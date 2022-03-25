@@ -16,16 +16,9 @@ const
 // Load Files
 let setting = JSON.parse(fs.readFileSync(`./lib/setting.json`))
 
-let {
-    token,
-    ownerbot,
-    urlFact,
-    urlNewInfo,
-    urlShedule,
-    urlSupplyDemand
-} = setting
+let { token } = setting
 
-let {
+const {
     menu,
     routesInfo,
     info,
@@ -49,67 +42,6 @@ bot.use(
 );
 
 /* function */
-
-const sendMessageStart = async (ctx) => {
-
-    await bot.telegram.sendMessage(ctx.chat.id, menu(ctx, ownerbot),
-        {
-            reply_markup: {
-                inline_keyboard: [
-                    [
-                        { text: '❔Информация❔', callback_data: 'info' },
-                    ],
-                    [
-                        { text: '📚Рабочие документы📚', callback_data: 'docs' }
-                    ],
-                    [
-                        { text: '🚀Начать обслуживание🚀', callback_data: 'launchChecklist' }
-                    ]
-                ]
-            },
-            parse_mode: "Markdown",
-            disable_web_page_preview: "true"
-        })
-}
-
-const sendInfo = async (ctx) => {
-    await bot.telegram.sendMessage(ctx.chat.id, info(),
-        {
-            reply_markup: {
-                inline_keyboard: [
-                    [
-                        { text: 'FIBBEE🆘', url: 'https://fibbee.com/' },
-                    ],
-                    [
-                        { text: 'Back!🔙', callback_data: 'start' }
-                    ]
-                ]
-            },
-            parse_mode: "Markdown"
-        })
-}
-
-const sendMessageMenu = async (ctx) => {
-    await bot.telegram.sendMessage(ctx.chat.id, docs(ownerbot),
-        {
-            reply_markup: {
-                inline_keyboard: [
-                    [
-                        { text: 'Новая информация⚠️', url: urlNewInfo },
-                        { text: 'Рабочий график📆', url: urlShedule }
-                    ],
-                    [
-                        { text: 'Заказы комплексов🧾', url: urlSupplyDemand },
-                        { text: 'Факт📊', url: urlFact }
-                    ],
-                    [
-                        { text: 'Back!🔙', callback_data: 'start' }
-                    ]
-                ]
-            },
-            parse_mode: "Markdown"
-        })
-}
 
 const launchMessage = async (ctx) => {
     const helper = 'Для начала обслуживания нужно выбрать маршрут'
@@ -150,44 +82,7 @@ const routesInfoMessage = async (ctx) => {
 
 /* Command */
 
-bot.start(async (ctx) => {
-    try {
-        await ctx.deleteMessage()
-        await sendMessageStart(ctx)
-    } catch (error) {
-        await bot.telegram.sendMessage(ctx.chat.id, error)
-    }
 
-})
-bot.action('start', (ctx) => {
-    try {
-        ctx.deleteMessage()
-        sendMessageStart(ctx)
-    } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
-    }
-
-})
-
-bot.action('info', (ctx) => {
-    try {
-        ctx.deleteMessage()
-        sendInfo(ctx)
-    } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
-    }
-
-})
-
-bot.action('docs', (ctx) => {
-    try {
-        ctx.deleteMessage()
-        sendMessageMenu(ctx)
-    } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
-    }
-
-})
 
 bot.command('menu', (ctx) => {
     try {
@@ -262,7 +157,9 @@ bot.command('axiosxmpl', async (ctx) => {
         }
     }
 })
-
+bot.use(require('./composers/start.composer'))
+bot.use(require('./composers/info.composer'))
+bot.use(require('./composers/docs.composer'))
 bot.launch()
 
 // Enable graceful stop
