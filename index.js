@@ -1,19 +1,19 @@
-const { Telegraf } = require('telegraf')
-const axios = require('axios')
-const updateLogger = require('telegraf-update-logger');
-const chalk = require('chalk');
-const { Extra } = require('telegraf')
-const moment = require(`moment-timezone`)
-const fs = require('fs');
-const { spawn, exec } = require('child_process');
-const canvacord = require("canvacord");
-const serialNumber = require('./utils/generateSN');
-const messageError = require('./utils/sendMessageError');
-const { sendSearch, sendProses, sendLoading } = require('./utils/sendLoadings')
-const sleep = require('./utils/getSleep');
-const { getObjRoutes, getMessageRoutes } = require('./lib/getRoute')
+const
+    { Telegraf } = require('telegraf'),
+    axios = require('axios'),
+    updateLogger = require('telegraf-update-logger'),
+    chalk = require('chalk'),
+    { Extra } = require('telegraf'),
+    moment = require(`moment-timezone`),
+    fs = require('fs'),
+    canvacord = require("canvacord"),
+    serialNumber = require('./utils/generateSN'),
+    messageError = require('./utils/sendMessageError'),
+    { sendSearch, sendProses, sendLoading } = require('./utils/sendLoadings'),
+    sleep = require('./utils/getSleep'),
+    { getObjRoutes, getMessageRoutes } = require('./lib/getRoute')
 
-// Load File
+// Load Files
 let setting = JSON.parse(fs.readFileSync(`./lib/setting.json`))
 
 let {
@@ -50,9 +50,9 @@ bot.use(
 
 /* function */
 
-function sendMessageStart(ctx) {
+const sendMessageStart = async (ctx) => {
 
-    bot.telegram.sendMessage(ctx.chat.id, menu(ctx, ownerbot),
+    await bot.telegram.sendMessage(ctx.chat.id, menu(ctx, ownerbot),
         {
             reply_markup: {
                 inline_keyboard: [
@@ -60,7 +60,7 @@ function sendMessageStart(ctx) {
                         { text: '❔Информация❔', callback_data: 'info' },
                     ],
                     [
-                        { text: '📚Рабочие документы📚', callback_data: 'menu' }
+                        { text: '📚Рабочие документы📚', callback_data: 'docs' }
                     ],
                     [
                         { text: '🚀Начать обслуживание🚀', callback_data: 'launchChecklist' }
@@ -72,8 +72,8 @@ function sendMessageStart(ctx) {
         })
 }
 
-function sendInfo(ctx) {
-    bot.telegram.sendMessage(ctx.chat.id, info(),
+const sendInfo = async (ctx) => {
+    await bot.telegram.sendMessage(ctx.chat.id, info(),
         {
             reply_markup: {
                 inline_keyboard: [
@@ -89,8 +89,8 @@ function sendInfo(ctx) {
         })
 }
 
-function sendMessageMenu(ctx) {
-    bot.telegram.sendMessage(ctx.chat.id, docs(ownerbot),
+const sendMessageMenu = async (ctx) => {
+    await bot.telegram.sendMessage(ctx.chat.id, docs(ownerbot),
         {
             reply_markup: {
                 inline_keyboard: [
@@ -111,9 +111,9 @@ function sendMessageMenu(ctx) {
         })
 }
 
-function launchMessage(ctx) {
+const launchMessage = async (ctx) => {
     const helper = 'Для начала обслуживания нужно выбрать маршрут'
-    bot.telegram.sendMessage(ctx.chat.id, helper,
+    await bot.telegram.sendMessage(ctx.chat.id, helper,
         {
             reply_markup: {
                 inline_keyboard: [
@@ -134,8 +134,8 @@ function launchMessage(ctx) {
         })
 }
 
-function routesInfoMessage(ctx) {
-    bot.telegram.sendMessage(ctx.chat.id, getMessageRoutes(), {
+const routesInfoMessage = async (ctx) => {
+    await bot.telegram.sendMessage(ctx.chat.id, getMessageRoutes(), {
         reply_markup: {
             inline_keyboard: [
                 [
@@ -150,45 +150,83 @@ function routesInfoMessage(ctx) {
 
 /* Command */
 
+bot.start(async (ctx) => {
+    try {
+        await ctx.deleteMessage()
+        await sendMessageStart(ctx)
+    } catch (error) {
+        await bot.telegram.sendMessage(ctx.chat.id, error)
+    }
 
-bot.action('routesInfo', (ctx) => {
-    ctx.deleteMessage()
-    routesInfoMessage(ctx)
 })
+bot.action('start', (ctx) => {
+    try {
+        ctx.deleteMessage()
+        sendMessageStart(ctx)
+    } catch (error) {
+        bot.telegram.sendMessage(ctx.chat.id, error)
+    }
 
-bot.action('launchChecklist', (ctx) => {
-    ctx.deleteMessage()
-    launchMessage(ctx)
 })
 
 bot.action('info', (ctx) => {
-    ctx.deleteMessage()
-    sendInfo(ctx)
+    try {
+        ctx.deleteMessage()
+        sendInfo(ctx)
+    } catch (error) {
+        bot.telegram.sendMessage(ctx.chat.id, error)
+    }
+
 })
 
-bot.action('start', (ctx) => {
-    ctx.deleteMessage()
-    sendMessageStart(ctx)
-})
+bot.action('docs', (ctx) => {
+    try {
+        ctx.deleteMessage()
+        sendMessageMenu(ctx)
+    } catch (error) {
+        bot.telegram.sendMessage(ctx.chat.id, error)
+    }
 
-bot.action('route1', (ctx) => {
-    ctx.deleteMessage()
-    sendMessageStart(ctx)
-})
-
-bot.start((ctx) => {
-    ctx.deleteMessage()
-    sendMessageStart(ctx)
-})
-
-bot.action('menu', (ctx) => {
-    ctx.deleteMessage()
-    sendMessageMenu(ctx)
 })
 
 bot.command('menu', (ctx) => {
-    ctx.deleteMessage()
-    sendMessageStart(ctx)
+    try {
+        ctx.deleteMessage()
+        sendMessageStart(ctx)
+    } catch (error) {
+        bot.telegram.sendMessage(ctx.chat.id, error)
+    }
+
+})
+
+bot.action('routesInfo', (ctx) => {
+    try {
+        ctx.deleteMessage()
+        routesInfoMessage(ctx)
+    } catch (error) {
+        bot.telegram.sendMessage(ctx.chat.id, error)
+    }
+
+})
+
+bot.action('launchChecklist', (ctx) => {
+    try {
+        ctx.deleteMessage()
+        launchMessage(ctx)
+    } catch (error) {
+        bot.telegram.sendMessage(ctx.chat.id, error)
+    }
+
+})
+
+bot.action('route1', (ctx) => {
+    try {
+        ctx.deleteMessage()
+        sendMessageStart(ctx)
+    } catch (error) {
+        bot.telegram.sendMessage(ctx.chat.id, error)
+    }
+
 })
 
 bot.command('axiosxmpl', async (ctx) => {
@@ -204,7 +242,7 @@ bot.command('axiosxmpl', async (ctx) => {
         inputArray.shift();
         messager = inputArray.join(" ")
         try {
-            const link = await axios.get(`http://lolhuman.herokuapp.com/api/ytsearch?apikey=${key}&query=${messager}`)
+            const link = await axios.get(`http://hhh.fff.com/api/axiosxmpl?apikey=${key}&query=${messager}`)
             const { result } = link.data
             const axiObj = result.slice(0, 3)
             axiObj.forEach(async (res) => {
@@ -224,41 +262,6 @@ bot.command('axiosxmpl', async (ctx) => {
         }
     }
 })
-
-// /* Music Fiture */
-
-// bot.command('play', async (ctx) => {
-//     let input = ctx.message.text
-//     let inputArray = input.split(" ")
-//     let message = "";
-
-//     if (inputArray.length == 1) {
-//         message = "Harap masukan judul, Contoh /play snowman"
-//         ctx.reply(message)
-//     } else {
-//         sendSearch(ctx)
-//         inputArray.shift();
-//         messager = inputArray.join(" ")
-//         const date = await axios.get(`https://api.vhtear.com/ytmp3?query=${messager}&apikey=${vhKey}`)
-//         if (date.data.message) {
-//             ctx.reply(`Music not found`)
-//         } else {
-//             const data = date.data.result
-//             ctx.replyWithPhoto({ url: data.image }, {
-//                 caption: `──────✿ 𝐏𝐥𝐚𝐲 ✿──────
-
-// ❖ Title: ${data.title}
-// ❖ DurationL ${data.duration}
-// ❖ Size: ${data.size}
-// ❖ Ext: ${data.ext}
-// ❖ Id: ${data.id}
-//             `})
-//             if (Number(data.size.split(` MB`)[0]) >= 25.00) return ctx.reply(`Sorry the bot cannot send more than 25 MB!`)
-//             sendLoading(ctx)
-//             ctx.replyWithAudio({ url: data.mp3 })
-//         }
-//     }
-// })
 
 bot.launch()
 
