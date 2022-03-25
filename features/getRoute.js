@@ -1,4 +1,4 @@
-const routes = require('./routesNew.json')
+const routes = require('../lib/routesNew.json')
 const json = JSON.stringify(routes);
 const objByJson = JSON.parse(json)
 

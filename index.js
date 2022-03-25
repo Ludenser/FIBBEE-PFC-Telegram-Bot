@@ -11,7 +11,7 @@ const
     messageError = require('./utils/sendMessageError'),
     { sendSearch, sendProses, sendLoading } = require('./utils/sendLoadings'),
     sleep = require('./utils/getSleep'),
-    { getObjRoutes, getMessageRoutes } = require('./lib/getRoute')
+    { getObjRoutes, getMessageRoutes } = require('./features/getRoute')
 
 // Load Files
 let setting = JSON.parse(fs.readFileSync(`./lib/setting.json`))
@@ -42,29 +42,6 @@ bot.use(
 );
 
 /* function */
-
-const launchMessage = async (ctx) => {
-    const helper = 'Для начала обслуживания нужно выбрать маршрут'
-    await bot.telegram.sendMessage(ctx.chat.id, helper,
-        {
-            reply_markup: {
-                inline_keyboard: [
-                    [
-                        { text: '1️⃣', callback_data: 'route1' },
-                        { text: '2️⃣', callback_data: 'route2' }
-                    ],
-                    [
-                        { text: '❔Информация по маршрутам❔', callback_data: 'routesInfo' }
-                    ],
-                    [
-                        { text: 'Back!🔙', callback_data: 'start' }
-                    ]
-                ]
-            },
-            parse_mode: "Markdown"
-
-        })
-}
 
 const routesInfoMessage = async (ctx) => {
     await bot.telegram.sendMessage(ctx.chat.id, getMessageRoutes(), {
@@ -98,16 +75,6 @@ bot.action('routesInfo', (ctx) => {
     try {
         ctx.deleteMessage()
         routesInfoMessage(ctx)
-    } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
-    }
-
-})
-
-bot.action('launchChecklist', (ctx) => {
-    try {
-        ctx.deleteMessage()
-        launchMessage(ctx)
     } catch (error) {
         bot.telegram.sendMessage(ctx.chat.id, error)
     }
@@ -160,6 +127,7 @@ bot.command('axiosxmpl', async (ctx) => {
 bot.use(require('./composers/start.composer'))
 bot.use(require('./composers/info.composer'))
 bot.use(require('./composers/docs.composer'))
+bot.use(require('./composers/launch.composer'))
 bot.launch()
 
 // Enable graceful stop
