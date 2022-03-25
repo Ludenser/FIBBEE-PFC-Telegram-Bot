@@ -41,52 +41,24 @@ bot.use(
     }),
 );
 
-/* function */
-
-const routesInfoMessage = async (ctx) => {
-    await bot.telegram.sendMessage(ctx.chat.id, getMessageRoutes(), {
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    { text: 'Back!🔙', callback_data: 'launchChecklist' }
-                ]
-            ]
-        },
-        parse_mode: "Markdown"
-
-    })
-}
-
 /* Command */
 
-
-
-bot.command('menu', (ctx) => {
+bot.action('route1', async (ctx) => {
     try {
-        ctx.deleteMessage()
+        await ctx.deleteMessage()
         sendMessageStart(ctx)
     } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
+        ctx.reply(error)
     }
 
 })
 
-bot.action('routesInfo', (ctx) => {
+bot.action('route2', async (ctx) => {
     try {
-        ctx.deleteMessage()
-        routesInfoMessage(ctx)
-    } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
-    }
-
-})
-
-bot.action('route1', (ctx) => {
-    try {
-        ctx.deleteMessage()
+        await ctx.deleteMessage()
         sendMessageStart(ctx)
     } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
+        ctx.reply(error)
     }
 
 })
@@ -124,10 +96,13 @@ bot.command('axiosxmpl', async (ctx) => {
         }
     }
 })
+
 bot.use(require('./composers/start.composer'))
 bot.use(require('./composers/info.composer'))
 bot.use(require('./composers/docs.composer'))
 bot.use(require('./composers/launch.composer'))
+bot.use(require('./composers/routesInfo.composer'))
+
 bot.launch()
 
 // Enable graceful stop
