@@ -1,6 +1,6 @@
 {
   "name": "pfcBot",
-  "version": "2.0.0",
+  "version": "0.1.0",
   "description": "Bot telegram use lib telegraf",
   "main": "index.js",
   "scripts": {
@@ -22,14 +22,15 @@
   "dependencies": {
     "axios": "^0.21.1",
     "canvacord": "^5.2.3",
-    "extra": "^0.2.1",
-    "markup": "0.0.4",
+    "dotenv": "^16.0.0",
+    "grammy": "^1.7.0",
+    "grammy-inline-menu": "^7.0.2",
     "moment-timezone": "^0.5.33",
     "nodemon": "^2.0.15",
     "os": "^0.1.1",
     "performance-now": "^2.1.0",
-    "telegraf": "^4.0.3",
-    "telegraf-inline-menu": "^6.1.0",
+    "telegraf": "^4.7.0",
+    "telegraf-i18n": "^6.6.0",
     "telegraf-update-logger": "^1.4.0"
   }
 }

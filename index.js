@@ -1,39 +1,32 @@
 const
     { Telegraf } = require('telegraf'),
+    TelegrafI18n = require('telegraf-i18n'),
     axios = require('axios'),
     updateLogger = require('telegraf-update-logger'),
     chalk = require('chalk'),
     { Extra } = require('telegraf'),
     moment = require(`moment-timezone`),
+    path = require('path'),
     fs = require('fs'),
     canvacord = require("canvacord"),
     serialNumber = require('./utils/generateSN'),
     messageError = require('./utils/sendMessageError'),
     { sendSearch, sendProses, sendLoading } = require('./utils/sendLoadings'),
     sleep = require('./utils/getSleep'),
-    { getObjRoutes, getMessageRoutes } = require('./lib/getRoute')
+    { getObjRoutes, getMessageRoutes } = require('./features/getRoute');
 
-// Load Files
-let setting = JSON.parse(fs.readFileSync(`./lib/setting.json`))
+require('dotenv').config();
 
-let {
-    token,
-    ownerbot,
-    urlFact,
-    urlNewInfo,
-    urlShedule,
-    urlSupplyDemand
-} = setting
-
-let {
-    menu,
-    routesInfo,
-    info,
-    docs
-} = require('./lib/menu')
-/* Bot */
+const i18n = new TelegrafI18n({
+    defaultLanguage: 'ru',
+    allowMissing: false, // Default true
+    directory: path.resolve(__dirname, 'locales')
+})
+const token = process.env.TOKEN;
 
 const bot = new Telegraf(token)
+
+const routeNumber = undefined;
 
 /* Log Function */
 
@@ -48,186 +41,7 @@ bot.use(
     }),
 );
 
-/* function */
-
-const sendMessageStart = async (ctx) => {
-
-    await bot.telegram.sendMessage(ctx.chat.id, menu(ctx, ownerbot),
-        {
-            reply_markup: {
-                inline_keyboard: [
-                    [
-                        { text: '❔Информация❔', callback_data: 'info' },
-                    ],
-                    [
-                        { text: '📚Рабочие документы📚', callback_data: 'docs' }
-                    ],
-                    [
-                        { text: '🚀Начать обслуживание🚀', callback_data: 'launchChecklist' }
-                    ]
-                ]
-            },
-            parse_mode: "Markdown",
-            disable_web_page_preview: "true"
-        })
-}
-
-const sendInfo = async (ctx) => {
-    await bot.telegram.sendMessage(ctx.chat.id, info(),
-        {
-            reply_markup: {
-                inline_keyboard: [
-                    [
-                        { text: 'FIBBEE🆘', url: 'https://fibbee.com/' },
-                    ],
-                    [
-                        { text: 'Back!🔙', callback_data: 'start' }
-                    ]
-                ]
-            },
-            parse_mode: "Markdown"
-        })
-}
-
-const sendMessageMenu = async (ctx) => {
-    await bot.telegram.sendMessage(ctx.chat.id, docs(ownerbot),
-        {
-            reply_markup: {
-                inline_keyboard: [
-                    [
-                        { text: 'Новая информация⚠️', url: urlNewInfo },
-                        { text: 'Рабочий график📆', url: urlShedule }
-                    ],
-                    [
-                        { text: 'Заказы комплексов🧾', url: urlSupplyDemand },
-                        { text: 'Факт📊', url: urlFact }
-                    ],
-                    [
-                        { text: 'Back!🔙', callback_data: 'start' }
-                    ]
-                ]
-            },
-            parse_mode: "Markdown"
-        })
-}
-
-const launchMessage = async (ctx) => {
-    const helper = 'Для начала обслуживания нужно выбрать маршрут'
-    await bot.telegram.sendMessage(ctx.chat.id, helper,
-        {
-            reply_markup: {
-                inline_keyboard: [
-                    [
-                        { text: '1️⃣', callback_data: 'route1' },
-                        { text: '2️⃣', callback_data: 'route2' }
-                    ],
-                    [
-                        { text: '❔Информация по маршрутам❔', callback_data: 'routesInfo' }
-                    ],
-                    [
-                        { text: 'Back!🔙', callback_data: 'start' }
-                    ]
-                ]
-            },
-            parse_mode: "Markdown"
-
-        })
-}
-
-const routesInfoMessage = async (ctx) => {
-    await bot.telegram.sendMessage(ctx.chat.id, getMessageRoutes(), {
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    { text: 'Back!🔙', callback_data: 'launchChecklist' }
-                ]
-            ]
-        },
-        parse_mode: "Markdown"
-
-    })
-}
-
 /* Command */
-
-bot.start(async (ctx) => {
-    try {
-        await ctx.deleteMessage()
-        await sendMessageStart(ctx)
-    } catch (error) {
-        await bot.telegram.sendMessage(ctx.chat.id, error)
-    }
-
-})
-bot.action('start', (ctx) => {
-    try {
-        ctx.deleteMessage()
-        sendMessageStart(ctx)
-    } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
-    }
-
-})
-
-bot.action('info', (ctx) => {
-    try {
-        ctx.deleteMessage()
-        sendInfo(ctx)
-    } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
-    }
-
-})
-
-bot.action('docs', (ctx) => {
-    try {
-        ctx.deleteMessage()
-        sendMessageMenu(ctx)
-    } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
-    }
-
-})
-
-bot.command('menu', (ctx) => {
-    try {
-        ctx.deleteMessage()
-        sendMessageStart(ctx)
-    } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
-    }
-
-})
-
-bot.action('routesInfo', (ctx) => {
-    try {
-        ctx.deleteMessage()
-        routesInfoMessage(ctx)
-    } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
-    }
-
-})
-
-bot.action('launchChecklist', (ctx) => {
-    try {
-        ctx.deleteMessage()
-        launchMessage(ctx)
-    } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
-    }
-
-})
-
-bot.action('route1', (ctx) => {
-    try {
-        ctx.deleteMessage()
-        sendMessageStart(ctx)
-    } catch (error) {
-        bot.telegram.sendMessage(ctx.chat.id, error)
-    }
-
-})
 
 bot.command('axiosxmpl', async (ctx) => {
     let input = ctx.message.text
@@ -262,6 +76,17 @@ bot.command('axiosxmpl', async (ctx) => {
         }
     }
 })
+
+bot.context.routeNumber = routeNumber
+
+bot.use(i18n.middleware())
+
+bot.use(require('./composers/start.composer'))
+bot.use(require('./composers/info.composer'))
+bot.use(require('./composers/docs.composer'))
+bot.use(require('./composers/driverMenu.composer'))
+bot.use(require('./composers/routesInfo.composer'))
+bot.use(require('./composers/selectRoute.composer'))
 
 bot.launch()
 
