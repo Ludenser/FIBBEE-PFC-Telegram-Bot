@@ -1,9 +1,7 @@
 const
   fs = require('fs'),
-  { docs } = require('../lib/menu'),
   setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
   {
-    ownerbot,
     urlFact,
     urlNewInfo,
     urlShedule,
@@ -11,7 +9,7 @@ const
   } = setting
 
 module.exports = async (ctx) => {
-  await ctx.reply(docs(ownerbot),
+  await ctx.reply(ctx.i18n.t('docs'),
     {
       reply_markup: {
         inline_keyboard: [
@@ -24,7 +22,7 @@ module.exports = async (ctx) => {
             { text: 'Факт📊', url: urlFact }
           ],
           [
-            { text: 'Back!🔙', callback_data: 'start' }
+            { text: 'Назад!↩️', callback_data: 'start' }
           ]
         ]
       },

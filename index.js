@@ -1,33 +1,32 @@
 const
     { Telegraf } = require('telegraf'),
+    TelegrafI18n = require('telegraf-i18n'),
     axios = require('axios'),
     updateLogger = require('telegraf-update-logger'),
     chalk = require('chalk'),
     { Extra } = require('telegraf'),
     moment = require(`moment-timezone`),
+    path = require('path'),
     fs = require('fs'),
     canvacord = require("canvacord"),
     serialNumber = require('./utils/generateSN'),
     messageError = require('./utils/sendMessageError'),
     { sendSearch, sendProses, sendLoading } = require('./utils/sendLoadings'),
     sleep = require('./utils/getSleep'),
-    { getObjRoutes, getMessageRoutes } = require('./features/getRoute'),
-    routeNumber = undefined;
+    { getObjRoutes, getMessageRoutes } = require('./features/getRoute');
 
-// Load Files
-let setting = JSON.parse(fs.readFileSync(`./lib/setting.json`))
+require('dotenv').config();
 
-let { token } = setting
-
-const {
-    menu,
-    routesInfo,
-    info,
-    docs
-} = require('./lib/menu')
-/* Bot */
+const i18n = new TelegrafI18n({
+    defaultLanguage: 'ru',
+    allowMissing: false, // Default true
+    directory: path.resolve(__dirname, 'locales')
+})
+const token = process.env.TOKEN;
 
 const bot = new Telegraf(token)
+
+const routeNumber = undefined;
 
 /* Log Function */
 
@@ -79,6 +78,8 @@ bot.command('axiosxmpl', async (ctx) => {
 })
 
 bot.context.routeNumber = routeNumber
+
+bot.use(i18n.middleware())
 
 bot.use(require('./composers/start.composer'))
 bot.use(require('./composers/info.composer'))

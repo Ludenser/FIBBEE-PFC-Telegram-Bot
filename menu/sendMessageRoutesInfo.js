@@ -6,7 +6,7 @@ module.exports = async (ctx) => {
     reply_markup: {
       inline_keyboard: [
         [
-          { text: 'Back!🔙', callback_data: 'driverMenu' }
+          { text: 'Назад!↩️', callback_data: 'driverMenu' }
         ]
       ]
     },

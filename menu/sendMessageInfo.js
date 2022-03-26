@@ -1,7 +1,5 @@
-const { info } = require('../lib/menu')
-
 module.exports = async (ctx) => {
-  await ctx.reply(info(),
+  await ctx.reply(ctx.i18n.t('info'),
     {
       reply_markup: {
         inline_keyboard: [
@@ -9,7 +7,7 @@ module.exports = async (ctx) => {
             { text: 'FIBBEE🆘', url: 'https://fibbee.com/' },
           ],
           [
-            { text: 'Back!🔙', callback_data: 'start' }
+            { text: 'Назад!↩️', callback_data: 'start' }
           ]
         ]
       },

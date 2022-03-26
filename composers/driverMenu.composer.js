@@ -1,5 +1,5 @@
 const { Composer } = require('telegraf');
-const sendMessageDriverMenu = require('../commands/sendMessageDriverMenu.command')
+const sendMessageDriverMenu = require('../menu/sendMessageDriverMenu')
 
 const composer = new Composer();
 

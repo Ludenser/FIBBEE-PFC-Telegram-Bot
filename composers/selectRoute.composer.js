@@ -1,5 +1,5 @@
 const { Composer } = require('telegraf');
-const sendMessageSelectRoute = require('../commands/sendMessageSelectRoute.command');
+const sendMessageSelectRoute = require('../menu/sendMessageSelectRoute');
 
 const composer = new Composer();
 

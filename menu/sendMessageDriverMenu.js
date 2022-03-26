@@ -1,9 +1,7 @@
 
-const { helper } = require('../lib/menu')
-
 module.exports = async (ctx) => {
 
-  await ctx.reply(helper(),
+  await ctx.reply(ctx.i18n.t('helper'),
     {
       reply_markup: {
         inline_keyboard: [
@@ -15,7 +13,7 @@ module.exports = async (ctx) => {
             { text: '❔Информация по маршрутам❔', callback_data: 'routesInfo' }
           ],
           [
-            { text: 'Back!🔙', callback_data: 'start' }
+            { text: 'Назад!↩️', callback_data: 'start' }
           ]
         ]
       },
