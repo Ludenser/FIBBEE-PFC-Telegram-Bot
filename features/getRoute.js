@@ -5,7 +5,7 @@ const objByJson = JSON.parse(json)
 module.exports = {
 
   getObjRoutes: function getObjRoutes(numRoute) {
-    let targetArr = [];
+    const targetArr = [];
     if (numRoute == 1) {
       const filtered = objByJson.filter(obj => obj.route == 1);
       for (i in filtered) {
@@ -50,9 +50,12 @@ module.exports = {
       }
       for (i in objByJson) {
         targetArr.push(objByJson[i].name);
-      } return `❖❖❖1 маршрут❖❖❖
+      } return `
+________________      
+❖❖❖1 маршрут❖❖❖
 ________________ 
 ${filteredArr1.join("\n\n")};
+________________
 ❖❖❖2 маршрут❖❖❖
 ________________
 ${filteredArr2.join("\n\n")}`

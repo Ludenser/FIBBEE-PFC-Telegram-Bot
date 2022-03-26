@@ -1,12 +1,12 @@
 const { Composer } = require('telegraf');
-const sendMessageLaunch = require('../commands/sendMessageLaunch.command')
+const sendMessageDriverMenu = require('../commands/sendMessageDriverMenu.command')
 
 const composer = new Composer();
 
-composer.action('launchChecklist', async (ctx) => {
+composer.action('driverMenu', async (ctx) => {
   try {
     await ctx.deleteMessage()
-    sendMessageLaunch(ctx)
+    sendMessageDriverMenu(ctx)
   } catch (error) {
     ctx.reply(error)
   }

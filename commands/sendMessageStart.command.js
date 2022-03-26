@@ -15,7 +15,7 @@ module.exports = async (ctx) => {
             { text: '📚Рабочие документы📚', callback_data: 'docs' }
           ],
           [
-            { text: '🚀Начать обслуживание🚀', callback_data: 'launchChecklist' }
+            { text: '🚀Меню водителя-оператора🚀', callback_data: 'driverMenu' }
           ]
         ]
       },

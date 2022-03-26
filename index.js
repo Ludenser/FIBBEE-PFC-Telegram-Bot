@@ -11,7 +11,8 @@ const
     messageError = require('./utils/sendMessageError'),
     { sendSearch, sendProses, sendLoading } = require('./utils/sendLoadings'),
     sleep = require('./utils/getSleep'),
-    { getObjRoutes, getMessageRoutes } = require('./features/getRoute')
+    { getObjRoutes, getMessageRoutes } = require('./features/getRoute'),
+    routeNumber = undefined;
 
 // Load Files
 let setting = JSON.parse(fs.readFileSync(`./lib/setting.json`))
@@ -42,26 +43,6 @@ bot.use(
 );
 
 /* Command */
-
-bot.action('route1', async (ctx) => {
-    try {
-        await ctx.deleteMessage()
-        sendMessageStart(ctx)
-    } catch (error) {
-        ctx.reply(error)
-    }
-
-})
-
-bot.action('route2', async (ctx) => {
-    try {
-        await ctx.deleteMessage()
-        sendMessageStart(ctx)
-    } catch (error) {
-        ctx.reply(error)
-    }
-
-})
 
 bot.command('axiosxmpl', async (ctx) => {
     let input = ctx.message.text
@@ -97,11 +78,14 @@ bot.command('axiosxmpl', async (ctx) => {
     }
 })
 
+bot.context.routeNumber = routeNumber
+
 bot.use(require('./composers/start.composer'))
 bot.use(require('./composers/info.composer'))
 bot.use(require('./composers/docs.composer'))
-bot.use(require('./composers/launch.composer'))
+bot.use(require('./composers/driverMenu.composer'))
 bot.use(require('./composers/routesInfo.composer'))
+bot.use(require('./composers/selectRoute.composer'))
 
 bot.launch()
 
