@@ -4,16 +4,9 @@ const
     axios = require('axios'),
     updateLogger = require('telegraf-update-logger'),
     chalk = require('chalk'),
-    { Extra } = require('telegraf'),
-    moment = require(`moment-timezone`),
     path = require('path'),
-    fs = require('fs'),
-    canvacord = require("canvacord"),
-    serialNumber = require('./utils/generateSN'),
     messageError = require('./utils/sendMessageError'),
-    { sendSearch, sendProses, sendLoading } = require('./utils/sendLoadings'),
-    sleep = require('./utils/getSleep'),
-    { getObjRoutes, getMessageRoutes } = require('./features/getRoute');
+    { sendSearch, sendProses, sendLoading } = require('./utils/sendLoadings');
 
 require('dotenv').config();
 
@@ -82,9 +75,7 @@ bot.context.routeNumber = routeNumber
 bot.use(i18n.middleware())
 
 bot.use(require('./composers/start.composer'))
-bot.use(require('./composers/info.composer'))
-bot.use(require('./composers/docs.composer'))
-bot.use(require('./composers/driverMenu.composer'))
+bot.use(require('./composers/mainMenu.composer'))
 bot.use(require('./composers/routesInfo.composer'))
 bot.use(require('./composers/selectRoute.composer'))
 
