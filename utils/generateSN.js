@@ -3,8 +3,8 @@ const GenerateRandomNumber = (min, max) => {
 }
 
 const GenerateRandomChar = () => {
-  var chars = "abcdefghijklmnopqrztuvwxyz";
-  var randomNumber = GenerateRandomNumber(0, chars.length - 1);
+  let chars = "abcdefghijklmnopqrztuvwxyz";
+  let randomNumber = GenerateRandomNumber(0, chars.length - 1);
   return chars[randomNumber];
 }
 

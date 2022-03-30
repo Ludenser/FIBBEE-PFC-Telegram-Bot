@@ -1,19 +1,18 @@
 const
-    { Telegraf } = require('telegraf'),
+    { Telegraf, Scenes, session } = require('telegraf'),
     TelegrafI18n = require('telegraf-i18n'),
     axios = require('axios'),
     updateLogger = require('telegraf-update-logger'),
     chalk = require('chalk'),
-    { Extra } = require('telegraf'),
-    moment = require(`moment-timezone`),
     path = require('path'),
-    fs = require('fs'),
-    canvacord = require("canvacord"),
-    serialNumber = require('./utils/generateSN'),
     messageError = require('./utils/sendMessageError'),
-    { sendSearch, sendProses, sendLoading } = require('./utils/sendLoadings'),
-    sleep = require('./utils/getSleep'),
-    { getObjRoutes, getMessageRoutes } = require('./features/getRoute');
+    startComposer = require('./composers/start.composer'),
+    mainMenuComposer = require('./composers/mainMenu.composer'),
+    routesInfoComposer = require('./composers/routesInfo.composer'),
+    selectRouteComposer = require('./composers/selectRoute.composer'),
+    route1Scene = require('./scenes/route1.scene'),
+    route2Scene = require('./scenes/route2.scene'),
+    { sendSearch, sendProses, sendLoading } = require('./utils/sendLoadings');
 
 require('dotenv').config();
 
@@ -29,7 +28,6 @@ const bot = new Telegraf(token)
 const routeNumber = undefined;
 
 /* Log Function */
-
 bot.use(
     updateLogger({
         colors: {
@@ -42,7 +40,6 @@ bot.use(
 );
 
 /* Command */
-
 bot.command('axiosxmpl', async (ctx) => {
     let input = ctx.message.text
     let inputArray = input.split(" ")
@@ -81,12 +78,13 @@ bot.context.routeNumber = routeNumber
 
 bot.use(i18n.middleware())
 
-bot.use(require('./composers/start.composer'))
-bot.use(require('./composers/info.composer'))
-bot.use(require('./composers/docs.composer'))
-bot.use(require('./composers/driverMenu.composer'))
-bot.use(require('./composers/routesInfo.composer'))
-bot.use(require('./composers/selectRoute.composer'))
+bot.use(startComposer)
+bot.use(mainMenuComposer)
+bot.use(routesInfoComposer)
+bot.use(selectRouteComposer)
+
+const stage = new Scenes.Stage([route1Scene, route2Scene])
+bot.use(session(), stage.middleware())
 
 bot.launch()
 
