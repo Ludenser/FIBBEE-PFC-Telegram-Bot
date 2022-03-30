@@ -1,5 +1,4 @@
-const { Composer } = require('telegraf');
-const
+const { Composer } = require('telegraf'),
   sendMessageRoutesInfo = require('../menu/sendMessageRoutesInfo'),
   sendMessageError = require('../utils/sendMessageError');
 

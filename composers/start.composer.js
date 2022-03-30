@@ -1,5 +1,5 @@
-const { Composer } = require('telegraf');
-const sendMessageStart = require('../menu/sendMessageStart')
+const { Composer } = require('telegraf'),
+  sendMessageStart = require('../menu/sendMessageStart');
 
 const composer = new Composer();
 

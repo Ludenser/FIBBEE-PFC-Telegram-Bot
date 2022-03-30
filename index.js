@@ -9,10 +9,7 @@ const
     startComposer = require('./composers/start.composer'),
     mainMenuComposer = require('./composers/mainMenu.composer'),
     routesInfoComposer = require('./composers/routesInfo.composer'),
-    selectRouteComposer = require('./composers/selectRoute.composer'),
-    route1Scene = require('./scenes/route1.scene'),
-    route2Scene = require('./scenes/route2.scene'),
-    { sendSearch, sendProses, sendLoading } = require('./utils/sendLoadings');
+    selectRouteComposer = require('./composers/selectRoute.composer');
 
 require('dotenv').config();
 
@@ -82,9 +79,6 @@ bot.use(startComposer)
 bot.use(mainMenuComposer)
 bot.use(routesInfoComposer)
 bot.use(selectRouteComposer)
-
-const stage = new Scenes.Stage([route1Scene, route2Scene])
-bot.use(session(), stage.middleware())
 
 bot.launch()
 
