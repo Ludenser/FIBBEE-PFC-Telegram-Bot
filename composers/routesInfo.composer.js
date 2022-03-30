@@ -9,6 +9,7 @@ composer.action('routesInfo', async (ctx) => {
     await ctx.deleteMessage()
     sendMessageRoutesInfo(ctx)
   } catch (e) {
+    console.log(e)
     sendMessageError(ctx, e)
   }
 

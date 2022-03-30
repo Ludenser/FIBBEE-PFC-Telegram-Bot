@@ -1,14 +1,19 @@
 const { Scenes } = require('telegraf'),
-  msgError = require('../utils/sendMessageError');
+  sendMessageError = require('../utils/sendMessageError'),
+  sendMessageInit = require('../routeMenu/sendMessageInit.routeMenu');
 
 module.exports = new Scenes.WizardScene(
-  'route1Wizard',
+  'ROUTE_1_WIZARD_ID',
+  async (ctx) => {
+    console.log('ты в сцене 1')
+    sendMessageInit(ctx)
+    return ctx.wizard.next()
+  },
   async (ctx) => {
     try {
-      console.log(ctx, '1 сцена')
-      return ctx.wizard.next()
+
     } catch (error) {
-      msgError(ctx)
+      sendMessageError(ctx, e)
     }
   }
 
