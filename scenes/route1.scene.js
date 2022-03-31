@@ -6,12 +6,13 @@ module.exports = new Scenes.WizardScene(
   'ROUTE_1_WIZARD_ID',
   async (ctx) => {
     console.log('ты в сцене 1')
-    sendMessageInit(ctx)
-    return ctx.wizard.next()
+    await sendMessageInit(ctx)
+    return await ctx.scene.leave()
   },
   async (ctx) => {
     try {
-
+      console.log('step 2')
+      return ctx.scene.leave()
     } catch (error) {
       sendMessageError(ctx, e)
     }

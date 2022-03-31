@@ -35,6 +35,7 @@ composer.action('route2', async (ctx) => {
 composer.action('leaveScene', async (ctx) => {
     try {
         await ctx.deleteMessage()
+        console.log(ctx)
         ctx.routeNumber = undefined
         return await ctx.scene.leave()
 
