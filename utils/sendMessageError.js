@@ -1,3 +1,3 @@
-module.exports = (ctx) => {
-  return ctx.reply(`Ошибка!, Сообщите об этом в чате supply-team`)
+module.exports = (ctx, e) => {
+  return ctx.reply(`Ошибка! Сообщите об этом в чате supply-team, ${e}`)
 }
