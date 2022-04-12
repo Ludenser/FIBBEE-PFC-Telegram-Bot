@@ -1,18 +1,14 @@
 const
     { Telegraf, Scenes, session } = require('telegraf'),
     TelegrafI18n = require('telegraf-i18n'),
-    axios = require('axios'),
     updateLogger = require('telegraf-update-logger'),
     chalk = require('chalk'),
     path = require('path'),
-    messageError = require('./utils/sendMessageError'),
+    sendMessageError = require('./utils/sendMessageError'),
     startComposer = require('./composers/start.composer'),
     mainMenuComposer = require('./composers/mainMenu.composer'),
     routesInfoComposer = require('./composers/routesInfo.composer'),
-    selectRouteComposer = require('./composers/selectRoute.composer'),
-    route1Scene = require('./scenes/route1.scene'),
-    route2Scene = require('./scenes/route2.scene'),
-    { sendSearch, sendProses, sendLoading } = require('./utils/sendLoadings');
+    selectRouteComposer = require('./composers/selectRoute.composer');
 
 require('dotenv').config();
 
@@ -40,39 +36,39 @@ bot.use(
 );
 
 /* Command */
-bot.command('axiosxmpl', async (ctx) => {
-    let input = ctx.message.text
-    let inputArray = input.split(" ")
-    let message = "";
+// bot.command('axiosxmpl', async (ctx) => {
+//     let input = ctx.message.text
+//     let inputArray = input.split(" ")
+//     let message = "";
 
-    if (inputArray.length == 1) {
-        message = "Пожалуйста, введите текст, например: /axiosxmpl snowman"
-        ctx.reply(message)
-    } else {
-        sendProses(ctx, bot)
-        inputArray.shift();
-        messager = inputArray.join(" ")
-        try {
-            const link = await axios.get(`http://hhh.fff.com/api/axiosxmpl?apikey=${key}&query=${messager}`)
-            const { result } = link.data
-            const axiObj = result.slice(0, 3)
-            axiObj.forEach(async (res) => {
-                ctx.replyWithPhoto({ url: res.thumbnail }, {
-                    caption: `──────✿ 𝐒𝐞𝐚𝐫𝐜𝐡 ✿──────
-        
-❖ Title: ${res.title}
-❖ Link: https://www.youtube.com/watch?v=${res.videoId}
-❖ Published: ${res.published}
-❖ Viewrs: ${res.views}
+//     if (inputArray.length == 1) {
+//         message = "Пожалуйста, введите текст, например: /axiosxmpl snowman"
+//         ctx.reply(message)
+//     } else {
+//         sendProses(ctx, bot)
+//         inputArray.shift();
+//         messager = inputArray.join(" ")
+//         try {
+//             const link = await axios.get(`http://hhh.fff.com/api/axiosxmpl?apikey=${key}&query=${messager}`)
+//             const { result } = link.data
+//             const axiObj = result.slice(0, 3)
+//             axiObj.forEach(async (res) => {
+//                 ctx.replyWithPhoto({ url: res.thumbnail }, {
+//                     caption: `──────✿ 𝐒𝐞𝐚𝐫𝐜𝐡 ✿──────
 
-`})
+// ❖ Title: ${res.title}
+// ❖ Link: https://www.youtube.com/watch?v=${res.videoId}
+// ❖ Published: ${res.published}
+// ❖ Viewrs: ${res.views}
 
-            })
-        } catch (e) {
-            messageError(ctx)
-        }
-    }
-})
+// `})
+
+//             })
+//         } catch (e) {
+//             messageError(ctx)
+//         }
+//     }
+// })
 
 bot.context.routeNumber = routeNumber
 
@@ -82,9 +78,6 @@ bot.use(startComposer)
 bot.use(mainMenuComposer)
 bot.use(routesInfoComposer)
 bot.use(selectRouteComposer)
-
-const stage = new Scenes.Stage([route1Scene, route2Scene])
-bot.use(session(), stage.middleware())
 
 bot.launch()
 

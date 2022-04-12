@@ -1,11 +1,12 @@
 const { Composer, Scenes, session } = require('telegraf'),
-    route1Scene = require('../scenes/route1.scene'),
-    route2Scene = require('../scenes/route2.scene'),
-    sendMessageError = require('../utils/sendMessageError');
+    routeScene = require('../scenes/route.scene'),
+    sendMessageError = require('../utils/sendMessageError'),
+    sendMessageInit = require('../routeMenu/sendMessageInit.routeMenu');
+
 
 const composer = new Composer();
 
-const stage = new Scenes.Stage([route1Scene, route2Scene])
+const stage = new Scenes.Stage([routeScene])
 composer.use(session())
 composer.use(stage.middleware())
 
@@ -13,8 +14,8 @@ composer.action('route1', async (ctx) => {
     try {
         await ctx.deleteMessage()
         ctx.routeNumber = 1
-        ctx.reply(`Вы выбрали ${ctx.routeNumber} маршрут`)
-        ctx.scene.enter('route1Wizard')
+        await sendMessageInit(ctx)
+        await ctx.scene.enter('ROUTE_WIZARD_ID')
     } catch (e) {
         sendMessageError(ctx, e)
     }
@@ -25,8 +26,8 @@ composer.action('route2', async (ctx) => {
     try {
         await ctx.deleteMessage()
         ctx.routeNumber = 2
-        ctx.reply(`Вы выбрали ${ctx.routeNumber} маршрут`)
-        ctx.scene.enter('route2Wizard')
+        await sendMessageInit(ctx)
+        await ctx.scene.enter('ROUTE_WIZARD_ID')
     } catch (e) {
         sendMessageError(ctx, e)
     }

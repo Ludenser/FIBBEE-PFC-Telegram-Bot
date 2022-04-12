@@ -1,5 +1,4 @@
-const { Composer } = require('telegraf');
-const
+const { Composer } = require('telegraf'),
   sendMessageRoutesInfo = require('../menu/sendMessageRoutesInfo'),
   sendMessageError = require('../utils/sendMessageError');
 
@@ -10,6 +9,7 @@ composer.action('routesInfo', async (ctx) => {
     await ctx.deleteMessage()
     sendMessageRoutesInfo(ctx)
   } catch (e) {
+    console.log(e)
     sendMessageError(ctx, e)
   }
 
