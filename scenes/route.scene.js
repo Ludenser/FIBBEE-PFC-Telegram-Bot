@@ -1,5 +1,6 @@
 const { default: Timer } = require('easytimer.js');
 const GetService = require('../api/clickupApi.service');
+const { getMessageRouteSupplyFromClickAPI, getMessageRouteCleaningFromClickAPI } = require('../features/getRoute')
 const { Scenes, Composer, Markup } = require('telegraf'),
 
   sendMessageError = require('../utils/sendMessageError'),
@@ -17,22 +18,29 @@ firstStep.action('leaveScene', async (ctx) => {
   return await ctx.scene.leave();
 })
 
+// async function messagePoints(ctx, listId) {
+//   const response = await GetService.getAll(listId)
+//   const nameValues = response.data.tasks.reverse().map((value, index) => {
+//     return `${index + 1}-${value.name}`
+//   })
+//   await ctx.reply(nameValues.join("\n\n"))
+// }
+
 firstStep.action(`openRoute1`, async (ctx) => {
   timer.start()
+  await ctx.deleteMessage()
+  await getMessageRouteSupplyFromClickAPI(ctx)
   await ctx.reply(ctx.i18n.t('messageSceneUazPhoto'), Markup.inlineKeyboard([
     Markup.button.callback('Выйти', 'leave')
   ]))
-  ctx.deleteMessage()
+
   return await ctx.wizard.next();
 })
 
 firstStep.action(`openRoute2`, async (ctx) => {
   timer.start()
-  const response = await GetService.getAll(168384070)
-  ctx.deleteMessage()
-  response.data.tasks.map(async (value, index) => {
-    return await ctx.reply(value.name)
-  })
+  await ctx.deleteMessage()
+  await getMessageRouteCleaningFromClickAPI(ctx)
   await ctx.reply(ctx.i18n.t('messageSceneUazPhoto'), Markup.inlineKeyboard([
     Markup.button.callback('Выйти', 'leave')
   ]))
