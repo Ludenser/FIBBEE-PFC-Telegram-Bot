@@ -3,8 +3,9 @@ const
   fs = require('fs'),
   json = JSON.stringify(routes),
   objByJson = JSON.parse(json),
-  GetService = require('../api/clickupApi.service'),
+  GetTasksService = require('../api/clickupApi.service'),
   setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
+  sendMessageError = require('../utils/sendMessageError'),
   {
     listIdSupply,
     listIdCleaning
@@ -77,18 +78,29 @@ ${filteredArr2.join("\n\n")}`
   },
 
   getMessageRouteSupplyFromClickAPI: async function getMessageRoutesFromClickAPI(ctx) {
-    const response = await GetService.getAll(listIdSupply)
-    const nameValues = response.data.tasks.reverse().map((value, index) => {
-      return `${index + 1}-${value.name}`
-    })
-    await ctx.reply(nameValues.join("\n\n"))
+    try {
+      const response = await GetTasksService.getAllTasksFromList(listIdSupply)
+      const nameValues = response.data.tasks.reverse().map((value, index) => {
+        return `${index + 1}-${value.name}`
+      })
+      await ctx.reply(nameValues.join("\n\n"))
+    } catch (e) {
+      sendMessageError(ctx, e)
+    }
+
   },
 
   getMessageRouteCleaningFromClickAPI: async function getMessageRouteCleaningFromClickAPI(ctx) {
-    const response = await GetService.getAll(listIdCleaning)
-    const nameValues = response.data.tasks.reverse().map((value, index) => {
-      return `${index + 1}-${value.name}`
-    })
-    await ctx.reply(nameValues.join("\n\n"))
+
+    try {
+      const response = await GetTasksService.getAllTasksFromList(listIdCleaning)
+      const nameValues = response.data.tasks.reverse().map((value, index) => {
+        return `${index + 1}-${value.name}`
+      })
+      await ctx.reply(nameValues.join("\n\n"))
+
+    } catch (e) {
+      sendMessageError(ctx, e)
+    }
   }
 }
