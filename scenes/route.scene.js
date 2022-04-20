@@ -2,8 +2,9 @@ const
   { default: Timer } = require('easytimer.js'),
   { getMessageRouteSupplyFromClickAPI, getMessageRouteCleaningFromClickAPI } = require('../features/getRoute'),
   { Scenes, Composer, Markup } = require('telegraf'),
-  GetTasksService = require('../api/clickupApi.service'),
-  sendMessageError = require('../utils/sendMessageError'),
+  GetTasksService = require('../api/clickupApiTasks.service'),
+  GetTimeService = require('../api/clickupApiTime.service')
+sendMessageError = require('../utils/sendMessageError'),
   sendMessageInit = require('../routeMenu/sendMessageInit.routeMenu'),
   sendMessageDriverMenu = require('../menu/sendMessageDriverMenu');
 
@@ -21,7 +22,8 @@ firstStep.action(`openRoute1`, async (ctx) => {
   timer.start()
   await ctx.deleteMessage()
   await getMessageRouteSupplyFromClickAPI(ctx)
-  await GetTasksService.startTimeEntry(24409308, '2bukvwe')
+  await GetTasksService.setTaskStatus('2bukvwe', 'in progress')
+  await GetTimeService.startTimeEntry(24409308, '2bukvwe')
   await ctx.reply(ctx.i18n.t('messageSceneUazPhoto'), Markup.inlineKeyboard([
     Markup.button.callback('Выйти', 'leave')
   ]))
@@ -42,7 +44,8 @@ firstStep.action(`openRoute2`, async (ctx) => {
 const stepRoute1 = new Composer()
 
 stepRoute1.action('leave', async (ctx) => {
-  await GetTasksService.stopTimeEntry(24409308)
+  await GetTimeService.stopTimeEntry(24409308)
+  await GetTasksService.setTaskStatus('2bukvwe', 'to do')
   await ctx.deleteMessage()
   await sendMessageDriverMenu(ctx)
   return await ctx.scene.leave()
@@ -51,7 +54,7 @@ stepRoute1.action('leave', async (ctx) => {
 const stepRoute2 = new Composer()
 
 stepRoute2.action('leave', async (ctx) => {
-  await GetTasksService.stopTimeEntry(24409308)
+  await GetTimeService.stopTimeEntry(24409308)
   await ctx.deleteMessage()
   await sendMessageDriverMenu(ctx)
   return await ctx.scene.leave()

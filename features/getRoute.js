@@ -3,7 +3,7 @@ const
   fs = require('fs'),
   json = JSON.stringify(routes),
   objByJson = JSON.parse(json),
-  GetTasksService = require('../api/clickupApi.service'),
+  GetTasksService = require('../api/clickupApiTasks.service'),
   setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
   sendMessageError = require('../utils/sendMessageError'),
   {
