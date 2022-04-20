@@ -23,6 +23,7 @@
     "axios": "^0.21.1",
     "canvacord": "^5.2.3",
     "dotenv": "^16.0.0",
+    "easytimer.js": "^4.5.3",
     "grammy": "^1.7.0",
     "grammy-inline-menu": "^7.0.2",
     "moment-timezone": "^0.5.33",
