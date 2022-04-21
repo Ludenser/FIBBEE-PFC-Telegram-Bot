@@ -24,7 +24,6 @@ composer.command('/start', (ctx) => {
 
 composer.action('start', (ctx) => {
   try {
-    ctx.deleteMessage()
     sendMessageStart(ctx)
   } catch (e) {
     console.log(e)

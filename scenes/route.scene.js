@@ -32,7 +32,6 @@ firstStep.action(`openRoute1`, async (ctx) => {
 })
 
 firstStep.action(`openRoute2`, async (ctx) => {
-  timer.start()
   await ctx.deleteMessage()
   await getMessageRouteCleaningFromClickAPI(ctx)
   await ctx.reply(ctx.i18n.t('messageSceneUazPhoto'), Markup.inlineKeyboard([

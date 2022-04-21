@@ -37,7 +37,7 @@ module.exports = {
     return targetArr
   },
 
-  getMessageRoutes: function getMessageRoutes(numRoute) {
+  getMessageRoutes: function getMessageRoutes(ctx, numRoute) {
 
     let targetArr = [];
     if (numRoute == 1) {
@@ -60,9 +60,7 @@ module.exports = {
       for (i in objByJson) {
         targetArr.push(objByJson[i].name);
       } return `
-________________      
-❖❖❖1 маршрут❖❖❖
-________________ 
+      ${ctx.i18n.t('decoreRouteNumber')}
 ${filteredArr1.join("\n\n")};
 ________________
 ❖❖❖2 маршрут❖❖❖
