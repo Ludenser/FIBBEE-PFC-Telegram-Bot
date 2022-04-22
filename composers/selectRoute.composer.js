@@ -1,12 +1,12 @@
 const { Composer, Scenes, session } = require('telegraf'),
-    routeScene = require('../scenes/route.scene'),
+    routeWizard = require('../wizards/route.wizard'),
     sendMessageError = require('../utils/sendMessageError'),
     sendMessageInit = require('../routeMenu/sendMessageInit.routeMenu');
 
 
 const composer = new Composer();
 
-const stage = new Scenes.Stage([routeScene])
+const stage = new Scenes.Stage([routeWizard])
 composer.use(session())
 composer.use(stage.middleware())
 

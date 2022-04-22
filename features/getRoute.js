@@ -60,12 +60,10 @@ module.exports = {
       for (i in objByJson) {
         targetArr.push(objByJson[i].name);
       } return `
-      ${ctx.i18n.t('decoreRouteNumber')}
-${filteredArr1.join("\n\n")};
-________________
-❖❖❖2 маршрут❖❖❖
-________________
-${filteredArr2.join("\n\n")}`
+      ${ctx.i18n.t('decoreRoute1Number')}
+      ${filteredArr1.join("\n\n")};
+      ${ctx.i18n.t('decoreRoute2Number')}
+      ${filteredArr2.join("\n\n")}`
     } else {
       const filtered = objByJson.filter(obj => obj.route == 2);
       for (i in filtered) {
@@ -75,7 +73,7 @@ ${filteredArr2.join("\n\n")}`
     return `${targetArr.join("\n")} `
   },
 
-  getMessageRouteSupplyFromClickAPI: async function getMessageRoutesFromClickAPI(ctx) {
+  getMessageRouteSupplyFromClickAPI: async function getMessageRoutesSupplyFromClickAPI(ctx) {
     try {
       const response = await GetTasksService.getAllTasksFromList(listIdSupply)
       const nameValues = response.data.tasks.reverse().map((value, index) => {
