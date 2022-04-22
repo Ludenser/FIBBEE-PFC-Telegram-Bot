@@ -3,6 +3,7 @@ const setting = JSON.parse(fs.readFileSync(`./lib/setting.json`))
 const { ownerbot } = setting
 
 module.exports = async (ctx) => {
+  await ctx.deleteMessage()
   await ctx.reply(ctx.i18n.t('menu', { ctx, ownerbot }),
     {
       reply_markup: {

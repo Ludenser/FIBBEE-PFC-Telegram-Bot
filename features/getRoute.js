@@ -1,6 +1,15 @@
-const routes = require('../lib/routesNew.json')
-const json = JSON.stringify(routes);
-const objByJson = JSON.parse(json)
+const
+  routes = require('../lib/routesNew.json'),
+  fs = require('fs'),
+  json = JSON.stringify(routes),
+  objByJson = JSON.parse(json),
+  GetTasksService = require('../api/clickupApiTasks.service'),
+  setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
+  sendMessageError = require('../utils/sendMessageError'),
+  {
+    listIdSupply,
+    listIdCleaning
+  } = setting;
 
 module.exports = {
 
@@ -28,7 +37,7 @@ module.exports = {
     return targetArr
   },
 
-  getMessageRoutes: function getMessageRoutes(numRoute) {
+  getMessageRoutes: function getMessageRoutes(ctx, numRoute) {
 
     let targetArr = [];
     if (numRoute == 1) {
@@ -51,14 +60,10 @@ module.exports = {
       for (i in objByJson) {
         targetArr.push(objByJson[i].name);
       } return `
-________________      
-❖❖❖1 маршрут❖❖❖
-________________ 
-${filteredArr1.join("\n\n")};
-________________
-❖❖❖2 маршрут❖❖❖
-________________
-${filteredArr2.join("\n\n")}`
+      ${ctx.i18n.t('decoreRoute1Number')}
+      ${filteredArr1.join("\n\n")};
+      ${ctx.i18n.t('decoreRoute2Number')}
+      ${filteredArr2.join("\n\n")}`
     } else {
       const filtered = objByJson.filter(obj => obj.route == 2);
       for (i in filtered) {
@@ -66,5 +71,32 @@ ${filteredArr2.join("\n\n")}`
       }
     }
     return `${targetArr.join("\n")} `
+  },
+
+  getMessageRouteSupplyFromClickAPI: async function getMessageRoutesSupplyFromClickAPI(ctx) {
+    try {
+      const response = await GetTasksService.getAllTasksFromList(listIdSupply)
+      const nameValues = response.data.tasks.reverse().map((value, index) => {
+        return `${index + 1}-${value.name}`
+      })
+      await ctx.reply(nameValues.join("\n\n"))
+    } catch (e) {
+      sendMessageError(ctx, e)
+    }
+
+  },
+
+  getMessageRouteCleaningFromClickAPI: async function getMessageRouteCleaningFromClickAPI(ctx) {
+
+    try {
+      const response = await GetTasksService.getAllTasksFromList(listIdCleaning)
+      const nameValues = response.data.tasks.reverse().map((value, index) => {
+        return `${index + 1}-${value.name}`
+      })
+      await ctx.reply(nameValues.join("\n\n"))
+
+    } catch (e) {
+      sendMessageError(ctx, e)
+    }
   }
 }

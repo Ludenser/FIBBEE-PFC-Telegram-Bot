@@ -1,23 +1,33 @@
-const { Composer } = require('telegraf');
-const sendMessageStart = require('../menu/sendMessageStart')
+const { Composer } = require('telegraf'),
+  sendMessageStart = require('../menu/sendMessageStart'),
+  sendMessageError = require('../utils/sendMessageError');
 
 const composer = new Composer();
 
-composer.start(async (ctx) => {
+composer.start((ctx) => {
   try {
-    await ctx.deleteMessage()
     sendMessageStart(ctx)
-  } catch (error) {
-    ctx.reply(error)
+  } catch (e) {
+    console.log(e)
+    sendMessageError(ctx, e)
   }
-
 })
+
+composer.command('/start', (ctx) => {
+  try {
+    sendMessageStart(ctx)
+  } catch (e) {
+    console.log(e)
+    sendMessageError(ctx, e)
+  }
+})
+
 composer.action('start', (ctx) => {
   try {
-    ctx.deleteMessage()
-    sendMessageStart(ctx, composer)
-  } catch (error) {
-    ctx.reply(error)
+    sendMessageStart(ctx)
+  } catch (e) {
+    console.log(e)
+    sendMessageError(ctx, e)
   }
 
 })

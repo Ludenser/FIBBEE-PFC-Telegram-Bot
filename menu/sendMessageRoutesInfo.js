@@ -2,7 +2,7 @@ const { getMessageRoutes } = require('../features/getRoute')
 
 module.exports = async (ctx) => {
 
-  await ctx.reply(getMessageRoutes(), {
+  await ctx.reply(getMessageRoutes(ctx), {
     reply_markup: {
       inline_keyboard: [
         [
