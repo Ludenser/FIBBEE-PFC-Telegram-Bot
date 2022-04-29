@@ -23,6 +23,7 @@ firstStep.action(`openRoute1`, async (ctx) => {
     await GetTasksService.setTaskStatus('2bukvwe', 'in progress')
     await GetTimeService.startTimeEntry(24409308, '2bukvwe')
     await ctx.reply(ctx.i18n.t('messageSceneUazPhoto'), Markup.inlineKeyboard([
+        Markup.button.callback('Подтвердить загрузку', 'accept'),
         Markup.button.callback('Выйти', 'leave')
     ]))
 
@@ -33,6 +34,7 @@ firstStep.action(`openRoute2`, async (ctx) => {
     await ctx.deleteMessage()
     await getMessageRouteCleaningFromClickAPI(ctx)
     await ctx.reply(ctx.i18n.t('messageSceneUazPhoto'), Markup.inlineKeyboard([
+        Markup.button.callback('Подтвердить загрузку', 'accept'),
         Markup.button.callback('Выйти', 'leave')
     ]))
     return await ctx.wizard.selectStep(2);

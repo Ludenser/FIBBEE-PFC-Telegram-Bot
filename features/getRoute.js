@@ -77,7 +77,10 @@ module.exports = {
     try {
       const response = await GetTasksService.getAllTasksFromList(listIdSupply)
       const nameValues = response.data.tasks.reverse().map((value, index) => {
-        return `${index + 1}-${value.name}`
+        const
+          tsStart = new Date(Number.parseInt(value.start_date)),
+          tsDue = new Date(Number.parseInt(value.due_date));
+        return `${index + 1}. ${value.name} c ${tsStart.toLocaleTimeString()} до ${tsDue.toLocaleTimeString()}`
       })
       await ctx.reply(nameValues.join("\n\n"))
     } catch (e) {

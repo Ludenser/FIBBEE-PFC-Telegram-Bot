@@ -41,7 +41,7 @@ bot.use(
 //     let message = "";
 
 //     if (inputArray.length == 1) {
-//         message = "Пожалуйста, введите текст, например: /axiosxmpl snowman"
+//         message = "Пожалуйста, введите текст, например: /axiosxmpl fxgncghnmhgj"
 //         ctx.reply(message)
 //     } else {
 //         sendProses(ctx, bot)

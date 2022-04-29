@@ -5,6 +5,10 @@ const { Composer } = require('telegraf'),
 
 const stepRoute1 = new Composer()
 
+stepRoute1.action('accept', async (ctx) => {
+    // Берем здесь фотки из сообщения и отправляем в кликап в текущий таск
+})
+
 stepRoute1.action('leave', async (ctx) => {
     await GetTimeService.stopTimeEntry(24409308)
     await GetTasksService.setTaskStatus('2bukvwe', 'to do')
