@@ -3,8 +3,9 @@ const
     { getMessageRouteSupplyFromClickAPI, getMessageRouteCleaningFromClickAPI } = require('../features/getRoute'),
     GetTasksService = require('../api/clickupApiTasks.service'),
     GetTimeService = require('../api/clickupApiTime.service'),
-    { default: Timer } = require('easytimer.js')
-sendMessageDriverMenu = require('../menu/sendMessageDriverMenu');
+    { default: Timer } = require('easytimer.js'),
+    sendMessageDriverMenu = require('../menu/sendMessageDriverMenu'),
+    sendMessageUazPhoto = require('../routeMenu/sendMessageUazPhoto.routeMenu')
 
 const timer = new Timer()
 
@@ -22,10 +23,7 @@ firstStep.action(`openRoute1`, async (ctx) => {
     await getMessageRouteSupplyFromClickAPI(ctx)
     await GetTasksService.setTaskStatus('2bukvwe', 'in progress')
     await GetTimeService.startTimeEntry(24409308, '2bukvwe')
-    await ctx.reply(ctx.i18n.t('messageSceneUazPhoto'), Markup.inlineKeyboard([
-        Markup.button.callback('Подтвердить загрузку', 'accept'),
-        Markup.button.callback('Выйти', 'leave')
-    ]))
+    await sendMessageUazPhoto(ctx)
 
     return await ctx.wizard.next();
 })
@@ -33,10 +31,7 @@ firstStep.action(`openRoute1`, async (ctx) => {
 firstStep.action(`openRoute2`, async (ctx) => {
     await ctx.deleteMessage()
     await getMessageRouteCleaningFromClickAPI(ctx)
-    await ctx.reply(ctx.i18n.t('messageSceneUazPhoto'), Markup.inlineKeyboard([
-        Markup.button.callback('Подтвердить загрузку', 'accept'),
-        Markup.button.callback('Выйти', 'leave')
-    ]))
+    await sendMessageUazPhoto(ctx)
     return await ctx.wizard.selectStep(2);
 })
 
