@@ -3,11 +3,8 @@ const
     { getMessageRouteSupplyFromClickAPI, getMessageRouteCleaningFromClickAPI } = require('../features/getRoute'),
     GetTasksService = require('../api/clickupApiTasks.service'),
     GetTimeService = require('../api/clickupApiTime.service'),
-    { default: Timer } = require('easytimer.js'),
     sendMessageDriverMenu = require('../menu/sendMessageDriverMenu'),
     sendMessageUazPhoto = require('../routeMenu/sendMessageUazPhoto.routeMenu')
-
-const timer = new Timer()
 
 const firstStep = new Composer()
 
@@ -18,11 +15,10 @@ firstStep.action('leaveScene', async (ctx) => {
 })
 
 firstStep.action(`openRoute1`, async (ctx) => {
-    timer.start()
     await ctx.deleteMessage()
     await getMessageRouteSupplyFromClickAPI(ctx)
-    await GetTasksService.setTaskStatus('2bukvwe', 'in progress')
-    await GetTimeService.startTimeEntry(24409308, '2bukvwe')
+    // await GetTasksService.setTaskStatus('2bukvwe', 'in progress')
+    // await GetTimeService.startTimeEntry(24409308, '2bukvwe')
     await sendMessageUazPhoto(ctx)
 
     return await ctx.wizard.next();
