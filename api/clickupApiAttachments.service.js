@@ -1,7 +1,6 @@
-
+require('dotenv').config();
 const axios = require('axios');
-const FormData = require('form-data')
-
+const token = process.env.CLICKUP_TOKEN;
 
 class postAttachmentsService {
 
@@ -13,7 +12,32 @@ class postAttachmentsService {
             data: form,
             headers,
         })
-            .then(() => console.log('worked!'))
+            .then(() => console.log('Загружено в кликап!'))
+            .catch((e) => console.log(e))
+        // return response
+    }
+
+    static async createCommentAttachment(task_id, urll) {
+
+        await axios({
+            method: 'post',
+            url: `https://api.clickup.com/api/v2/task/${task_id}/comment`,
+            data: {
+                'comment': [
+                    {
+                        "text": urll,
+                        "attributes": {
+                            'attachment': true
+                        }
+                    }
+                ]
+            },
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(() => console.log('Загружено в кликап!'))
             .catch((e) => console.log(e))
         // return response
     }

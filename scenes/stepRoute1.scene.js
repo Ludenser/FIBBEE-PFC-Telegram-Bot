@@ -11,37 +11,41 @@ require('dotenv').config();
 
 const token = process.env.CLICKUP_TOKEN;
 const form = new FormData()
+const headers = form.getHeaders();
+headers.authorization = token;
+let urll = undefined
 const stepRoute1 = new Composer()
 
 stepRoute1.on(['document', 'photo'], async (ctx) => {
     // Берем здесь фотки из сообщения и отправляем в кликап в текущий таск
     const files = ctx.update.message.photo
     fileId = files[3].file_id
-    const headers = form.getHeaders();
-    headers.authorization = token;
-    await ctx.telegram.getFileLink(fileId).then(url => {
-        url = url.href
-        axios({ url, responseType: 'stream' }).then(async response => {
+    const url = await ctx.telegram.getFileLink(fileId)
+    url = url.href
+    const response = await axios({ url, responseType: 'stream' })
+    response.data.pipe(fs.createWriteStream(`./test/download/${ctx.update.message.message_id}.jpg`))
 
-            await response.data.pipe(fs.createWriteStream(`./test/download/${ctx.update.message.message_id}.jpg`))
+        .on('finish', async () => {
+            console.log(`Файл ${ctx.update.message.message_id}.jpg загружен`)
+            await PostAttachmentsService.createCommentAttachment('2bukvwe', url)
+            // fs.rename(`./test/download/${ctx.update.message.message_id}.jpg`, './test/upload/attachment.jpg', err => {
+            //     if (err) throw err
+            //     console.log('Файл перемещён')
+            //     return url
+            // })
 
-                .on('finish', () => {
-                    console.log(`Файл ${ctx.update.message.message_id}.jpg успешно загружен`)
-                    fs.rename(`./test/download/${ctx.update.message.message_id}.jpg`, './test/upload/attachment.jpg', err => {
-                        if (err) throw err
-                        console.log('Файл успешно перемещён')
-                    })
-
-                })
-                .on('error', e => ctx.reply(`Ошибка, ${e}`))
         })
-    })
-    form.append('filename', `${ctx.update.message.message_id}.jpg`)
+
+        .on('error', e => ctx.reply(`Ошибка, ${e}`))
+
+
     form.append('attachment', fs.createReadStream(`./test/upload/attachment.jpg`))
-    await PostAttachmentsService.createTaskAttachment('2bukvwe', form, headers)
+    form.append('filename', `${ctx.update.message.message_id}.jpg`)
     fs.rmSync(`./test/upload/attachment.jpg`, {
         force: true,
-    });
+        recursive: true,
+        maxRetries: 1
+    })
 
 })
 
