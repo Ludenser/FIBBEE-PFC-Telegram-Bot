@@ -1,10 +1,9 @@
 const
-    { Telegraf, Scenes, session } = require('telegraf'),
+    { Telegraf } = require('telegraf'),
     TelegrafI18n = require('telegraf-i18n'),
     updateLogger = require('telegraf-update-logger'),
     chalk = require('chalk'),
     path = require('path'),
-    sendMessageError = require('./utils/sendMessageError'),
     startComposer = require('./composers/start.composer'),
     mainMenuComposer = require('./composers/mainMenu.composer'),
     routesInfoComposer = require('./composers/routesInfo.composer'),
@@ -42,7 +41,7 @@ bot.use(
 //     let message = "";
 
 //     if (inputArray.length == 1) {
-//         message = "Пожалуйста, введите текст, например: /axiosxmpl snowman"
+//         message = "Пожалуйста, введите текст, например: /axiosxmpl fxgncghnmhgj"
 //         ctx.reply(message)
 //     } else {
 //         sendProses(ctx, bot)

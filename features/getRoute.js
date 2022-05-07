@@ -37,7 +37,7 @@ module.exports = {
     return targetArr
   },
 
-  getMessageRoutes: function getMessageRoutes(numRoute) {
+  getMessageRoutes: function getMessageRoutes(ctx, numRoute) {
 
     let targetArr = [];
     if (numRoute == 1) {
@@ -60,14 +60,10 @@ module.exports = {
       for (i in objByJson) {
         targetArr.push(objByJson[i].name);
       } return `
-________________      
-❖❖❖1 маршрут❖❖❖
-________________ 
-${filteredArr1.join("\n\n")};
-________________
-❖❖❖2 маршрут❖❖❖
-________________
-${filteredArr2.join("\n\n")}`
+      ${ctx.i18n.t('decoreRoute1Number')}
+      ${filteredArr1.join("\n\n")};
+      ${ctx.i18n.t('decoreRoute2Number')}
+      ${filteredArr2.join("\n\n")}`
     } else {
       const filtered = objByJson.filter(obj => obj.route == 2);
       for (i in filtered) {
@@ -77,11 +73,14 @@ ${filteredArr2.join("\n\n")}`
     return `${targetArr.join("\n")} `
   },
 
-  getMessageRouteSupplyFromClickAPI: async function getMessageRoutesFromClickAPI(ctx) {
+  getMessageRouteSupplyFromClickAPI: async function getMessageRoutesSupplyFromClickAPI(ctx) {
     try {
       const response = await GetTasksService.getAllTasksFromList(listIdSupply)
       const nameValues = response.data.tasks.reverse().map((value, index) => {
-        return `${index + 1}-${value.name}`
+        const
+          tsStart = new Date(Number.parseInt(value.start_date)),
+          tsDue = new Date(Number.parseInt(value.due_date));
+        return `${index + 1}. ${value.name} c ${tsStart.toLocaleTimeString()} до ${tsDue.toLocaleTimeString()}`
       })
       await ctx.reply(nameValues.join("\n\n"))
     } catch (e) {
