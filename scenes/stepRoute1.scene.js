@@ -1,8 +1,9 @@
-const { Composer } = require('telegraf'),
+const { ADDRGETNETWORKPARAMS } = require('dns');
+const { Composer, Markup } = require('telegraf'),
     GetTasksService = require('../api/clickupApiTasks.service'),
     GetTimeService = require('../api/clickupApiTime.service'),
-    PostAttachmentsService = require('../api/clickupApiAttachments.service')
-sendMessageDriverMenu = require('../menu/sendMessageDriverMenu'),
+    PostAttachmentsService = require('../api/clickupApiAttachments.service'),
+    sendMessageDriverMenu = require('../menu/sendMessageDriverMenu'),
     sendMessageUazPhotoCheck = require('../routeMenu/sendMessageUazPhotoCheck.routeMenu'),
     deleteMessagePrev = require('../utils/deleteMessagePrev'),
     axios = require('axios'),
@@ -23,10 +24,20 @@ stepRoute1.on('photo', async (ctx) => {
         .on('finish', async () => {
             console.log(`Файл ${ctx.update.message.message_id}.jpg загружен`)
             await PostAttachmentsService.createTaskAttachment('2eaj9tf', ctx)
-            await sendMessageUazPhotoCheck(ctx)
         })
         .on('error', e => ctx.reply(`Ошибка, ${e}`))
+})
 
+stepRoute1.on('message', async (ctx) => {
+    await sendMessageUazPhotoCheck(ctx)
+})
+
+stepRoute1.action('point_1', async (ctx) => {
+    await ctx.deleteMessage()
+    await deleteMessagePrev(ctx, 3)
+    await deleteMessagePrev(ctx, 2)
+    await deleteMessagePrev(ctx, 1)
+    // return await ctx.wizard.next()
 })
 
 stepRoute1.action('leaveScene', async (ctx) => {
