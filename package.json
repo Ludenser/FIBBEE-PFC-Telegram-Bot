@@ -22,6 +22,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "canvacord": "^5.2.3",
+    "clickup-wrapper": "^1.0.1",
     "clickup.js": "^3.0.1",
     "dotenv": "^16.0.0",
     "easytimer.js": "^4.5.3",
