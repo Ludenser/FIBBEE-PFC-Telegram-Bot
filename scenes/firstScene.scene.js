@@ -17,8 +17,8 @@ firstStep.action('leaveScene', async (ctx) => {
 firstStep.action(`openRoute1`, async (ctx) => {
     await ctx.deleteMessage()
     await getMessageRouteSupplyFromClickAPI(ctx)
-    // await GetTasksService.setTaskStatus('2bukvwe', 'in progress')
-    // await GetTimeService.startTimeEntry(24409308, '2bukvwe')
+    // await GetTasksService.setTaskStatus('2eaj9tf', 'in progress')
+    // await GetTimeService.startTimeEntry(24409308, '2eaj9tf')
     await sendMessageUazPhoto(ctx)
 
     return await ctx.wizard.next();
