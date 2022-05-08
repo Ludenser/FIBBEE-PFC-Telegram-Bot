@@ -1,5 +1,4 @@
-const { ADDRGETNETWORKPARAMS } = require('dns');
-const { Composer, Markup } = require('telegraf'),
+const { Composer } = require('telegraf'),
     GetTasksService = require('../api/clickupApiTasks.service'),
     GetTimeService = require('../api/clickupApiTime.service'),
     PostAttachmentsService = require('../api/clickupApiAttachments.service'),
@@ -9,9 +8,9 @@ const { Composer, Markup } = require('telegraf'),
     axios = require('axios'),
     fs = require('fs');
 
-const stepRoute1 = new Composer()
+const initStepRoute1 = new Composer()
 
-stepRoute1.on('photo', async (ctx) => {
+initStepRoute1.on('photo', async (ctx) => {
     // Берем здесь фотки из сообщения и отправляем в кликап в текущий таск
     const files = ctx.update.message.photo
     const fileId = files[2].file_id
@@ -28,11 +27,11 @@ stepRoute1.on('photo', async (ctx) => {
         .on('error', e => ctx.reply(`Ошибка, ${e}`))
 })
 
-stepRoute1.on('message', async (ctx) => {
+initStepRoute1.on('message', async (ctx) => {
     await sendMessageUazPhotoCheck(ctx)
 })
 
-stepRoute1.action('point_1', async (ctx) => {
+initStepRoute1.action('point_1', async (ctx) => {
     await ctx.deleteMessage()
     await deleteMessagePrev(ctx, 3)
     await deleteMessagePrev(ctx, 2)
@@ -40,7 +39,7 @@ stepRoute1.action('point_1', async (ctx) => {
     // return await ctx.wizard.next()
 })
 
-stepRoute1.action('leaveScene', async (ctx) => {
+initStepRoute1.action('leaveScene', async (ctx) => {
     await GetTimeService.stopTimeEntry(24409308)
     await GetTasksService.setTaskStatus('2eaj9tf', 'to do')
     await ctx.deleteMessage()
@@ -49,4 +48,4 @@ stepRoute1.action('leaveScene', async (ctx) => {
     return await ctx.scene.leave()
 })
 
-module.exports = stepRoute1
+module.exports = initStepRoute1
