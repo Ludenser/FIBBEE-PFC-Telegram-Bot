@@ -68,9 +68,9 @@ module.exports = {
     return `${targetArr.join("\n")} `
   },
 
-  getMessageRouteFromClickAPI: async function getMessageRoutesFromClickAPI(ctx, listId) {
+  getMessageRouteFromClickAPI: async function getMessageRoutesFromClickAPI(ctx, list_id) {
     try {
-      const response = await GetTasksService.getAllTasksFromList(listId)
+      const response = await GetTasksService.getAllTasksFromList(list_id)
       const nameValues = response.data.tasks.reverse().map((value, index) => {
 
         if (!value.start_date) {
@@ -83,6 +83,18 @@ module.exports = {
         }
       })
       await ctx.reply(nameValues.join("\n\n"))
+    } catch (e) {
+      sendMessageError(ctx, e)
+    }
+  },
+
+  getTaskIdArrFromApi: async function getTaskIdArrFromApi(ctx, list_id) {
+    try {
+      const response = await GetTasksService.getAllTasksFromList(list_id)
+      const newArr = response.data.tasks.reverse().map(value => {
+        return value.id
+      })
+      console.log(newArr)
     } catch (e) {
       sendMessageError(ctx, e)
     }

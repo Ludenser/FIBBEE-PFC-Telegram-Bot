@@ -4,9 +4,7 @@ const { Composer } = require('telegraf'),
     sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu'),
     sendMessageUazPhotoCheck = require('../keyboards/scenes/sendMessageUazPhotoCheck.routeMenu'),
     deleteMessagePrev = require('../utils/deleteMessagePrev'),
-    postAttachment = require('../features/postAttachments.feature')
-axios = require('axios'),
-    fs = require('fs');
+    postAttachment = require('../features/postAttachments.feature');
 
 const initStepRoute1 = new Composer()
 

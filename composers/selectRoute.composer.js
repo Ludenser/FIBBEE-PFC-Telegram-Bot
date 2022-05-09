@@ -1,7 +1,14 @@
 const { Composer, Scenes, session } = require('telegraf'),
     routeWizard = require('../wizards/route.wizard'),
     sendMessageError = require('../utils/sendMessageError'),
-    sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu');
+    { getTaskIdArrFromApi } = require('../features/getRoute.feature'),
+    fs = require('fs')
+setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
+    {
+        listIdSupply,
+        listIdCleaning
+    } = setting
+sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu');
 
 
 const composer = new Composer();
@@ -15,6 +22,7 @@ composer.action('route1', async (ctx) => {
         await ctx.deleteMessage()
         ctx.routeNumber = 1
         await sendMessageInit(ctx)
+        await getTaskIdArrFromApi(ctx, listIdSupply)
         await ctx.scene.enter('ROUTE_WIZARD_ID')
     } catch (e) {
         sendMessageError(ctx, e)
@@ -27,6 +35,7 @@ composer.action('route2', async (ctx) => {
         await ctx.deleteMessage()
         ctx.routeNumber = 2
         await sendMessageInit(ctx)
+        await getTaskIdArrFromApi(ctx, listIdCleaning)
         await ctx.scene.enter('ROUTE_WIZARD_ID')
     } catch (e) {
         sendMessageError(ctx, e)
