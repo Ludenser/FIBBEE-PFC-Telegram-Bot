@@ -11,7 +11,7 @@ module.exports = async (ctx) => {
             },
             reply_markup: {
                 keyboard: [
-                    [{ text: 'Подтвердить загрузку✅' }]
+                    [{ text: 'Подтвердить загрузку фото✅' }]
                 ],
                 one_time_keyboard: true,
                 resize_keyboard: true

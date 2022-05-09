@@ -1,30 +1,17 @@
 const { Composer } = require('telegraf'),
     GetTasksService = require('../api/clickupApiTasks.service'),
     GetTimeService = require('../api/clickupApiTime.service'),
-    PostAttachmentsService = require('../api/clickupApiAttachments.service'),
-    sendMessageDriverMenu = require('../menu/sendMessageDriverMenu'),
-    sendMessageUazPhotoCheck = require('../routeMenu/sendMessageUazPhotoCheck.routeMenu'),
+    sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu'),
+    sendMessageUazPhotoCheck = require('../keyboards/scenes/sendMessageUazPhotoCheck.routeMenu'),
     deleteMessagePrev = require('../utils/deleteMessagePrev'),
-    axios = require('axios'),
+    postAttachment = require('../features/postAttachments.feature')
+axios = require('axios'),
     fs = require('fs');
 
 const initStepRoute1 = new Composer()
 
 initStepRoute1.on('photo', async (ctx) => {
-    // Берем здесь фотки из сообщения и отправляем в кликап в текущий таск
-    const files = ctx.update.message.photo
-    const fileId = files[2].file_id
-    let url = await ctx.telegram.getFileLink(fileId)
-    url = url.href
-
-    const response = await axios({ url, responseType: 'stream' })
-    response.data.pipe(fs.createWriteStream(`./test/download/${ctx.update.message.message_id}.jpg`))
-
-        .on('finish', async () => {
-            console.log(`Файл ${ctx.update.message.message_id}.jpg загружен`)
-            await PostAttachmentsService.createTaskAttachment('2eaj9tf', ctx)
-        })
-        .on('error', e => ctx.reply(`Ошибка, ${e}`))
+    await postAttachment(ctx, '2eaj9tf')
 })
 
 initStepRoute1.on('message', async (ctx) => {

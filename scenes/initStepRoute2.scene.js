@@ -1,6 +1,6 @@
 const { Composer } = require('telegraf'),
     GetTimeService = require('../api/clickupApiTime.service'),
-    sendMessageDriverMenu = require('../menu/sendMessageDriverMenu'),
+    sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu'),
     deleteMessagePrev = require('../utils/deleteMessagePrev');
 
 const initStepRoute2 = new Composer()
