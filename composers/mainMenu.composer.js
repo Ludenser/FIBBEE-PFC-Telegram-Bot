@@ -1,7 +1,7 @@
 const { Composer } = require('telegraf'),
-  sendMessageInfo = require('../menu/sendMessageInfo'),
-  sendMessageDocs = require('../menu/sendMessageDocs'),
-  sendMessageDriverMenu = require('../menu/sendMessageDriverMenu'),
+  sendMessageInfo = require('../keyboards/mainMenu/sendMessageInfo'),
+  sendMessageDocs = require('../keyboards/mainMenu/sendMessageDocs'),
+  sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu'),
   sendMessageError = require('../utils/sendMessageError');
 
 const composer = new Composer();

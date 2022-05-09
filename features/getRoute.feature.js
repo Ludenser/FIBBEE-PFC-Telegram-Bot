@@ -4,12 +4,7 @@ const
   json = JSON.stringify(routes),
   objByJson = JSON.parse(json),
   GetTasksService = require('../api/clickupApiTasks.service'),
-  setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
-  sendMessageError = require('../utils/sendMessageError'),
-  {
-    listIdSupply,
-    listIdCleaning
-  } = setting;
+  sendMessageError = require('../utils/sendMessageError');
 
 module.exports = {
 
@@ -73,31 +68,21 @@ module.exports = {
     return `${targetArr.join("\n")} `
   },
 
-  getMessageRouteSupplyFromClickAPI: async function getMessageRoutesSupplyFromClickAPI(ctx) {
+  getMessageRouteFromClickAPI: async function getMessageRoutesFromClickAPI(ctx, listId) {
     try {
-      const response = await GetTasksService.getAllTasksFromList(listIdSupply)
+      const response = await GetTasksService.getAllTasksFromList(listId)
       const nameValues = response.data.tasks.reverse().map((value, index) => {
-        const
-          tsStart = new Date(Number.parseInt(value.start_date)),
-          tsDue = new Date(Number.parseInt(value.due_date));
-        return `${index + 1}. ${value.name} c ${tsStart.toLocaleTimeString()} до ${tsDue.toLocaleTimeString()}`
+
+        if (!value.start_date) {
+          const tsCreate = new Date(Number.parseInt(value.date_created))
+          return `${index + 1}. ${value.name}, время не указано, дата создания ${tsCreate.toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}`
+        } else {
+          const tsStart = new Date(Number.parseInt(value.start_date))
+          const tsDue = new Date(Number.parseInt(value.due_date))
+          return `${index + 1}. ${value.name} c ${tsStart.toLocaleTimeString([], { timeStyle: 'short' })} до ${tsDue.toLocaleTimeString([], { timeStyle: 'short' })}`
+        }
       })
       await ctx.reply(nameValues.join("\n\n"))
-    } catch (e) {
-      sendMessageError(ctx, e)
-    }
-
-  },
-
-  getMessageRouteCleaningFromClickAPI: async function getMessageRouteCleaningFromClickAPI(ctx) {
-
-    try {
-      const response = await GetTasksService.getAllTasksFromList(listIdCleaning)
-      const nameValues = response.data.tasks.reverse().map((value, index) => {
-        return `${index + 1}-${value.name}`
-      })
-      await ctx.reply(nameValues.join("\n\n"))
-
     } catch (e) {
       sendMessageError(ctx, e)
     }

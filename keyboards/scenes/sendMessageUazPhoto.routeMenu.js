@@ -9,7 +9,13 @@ module.exports = async (ctx) => {
                     ]
                 ]
             },
+            reply_markup: {
+                keyboard: [
+                    [{ text: 'Подтвердить загрузку фото✅' }]
+                ],
+                one_time_keyboard: true,
+                resize_keyboard: true
+            },
             parse_mode: "Markdown"
-
         })
 }

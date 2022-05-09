@@ -1,4 +1,4 @@
-const { getMessageRoutes } = require('../features/getRoute')
+const { getMessageRoutes } = require('../../features/getRoute.feature');
 
 module.exports = async (ctx) => {
 
