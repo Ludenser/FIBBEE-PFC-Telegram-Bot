@@ -1,11 +1,9 @@
 const
     { Scenes } = require('telegraf'),
-    firstStep = require('../scenes/firstScene.scene'),
-    stepRoute1 = require('../scenes/stepRoute1.scene'),
-    stepRoute2 = require('../scenes/stepRoute2.scene'),
-    sendMessageError = require('../utils/sendMessageError'),
-    sendMessageInit = require('../routeMenu/sendMessageInit.routeMenu');
+    divisionStep = require('../scenes/divisionStepScene.scene'),
+    initStepRoute1 = require('../scenes/initStepRoute1.scene'),
+    initStepRoute2 = require('../scenes/initStepRoute2.scene');
 
-const routeScene = new Scenes.WizardScene('ROUTE_WIZARD_ID', firstStep, stepRoute1, stepRoute2)
+const routeScene = new Scenes.WizardScene('ROUTE_WIZARD_ID', divisionStep, initStepRoute1, initStepRoute2)
 
 module.exports = routeScene

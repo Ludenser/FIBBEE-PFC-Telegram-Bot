@@ -1,11 +1,11 @@
 const { Composer } = require('telegraf'),
     GetTimeService = require('../api/clickupApiTime.service'),
-    sendMessageDriverMenu = require('../menu/sendMessageDriverMenu'),
+    sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu'),
     deleteMessagePrev = require('../utils/deleteMessagePrev');
 
-const stepRoute2 = new Composer()
+const initStepRoute2 = new Composer()
 
-stepRoute2.action('leaveScene', async (ctx) => {
+initStepRoute2.action('leaveScene', async (ctx) => {
     await GetTimeService.stopTimeEntry(24409308)
     await ctx.deleteMessage()
     await deleteMessagePrev(ctx, 1)
@@ -13,4 +13,4 @@ stepRoute2.action('leaveScene', async (ctx) => {
     return await ctx.scene.leave()
 })
 
-module.exports = stepRoute2
+module.exports = initStepRoute2

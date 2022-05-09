@@ -1,6 +1,6 @@
 module.exports = async (ctx) => {
 
-    await ctx.reply(ctx.i18n.t('messageSceneUazPhotoCheck'),
+    await ctx.telegram.sendMessage(ctx.chat.id, ctx.i18n.t('messageSceneUazPhotoCheck'),
         {
             reply_markup: {
                 inline_keyboard: [

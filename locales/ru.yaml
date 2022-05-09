@@ -1,12 +1,12 @@
 menu: |
-  ●▬▬▬▬▬ஜFIBBEEஜ▬▬▬▬▬●
+  ●▬▬▬🦾▬▬FIBBEE▬▬🦿▬▬▬●
 
-  ❖ NameBot : *${ctx.botInfo.first_name}*
-  ❖ Version : 0.1.0
-  ❖ Owner : *${ownerbot}*
+  🔸 NameBot : *${ctx.botInfo.first_name}*
+  🔸 Version : 0.1.0
+  🔸 Owner : *${ownerbot}*
 
 info: |
-  ●▬▬▬ஜInfoஜ▬▬▬●
+  ●▬▬▬🦾▬▬Информация▬▬🦿▬▬▬●
 
   This is corporate chat-bot 
       by Foodtronics team
@@ -14,7 +14,7 @@ info: |
                 ⌤⌤⌤⌤⌤
 
 docs: |
-  ●▬▬▬ஜМенюஜ▬▬▬●
+  ●▬▬▬🦾▬▬Рабочие документы▬▬🦿▬▬▬●
   Нажми одну из кнопок снизу
 
 helper: |
@@ -27,19 +27,19 @@ helperSceneLeave: |
   Чтобы выйти напишите /leave
 
 messageSceneUazPhoto: |
-  Жду, пока загрузишь машину, потом не забудь ее сфоткать с 4х сторон и прикрепить сюда.
+  Жду, пока загрузишь машину, потом не забудь ее сфоткать с 4х сторон и прикрепить сюда. Для продолжения, подтверди загрузку кнопкой снизу.
 
 messageSceneUazPhotoCheck: |
   Проверь, все прикрепил?
 
 decoreRoute1Number: |
   ________________      
-  ❖❖❖1 маршрут❖❖❖
+  🔸🔸🔸1 маршрут🔸🔸🔸
   ________________ 
 
 decoreRoute2Number: |
   ________________      
-  ❖❖❖2 маршрут❖❖❖
+  🔸🔸🔸2 маршрут🔸🔸🔸
   ________________ 
 
 

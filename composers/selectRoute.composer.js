@@ -1,7 +1,7 @@
 const { Composer, Scenes, session } = require('telegraf'),
     routeWizard = require('../wizards/route.wizard'),
     sendMessageError = require('../utils/sendMessageError'),
-    sendMessageInit = require('../routeMenu/sendMessageInit.routeMenu');
+    sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu');
 
 
 const composer = new Composer();
