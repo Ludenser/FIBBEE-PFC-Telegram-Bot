@@ -1,51 +1,52 @@
-const { Composer } = require('telegraf'),
+const { Composer, Scenes } = require('telegraf'),
     GetTasksService = require('../api/clickupApiTasks.service'),
     GetTimeService = require('../api/clickupApiTime.service'),
-    PostAttachmentsService = require('../api/clickupApiAttachments.service'),
-    sendMessageDriverMenu = require('../menu/sendMessageDriverMenu'),
-    sendMessageUazPhotoCheck = require('../routeMenu/sendMessageUazPhotoCheck.routeMenu'),
-    deleteMessagePrev = require('../utils/deleteMessagePrev'),
-    axios = require('axios'),
-    fs = require('fs');
+    sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu'),
+    sendMessageUazPhotoCheck = require('../keyboards/scenes/sendMessageUazPhotoCheck.routeMenu'),
+    deleteMessagePrev = require('../utils/deleteMessagePrev');
 
-const initStepRoute1 = new Composer()
 
-initStepRoute1.on('photo', async (ctx) => {
-    // Берем здесь фотки из сообщения и отправляем в кликап в текущий таск
-    const files = ctx.update.message.photo
-    const fileId = files[2].file_id
-    let url = await ctx.telegram.getFileLink(fileId)
-    url = url.href
 
-    const response = await axios({ url, responseType: 'stream' })
-    response.data.pipe(fs.createWriteStream(`./test/download/${ctx.update.message.message_id}.jpg`))
 
-        .on('finish', async () => {
-            console.log(`Файл ${ctx.update.message.message_id}.jpg загружен`)
-            await PostAttachmentsService.createTaskAttachment('2eaj9tf', ctx)
+module.exports = (arr) => {
+    const newArr = arr.map((value) => {
+        const point_scene = new Composer()
+
+        // point_scene.action('openRoute1', async (ctx) => {
+        //     await sendMessageUazPhotoCheck(ctx)
+        //     console.log(value)
+        // })
+
+        // point_scene.action('openRoute2', async (ctx) => {
+        //     await sendMessageUazPhotoCheck(ctx)
+        //     console.log(value)
+        // })
+
+        point_scene.on('message', async (ctx) => {
+            // if (ctx.telegram.is_bot )
+            await sendMessageUazPhotoCheck(ctx)
+            console.log(value)
+            await ctx.wizard.next()
         })
-        .on('error', e => ctx.reply(`Ошибка, ${e}`))
-})
 
-initStepRoute1.on('message', async (ctx) => {
-    await sendMessageUazPhotoCheck(ctx)
-})
+        point_scene.action('point_1', async (ctx) => {
+            await ctx.deleteMessage()
+            // await deleteMessagePrev(ctx, 3)
+            // await deleteMessagePrev(ctx, 2)
+            // await deleteMessagePrev(ctx, 1)
+            console.log(value)
+            await ctx.wizard.next()
+        })
 
-initStepRoute1.action('point_1', async (ctx) => {
-    await ctx.deleteMessage()
-    await deleteMessagePrev(ctx, 3)
-    await deleteMessagePrev(ctx, 2)
-    await deleteMessagePrev(ctx, 1)
-    // return await ctx.wizard.next()
-})
-
-initStepRoute1.action('leaveScene', async (ctx) => {
-    await GetTimeService.stopTimeEntry(24409308)
-    await GetTasksService.setTaskStatus('2eaj9tf', 'to do')
-    await ctx.deleteMessage()
-    await deleteMessagePrev(ctx, 1)
-    await sendMessageDriverMenu(ctx)
-    return await ctx.scene.leave()
-})
-
-module.exports = initStepRoute1
+        point_scene.action('leaveScene', async (ctx) => {
+            // await GetTimeService.stopTimeEntry(24409308)
+            // await GetTasksService.setTaskStatus(value, 'to do')
+            await ctx.deleteMessage()
+            await deleteMessagePrev(ctx, 1)
+            await sendMessageDriverMenu(ctx)
+            await ctx.scene.leave()
+        })
+        return point_scene
+    })
+    return newArr
+}

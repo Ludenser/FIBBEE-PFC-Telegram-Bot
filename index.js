@@ -1,5 +1,5 @@
 const
-    { Telegraf } = require('telegraf'),
+    { Telegraf, session, Scenes } = require('telegraf'),
     TelegrafI18n = require('telegraf-i18n'),
     updateLogger = require('telegraf-update-logger'),
     chalk = require('chalk'),
@@ -7,7 +7,15 @@ const
     startComposer = require('./composers/start.composer'),
     mainMenuComposer = require('./composers/mainMenu.composer'),
     routesInfoComposer = require('./composers/routesInfo.composer'),
-    selectRouteComposer = require('./composers/selectRoute.composer');
+    { getTaskIdArrFromApi } = require('./features/getRoute.feature'),
+    fs = require('fs'),
+    setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
+    {
+        listIdSupply,
+        listIdCleaning
+    } = setting,
+    selectRouteComposer = require('./composers/selectRoute.composer'),
+    { routeScene, pointSupplyScene, pointCleanScene } = require('./wizards/route.wizard')
 
 require('dotenv').config();
 
@@ -20,7 +28,10 @@ const token = process.env.TOKEN;
 
 const bot = new Telegraf(token)
 
-const routeNumber = undefined;
+bot.context.routeNumber = undefined
+bot.context.supplyArr_id = undefined
+bot.context.cleanArr_id = undefined
+bot.context.curr_task = undefined
 
 /* Log Function */
 bot.use(
@@ -69,14 +80,17 @@ bot.use(
 //     }
 // })
 
-bot.context.routeNumber = routeNumber
-
 bot.use(i18n.middleware())
-
+bot.use(async (ctx, next) => {
+    setTimeout(() => {
+        selectRouteComposer
+    }, 1000);
+    await next()
+})
 bot.use(startComposer)
 bot.use(mainMenuComposer)
 bot.use(routesInfoComposer)
-bot.use(selectRouteComposer)
+// bot.use(selectRouteComposer)
 
 bot.launch()
 

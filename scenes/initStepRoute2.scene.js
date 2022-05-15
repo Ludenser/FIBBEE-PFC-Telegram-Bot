@@ -6,10 +6,11 @@ const { Composer } = require('telegraf'),
 const initStepRoute2 = new Composer()
 
 initStepRoute2.action('leaveScene', async (ctx) => {
-    await GetTimeService.stopTimeEntry(24409308)
+    // await GetTimeService.stopTimeEntry(24409308)
     await ctx.deleteMessage()
     await deleteMessagePrev(ctx, 1)
     await sendMessageDriverMenu(ctx)
+    ctx.state = {}
     return await ctx.scene.leave()
 })
 

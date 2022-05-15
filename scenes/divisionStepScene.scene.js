@@ -12,29 +12,30 @@ const
         listIdCleaning
     } = setting;
 
-const firstStep = new Composer()
-
-firstStep.action('leaveScene', async (ctx) => {
+const divisionStep = new Composer()
+divisionStep.action('leaveScene', async (ctx) => {
     await ctx.deleteMessage()
     await sendMessageDriverMenu(ctx)
+    ctx.state = {}
     return await ctx.scene.leave();
 })
 
-firstStep.action(`openRoute1`, async (ctx) => {
+divisionStep.action(`openRoute1`, async (ctx) => {
     await ctx.deleteMessage()
     await getMessageRouteFromClickAPI(ctx, listIdSupply)
+
     // await GetTasksService.setTaskStatus('2eaj9tf', 'in progress')
-    // await GetTimeService.startTimeEntry(24409308, '2eaj9tf')
+    // await GetTimeService.startTimeEntry(24409308,'2eaj9tf')
     await sendMessageUazPhoto(ctx)
 
     return await ctx.wizard.next();
 })
 
-firstStep.action(`openRoute2`, async (ctx) => {
+divisionStep.action(`openRoute2`, async (ctx) => {
     await ctx.deleteMessage()
     await getMessageRouteCleaningFromClickAPI(ctx, listIdCleaning)
     await sendMessageUazPhoto(ctx)
     return await ctx.wizard.selectStep(2);
 })
 
-module.exports = firstStep
+module.exports = divisionStep
