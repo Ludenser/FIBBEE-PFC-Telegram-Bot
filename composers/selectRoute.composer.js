@@ -8,12 +8,12 @@ const { Composer, Scenes, session } = require('telegraf'),
         listIdSupply,
         listIdCleaning
     } = setting,
-    pointSupplyScene = require('../wizards/point.wizard'),
+    pointScene = require('../wizards/point.wizard'),
     sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu');
 
 module.exports = (ctx) => {
     const composer = new Composer();
-    const stage = new Scenes.Stage([routeScene, pointSupplyScene(ctx.supplyArr_id)])
+    const stage = new Scenes.Stage([routeScene, pointScene('supply', ctx.supplyArr_id), pointScene('clean', ctx.cleanArr_id)])
 
     composer.use(session())
     composer.use(stage.middleware())
@@ -34,12 +34,10 @@ module.exports = (ctx) => {
 
     composer.action('route1', async (ctx) => {
         try {
-            console.log(ctx.scene)
-            //  I have doubts about the correctness of this part.
             await ctx.deleteMessage()
             ctx.routeNumber = 1
             await sendMessageInit(ctx)
-            await ctx.scene.enter('ROUTE_WIZARD_ID')  //temporary hardcode id, which ctx.scenes is guarantee has
+            await ctx.scene.enter('ROUTE_WIZARD_ID')
         } catch (e) {
             sendMessageError(ctx, e)
         }
