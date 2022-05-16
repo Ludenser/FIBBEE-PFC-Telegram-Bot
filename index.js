@@ -14,8 +14,7 @@ const
         listIdSupply,
         listIdCleaning
     } = setting,
-    selectRouteComposer = require('./composers/selectRoute.composer'),
-    { routeScene, pointSupplyScene, pointCleanScene } = require('./wizards/route.wizard')
+    selectRouteComposer = require('./composers/selectRoute.composer');
 
 require('dotenv').config();
 
@@ -27,11 +26,22 @@ const i18n = new TelegrafI18n({
 const token = process.env.TOKEN;
 
 const bot = new Telegraf(token)
-
+bot.context.curr_task = undefined
 bot.context.routeNumber = undefined
 bot.context.supplyArr_id = undefined
 bot.context.cleanArr_id = undefined
-bot.context.curr_task = undefined
+
+bot.use(async (ctx, next) => {
+    const supplyArr_id = await getTaskIdArrFromApi(listIdSupply)
+    ctx.supplyArr_id = supplyArr_id
+    await next()
+})
+bot.use(async (ctx, next) => {
+    const cleanArr_id = await getTaskIdArrFromApi(listIdCleaning)
+    ctx.cleanArr_id = cleanArr_id
+    await next()
+})
+
 
 /* Log Function */
 bot.use(
@@ -81,17 +91,17 @@ bot.use(
 // })
 
 bot.use(i18n.middleware())
+
 bot.use(async (ctx, next) => {
-    setTimeout(() => {
-        selectRouteComposer
-    }, 1000);
+    bot.use(selectRouteComposer(ctx))
+
     await next()
 })
 bot.use(startComposer)
 bot.use(mainMenuComposer)
 bot.use(routesInfoComposer)
-// bot.use(selectRouteComposer)
 
+// bot.use(selectRouteComposer)
 bot.launch()
 
 // Enable graceful stop

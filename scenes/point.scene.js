@@ -12,35 +12,24 @@ module.exports = (arr) => {
     const newArr = arr.map((value) => {
         const point_scene = new Composer()
 
-        // point_scene.action('openRoute1', async (ctx) => {
-        //     await sendMessageUazPhotoCheck(ctx)
-        //     console.log(value)
-        // })
-
-        // point_scene.action('openRoute2', async (ctx) => {
-        //     await sendMessageUazPhotoCheck(ctx)
-        //     console.log(value)
-        // })
 
         point_scene.on('message', async (ctx) => {
-            // if (ctx.telegram.is_bot )
             await sendMessageUazPhotoCheck(ctx)
             console.log(value)
+            console.log(ctx.scene)
             await ctx.wizard.next()
         })
 
         point_scene.action('point_1', async (ctx) => {
             await ctx.deleteMessage()
-            // await deleteMessagePrev(ctx, 3)
-            // await deleteMessagePrev(ctx, 2)
-            // await deleteMessagePrev(ctx, 1)
+
             console.log(value)
-            await ctx.wizard.next()
+            if (ctx.wizard.step)
+                await ctx.wizard.next()
         })
 
         point_scene.action('leaveScene', async (ctx) => {
-            // await GetTimeService.stopTimeEntry(24409308)
-            // await GetTasksService.setTaskStatus(value, 'to do')
+
             await ctx.deleteMessage()
             await deleteMessagePrev(ctx, 1)
             await sendMessageDriverMenu(ctx)
@@ -50,3 +39,18 @@ module.exports = (arr) => {
     })
     return newArr
 }
+// point_scene.action('openRoute1', async (ctx) => {
+        //     await sendMessageUazPhotoCheck(ctx)
+        //     console.log(value)
+        // })
+
+        // point_scene.action('openRoute2', async (ctx) => {
+        //     await sendMessageUazPhotoCheck(ctx)
+        //     console.log(value)
+        // })
+
+            // await deleteMessagePrev(ctx, 3)
+            // await deleteMessagePrev(ctx, 2)
+            // await deleteMessagePrev(ctx, 1)
+            // await GetTimeService.stopTimeEntry(24409308)
+            // await GetTasksService.setTaskStatus(value, 'to do')
