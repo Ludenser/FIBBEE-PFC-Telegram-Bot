@@ -31,16 +31,7 @@ bot.context.routeNumber = undefined
 bot.context.supplyArr_id = undefined
 bot.context.cleanArr_id = undefined
 
-bot.use(async (ctx, next) => {
-    const supplyArr_id = await getTaskIdArrFromApi(listIdSupply)
-    ctx.supplyArr_id = supplyArr_id
-    await next()
-})
-bot.use(async (ctx, next) => {
-    const cleanArr_id = await getTaskIdArrFromApi(listIdCleaning)
-    ctx.cleanArr_id = cleanArr_id
-    await next()
-})
+
 
 
 /* Log Function */
@@ -93,8 +84,11 @@ bot.use(
 bot.use(i18n.middleware())
 
 bot.use(async (ctx, next) => {
+    const supplyArr_id = await getTaskIdArrFromApi(listIdSupply)
+    const cleanArr_id = await getTaskIdArrFromApi(listIdCleaning)
+    ctx.supplyArr_id = supplyArr_id
+    ctx.cleanArr_id = cleanArr_id
     bot.use(selectRouteComposer(ctx))
-
     await next()
 })
 bot.use(startComposer)

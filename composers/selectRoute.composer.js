@@ -39,8 +39,6 @@ module.exports = (ctx) => {
             await ctx.deleteMessage()
             ctx.routeNumber = 1
             await sendMessageInit(ctx)
-            const arr_id = await getTaskIdArrFromApi(listIdCleaning)
-            ctx.state = arr_id
             await ctx.scene.enter('ROUTE_WIZARD_ID')  //temporary hardcode id, which ctx.scenes is guarantee has
         } catch (e) {
             sendMessageError(ctx, e)
@@ -53,9 +51,6 @@ module.exports = (ctx) => {
             await ctx.deleteMessage()
             ctx.routeNumber = 2
             await sendMessageInit(ctx)
-            const arr_id = await getTaskIdArrFromApi(listIdCleaning)
-            ctx.state = arr_id
-            console.log(ctx.state)
             await ctx.scene.enter('ROUTE_WIZARD_ID')
         } catch (e) {
             sendMessageError(ctx, e)

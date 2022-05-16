@@ -16,7 +16,6 @@ module.exports = (arr) => {
         point_scene.on('message', async (ctx) => {
             await sendMessageUazPhotoCheck(ctx)
             console.log(value)
-            console.log(ctx.scene)
             await ctx.wizard.next()
         })
 
