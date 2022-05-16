@@ -1,9 +1,4 @@
-const { getMessageRoutes } = require('../features/getRoute'),
-    setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
-    {
-        listIdSupply,
-        listIdCleaning
-    } = setting;
+const { getMessageRoutes } = require('../features/getRoute')
 
 module.exports = async (ctx) => {
 

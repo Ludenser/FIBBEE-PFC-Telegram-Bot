@@ -1,5 +1,5 @@
 const
-    { Telegraf } = require('telegraf'),
+    { Telegraf, session, Scenes } = require('telegraf'),
     TelegrafI18n = require('telegraf-i18n'),
     updateLogger = require('telegraf-update-logger'),
     chalk = require('chalk'),
@@ -7,6 +7,13 @@ const
     startComposer = require('./composers/start.composer'),
     mainMenuComposer = require('./composers/mainMenu.composer'),
     routesInfoComposer = require('./composers/routesInfo.composer'),
+    { getTaskIdArrFromApi } = require('./features/getRoute.feature'),
+    fs = require('fs'),
+    setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
+    {
+        listIdSupply,
+        listIdCleaning
+    } = setting,
     selectRouteComposer = require('./composers/selectRoute.composer');
 
 require('dotenv').config();
@@ -19,8 +26,13 @@ const i18n = new TelegrafI18n({
 const token = process.env.TOKEN;
 
 const bot = new Telegraf(token)
+bot.context.curr_task = undefined
+bot.context.routeNumber = undefined
+bot.context.supplyArr_id = undefined
+bot.context.cleanArr_id = undefined
 
-const routeNumber = undefined;
+
+
 
 /* Log Function */
 bot.use(
@@ -69,15 +81,21 @@ bot.use(
 //     }
 // })
 
-bot.context.routeNumber = routeNumber
-
 bot.use(i18n.middleware())
 
+bot.use(async (ctx, next) => {
+    const supplyArr_id = await getTaskIdArrFromApi(listIdSupply)
+    const cleanArr_id = await getTaskIdArrFromApi(listIdCleaning)
+    ctx.supplyArr_id = supplyArr_id
+    ctx.cleanArr_id = cleanArr_id
+    bot.use(selectRouteComposer(ctx))
+    await next()
+})
 bot.use(startComposer)
 bot.use(mainMenuComposer)
 bot.use(routesInfoComposer)
-bot.use(selectRouteComposer)
 
+// bot.use(selectRouteComposer)
 bot.launch()
 
 // Enable graceful stop

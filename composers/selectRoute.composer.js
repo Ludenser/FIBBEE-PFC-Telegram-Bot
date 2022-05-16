@@ -1,37 +1,62 @@
 const { Composer, Scenes, session } = require('telegraf'),
-    routeWizard = require('../wizards/route.wizard'),
+    routeScene = require('../wizards/route.wizard'),
     sendMessageError = require('../utils/sendMessageError'),
+    { getTaskIdArrFromApi } = require('../features/getRoute.feature'),
+    fs = require('fs'),
+    setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
+    {
+        listIdSupply,
+        listIdCleaning
+    } = setting,
+    pointSupplyScene = require('../wizards/point.wizard'),
     sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu');
 
+module.exports = (ctx) => {
+    const composer = new Composer();
+    const stage = new Scenes.Stage([routeScene, pointSupplyScene(ctx.supplyArr_id)])
 
-const composer = new Composer();
+    composer.use(session())
+    composer.use(stage.middleware())
 
-const stage = new Scenes.Stage([routeWizard])
-composer.use(session())
-composer.use(stage.middleware())
 
-composer.action('route1', async (ctx) => {
-    try {
-        await ctx.deleteMessage()
-        ctx.routeNumber = 1
-        await sendMessageInit(ctx)
-        await ctx.scene.enter('ROUTE_WIZARD_ID')
-    } catch (e) {
-        sendMessageError(ctx, e)
-    }
+    // const arr = await getTaskIdArrFromApi(listIdSupply)
+    // getTaskIdArrFromApi(listIdSupply).then((arr) => {
+    //     const scenes = arr.map((value) => {
+    //         return point_scene(value)
+    //     })
+    //     return scenes
+    // })
+    //     .then((scenes) => {
+    //         stage = new Scenes.Stage(scenes)
+    //         composer.use(session()).use(stage.middleware())
+    //     })  
 
-})
 
-composer.action('route2', async (ctx) => {
-    try {
-        await ctx.deleteMessage()
-        ctx.routeNumber = 2
-        await sendMessageInit(ctx)
-        await ctx.scene.enter('ROUTE_WIZARD_ID')
-    } catch (e) {
-        sendMessageError(ctx, e)
-    }
+    composer.action('route1', async (ctx) => {
+        try {
+            console.log(ctx.scene)
+            //  I have doubts about the correctness of this part.
+            await ctx.deleteMessage()
+            ctx.routeNumber = 1
+            await sendMessageInit(ctx)
+            await ctx.scene.enter('ROUTE_WIZARD_ID')  //temporary hardcode id, which ctx.scenes is guarantee has
+        } catch (e) {
+            sendMessageError(ctx, e)
+        }
 
-})
+    })
 
-module.exports = composer
+    composer.action('route2', async (ctx) => {
+        try {
+            await ctx.deleteMessage()
+            ctx.routeNumber = 2
+            await sendMessageInit(ctx)
+            await ctx.scene.enter('ROUTE_WIZARD_ID')
+        } catch (e) {
+            sendMessageError(ctx, e)
+        }
+
+    })
+
+    return composer
+}
