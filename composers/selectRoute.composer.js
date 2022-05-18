@@ -13,7 +13,7 @@ const { Composer, Scenes, session } = require('telegraf'),
 
 module.exports = (ctx) => {
     const composer = new Composer();
-    const stage = new Scenes.Stage([routeScene, pointScene('supply', ctx.supplyArr_id), pointScene('clean', ctx.cleanArr_id)])
+    const stage = new Scenes.Stage([routeScene, pointScene('supply', ctx), pointScene('clean', ctx)])
 
     composer.use(session())
     composer.use(stage.middleware())

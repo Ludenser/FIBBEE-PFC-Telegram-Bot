@@ -9,22 +9,23 @@ const { Composer, Scenes } = require('telegraf'),
 
 
 module.exports = (arr) => {
-    const newArr = arr.map((value) => {
+    const newArr = arr.reverse().map((task) => {
         const point_scene = new Composer()
 
 
         point_scene.on('message', async (ctx) => {
-            await sendMessageUazPhotoCheck(ctx)
-            console.log(value)
+            await ctx.deleteMessage()
+            // await sendMessageUazPhotoCheck(ctx)
+            await ctx.reply(task.name)
+            console.log(task, task.id)
             await ctx.wizard.next()
         })
 
         point_scene.action('point_1', async (ctx) => {
             await ctx.deleteMessage()
 
-            console.log(value)
-            if (ctx.wizard.step)
-                await ctx.wizard.next()
+            console.log(task, task.id)
+            await ctx.wizard.next()
         })
 
         point_scene.action('leaveScene', async (ctx) => {

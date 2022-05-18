@@ -50,11 +50,11 @@ class GetTimeService {
         return response
     }
 
-    static async startTimeEntry(team_id) { //Запуск встроенного таймера в ClickUp
+    static async startTimeEntry(team_id, task_id) { //Запуск встроенного таймера в ClickUp
         const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/start/`,
             {
                 "description": "from api",
-                "tid": this.task_id
+                "tid": task_id
             },
             {
                 headers: {
