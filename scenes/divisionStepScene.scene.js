@@ -23,13 +23,8 @@ divisionStep.action('leaveScene', async (ctx) => {
 divisionStep.action(`openRoute1`, async (ctx) => {
     await ctx.deleteMessage()
     await getMessageRouteFromClickAPI(ctx, listIdSupply)
-    await ctx.all_tasks.forEach(element => {
-        if (element.name.includes('Водителя' || 'оператора')) {
-            ctx.primeTask_id = element.id
-        }
-    })
-    await GetTasksService.setTaskStatus(ctx.primeTask_id, 'in progress')
-    await GetTimeService.startTimeEntry(24409308, ctx.primeTask_id)
+    await GetTasksService.setTaskStatus(ctx.primeTaskSupply_id, 'in progress')
+    await GetTimeService.startTimeEntry(ctx.team_id, ctx.primeTaskSupply_id)
     await sendMessageUazPhoto(ctx)
 
     return await ctx.wizard.next();
@@ -37,7 +32,9 @@ divisionStep.action(`openRoute1`, async (ctx) => {
 
 divisionStep.action(`openRoute2`, async (ctx) => {
     await ctx.deleteMessage()
-    await getMessageRouteCleaningFromClickAPI(ctx, listIdCleaning)
+    await getMessageRouteFromClickAPI(ctx, listIdCleaning)
+    await GetTasksService.setTaskStatus(ctx.primeTaskClean_id, 'in progress')
+    await GetTimeService.startTimeEntry(ctx.team_id, ctx.primeTaskClean_id)
     await sendMessageUazPhoto(ctx)
     return await ctx.wizard.selectStep(2);
 })

@@ -74,8 +74,8 @@ module.exports = {
       const nameValues = response.data.tasks.reverse().map((value, index) => {
 
         if (!value.start_date) {
-          const tsCreate = new Date(Number.parseInt(value.date_created))
-          return `${index + 1}. ${value.name}, время не указано, дата создания ${tsCreate.toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}`
+          const tsDue = new Date(Number.parseInt(value.due_date))
+          return `${index + 1}. ${value.name}, время не указано, выполнить до ${tsDue.toLocaleTimeString([], { timeStyle: 'short' })}`
         } else {
           const tsStart = new Date(Number.parseInt(value.start_date))
           const tsDue = new Date(Number.parseInt(value.due_date))

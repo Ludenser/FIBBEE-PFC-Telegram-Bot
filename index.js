@@ -13,7 +13,8 @@ const
     setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
     {
         listIdSupply,
-        listIdCleaning
+        listIdCleaning,
+        team_id,
     } = setting,
     selectRouteComposer = require('./composers/selectRoute.composer');
 
@@ -27,10 +28,12 @@ const i18n = new TelegrafI18n({
 const token = process.env.TOKEN;
 
 const bot = new Telegraf(token)
-bot.context.all_tasks = undefined
+bot.context.all_tasksSupply = undefined
+bot.context.all_tasksClean = undefined
 bot.context.routeNumber = undefined
-bot.context.supplyArr_id = undefined
-bot.context.cleanArr_id = undefined
+bot.context.team_id = team_id
+bot.context.primeTaskSupply_id = undefined
+bot.context.primeTaskClean_id = undefined
 
 
 
@@ -86,11 +89,22 @@ bot.use(i18n.middleware())
 
 bot.use(async (ctx, next) => {
     const all_tasksSupply = await getTasks.getAllTasks(listIdSupply)
-    const supplyArr_id = await getTaskIdArrFromApi(listIdSupply)
-    const cleanArr_id = await getTaskIdArrFromApi(listIdCleaning)
-    ctx.supplyArr_id = supplyArr_id
-    ctx.cleanArr_id = cleanArr_id
-    ctx.all_tasks = all_tasksSupply.data.tasks
+    const all_tasksClean = await getTasks.getAllTasks(listIdCleaning)
+    ctx.all_tasksSupply = all_tasksSupply.data.tasks
+    ctx.all_tasksClean = all_tasksClean.data.tasks
+    await ctx.all_tasksSupply.forEach((element, i) => {
+        if (element.name.includes('водителя' || 'оператора')) {
+            ctx.primeTaskSupply_id = element.id
+            const r = ctx.all_tasksSupply.splice(i, 1)
+
+        }
+    })
+    await ctx.all_tasksClean.forEach((element, i) => {
+        if (element.name.includes('водителя' || 'оператора')) {
+            ctx.primeTaskClean_id = element.id
+            const r = ctx.all_tasksClean.splice(i, 1)
+        }
+    })
     bot.use(selectRouteComposer(ctx))
     await next()
 })

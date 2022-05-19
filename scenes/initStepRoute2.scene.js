@@ -1,17 +1,36 @@
-const { Composer } = require('telegraf'),
+const { Composer, session, Scenes } = require('telegraf'),
+    GetTasksService = require('../api/clickupApiTasks.service'),
     GetTimeService = require('../api/clickupApiTime.service'),
     sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu'),
-    deleteMessagePrev = require('../utils/deleteMessagePrev');
-
+    sendMessageUazPhotoCheck = require('../keyboards/scenes/sendMessageUazPhotoCheck.routeMenu'),
+    deleteMessagePrev = require('../utils/deleteMessagePrev'),
+    postAttachment = require('../features/postAttachments.feature');
 const initStepRoute2 = new Composer()
 
+initStepRoute2.on('photo', async (ctx) => {
+    await postAttachment(ctx, ctx.primeTaskClean_id)
+
+})
+
+initStepRoute2.on('message', async (ctx) => {
+    await sendMessageUazPhotoCheck(ctx)
+
+})
+
+initStepRoute2.action('point_1', async (ctx) => {
+    await ctx.scene.enter('POINTS_CLEAN_WIZARD_ID')
+})
+
 initStepRoute2.action('leaveScene', async (ctx) => {
-    // await GetTimeService.stopTimeEntry(24409308)
+    await GetTimeService.stopTimeEntry(ctx.team_id, ctx.primeTaskClean_id)
+    await GetTasksService.setTaskStatus(ctx.primeTaskClean_id, 'to do')
     await ctx.deleteMessage()
     await deleteMessagePrev(ctx, 1)
     await sendMessageDriverMenu(ctx)
     ctx.state = {}
     return await ctx.scene.leave()
+
+
 })
 
 module.exports = initStepRoute2

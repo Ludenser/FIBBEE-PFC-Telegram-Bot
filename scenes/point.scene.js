@@ -9,36 +9,51 @@ const { Composer, Scenes } = require('telegraf'),
 
 
 module.exports = (arr) => {
-    const newArr = arr.reverse().map((task) => {
-        const point_scene = new Composer()
+    const newArr = arr.reverse().map((task, i) => {
+
+        if (task.name.includes('Обслуживание')) {
+            const point_scene = new Composer()
+
+            if (arr.length - 1 != i) {
+                point_scene.on('message', async (ctx) => {
+                    await ctx.deleteMessage()
+                    // await sendMessageUazPhotoCheck(ctx)
+                    await ctx.reply(task.name)
+                    console.log(task, task.id)
+                    await ctx.wizard.next()
+                })
+            } else {
+                point_scene.on('message', async (ctx) => {
+                    await ctx.deleteMessage()
+                    // await sendMessageUazPhotoCheck(ctx)
+                    await ctx.reply(task.name)
+                    console.log(task, i)
+
+                })
+            }
 
 
-        point_scene.on('message', async (ctx) => {
-            await ctx.deleteMessage()
-            // await sendMessageUazPhotoCheck(ctx)
-            await ctx.reply(task.name)
-            console.log(task, task.id)
-            await ctx.wizard.next()
-        })
+            point_scene.action('point_1', async (ctx) => {
+                await ctx.deleteMessage()
 
-        point_scene.action('point_1', async (ctx) => {
-            await ctx.deleteMessage()
+                console.log(task, task.id)
+                await ctx.wizard.next()
+            })
 
-            console.log(task, task.id)
-            await ctx.wizard.next()
-        })
+            point_scene.action('leaveScene', async (ctx) => {
 
-        point_scene.action('leaveScene', async (ctx) => {
-
-            await ctx.deleteMessage()
-            await deleteMessagePrev(ctx, 1)
-            await sendMessageDriverMenu(ctx)
-            await ctx.scene.leave()
-        })
-        return point_scene
+                await ctx.deleteMessage()
+                await deleteMessagePrev(ctx, 1)
+                await sendMessageDriverMenu(ctx)
+                await ctx.scene.leave()
+            })
+            return point_scene
+        }
     })
     return newArr
+
 }
+
 // point_scene.action('openRoute1', async (ctx) => {
         //     await sendMessageUazPhotoCheck(ctx)
         //     console.log(value)
