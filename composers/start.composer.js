@@ -1,10 +1,16 @@
-const { Composer, Scenes, session } = require('telegraf'),
-  sendMessageStart = require('../keyboards/mainMenu/sendMessageStart'),
-  sendMessageError = require('../utils/sendMessageError');
+const { Composer } = require('telegraf');
+const sendMessageStart = require('../keyboards/mainMenu/sendMessageStart');
+const sendMessageError = require('../utils/sendMessageError');
+const addTasksToCtxFeature = require('../features/addTasksToCtx.feature');
 
 const composer = new Composer();
 
 composer.start(async (ctx) => {
+
+  composer.use(async (ctx, next) => {
+    await addTasksToCtxFeature(ctx)
+    await next()
+  })
   try {
     await sendMessageStart(ctx)
   } catch (e) {
@@ -18,16 +24,6 @@ composer.command('/start', (ctx) => {
   } catch (e) {
     sendMessageError(ctx, e)
   }
-})
-
-composer.action('start', (ctx) => {
-  try {
-    sendMessageStart(ctx)
-  } catch (e) {
-    console.log(e)
-    sendMessageError(ctx, e)
-  }
-
 })
 
 module.exports = composer

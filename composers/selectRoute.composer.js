@@ -1,18 +1,14 @@
-const { Composer, Scenes, session } = require('telegraf'),
-    routeScene = require('../wizards/route.wizard'),
-    sendMessageError = require('../utils/sendMessageError'),
-    { getTaskIdArrFromApi } = require('../features/getRoute.feature'),
-    fs = require('fs'),
-    setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
-    {
-        listIdSupply,
-        listIdCleaning
-    } = setting,
-    pointScene = require('../wizards/point.wizard'),
-    sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu');
+const { Composer, Scenes, session } = require('telegraf');
+const routeScene = require('../wizards/route.wizard');
+const sendMessageError = require('../utils/sendMessageError');
+const { getTaskIdArrFromApi } = require('../features/getRoute.feature');
+const pointScene = require('../wizards/point.wizard');
+const sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu');
 
 module.exports = (ctx) => {
+
     const composer = new Composer();
+
     const stage = new Scenes.Stage([routeScene, pointScene('supply', ctx), pointScene('clean', ctx)])
 
     composer.use(session())

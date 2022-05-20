@@ -1,6 +1,6 @@
-const PostAttachmentsService = require('../api/clickupApiAttachments.service')
-const fs = require('fs')
-const axios = require('axios')
+const PostAttachmentsService = require('../api/clickupApiAttachments.service');
+const fs = require('fs');
+const axios = require('axios');
 
 module.exports = async (ctx, task_id) => {
     // Берем здесь фотки из сообщения и отправляем в кликап в текущий таск
