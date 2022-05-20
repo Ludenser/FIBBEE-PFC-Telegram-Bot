@@ -1,10 +1,12 @@
-const { Composer } = require('telegraf');
+const { Composer, Markup } = require('telegraf');
 const GetTasksService = require('../api/clickupApiTasks.service');
 const GetTimeService = require('../api/clickupApiTime.service');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
-const sendMessageUazPhotoCheck = require('../keyboards/scenes/sendMessageUazPhotoCheck.routeMenu');
+const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
 const deleteMessagePrev = require('../utils/deleteMessagePrev');
 const postAttachment = require('../features/postAttachments.feature');
+const sendMessageError = require('../utils/sendMessageError');
+
 const initStepRoute1 = new Composer()
 
 initStepRoute1.on('photo', async (ctx) => {
@@ -12,36 +14,34 @@ initStepRoute1.on('photo', async (ctx) => {
 })
 
 initStepRoute1.hears('Подтвердить загрузку фото✅', async (ctx) => {
-    await sendMessageUazPhotoCheck(ctx)
+    await ctx.deleteMessage()
+    await sendMessagePhotoCheck('main', ctx)
 })
 
 initStepRoute1.action('get_start', async (ctx) => {
-    await ctx.reply('Выбери',
-        {
-            reply_markup: {
-                inline_keyboard: [
-                    [
-                        { text: 'Войти', callback_data: `enter` }
-                    ],
-                    [
-                        { text: 'Назад!↩️', callback_data: 'leaveScene' }
-                    ]
-                ]
-            },
-            parse_mode: "Markdown"
-
-        })
+    await ctx.deleteMessage()
+    await ctx.reply('Приступить к',
+        Markup.inlineKeyboard([
+            Markup.button.callback('обслуживанию первого комплекса', 'enter')
+        ])
+    )
     await ctx.scene.enter('POINTS_SUPPLY_WIZARD_ID')
 })
 
 initStepRoute1.action('leaveScene', async (ctx) => {
-    await GetTimeService.stopTimeEntry(ctx.team_id, ctx.primeTaskSupply_id)
-    await GetTasksService.setTaskStatus(ctx.primeTaskSupply_id, 'to do')
-    await ctx.deleteMessage()
-    await deleteMessagePrev(ctx, 1)
-    await sendMessageDriverMenu(ctx)
-    ctx.state = {}
-    return await ctx.scene.leave()
+    try {
+        await GetTimeService.stopTimeEntry(ctx.team_id, ctx.primeTaskSupply_id)
+        await GetTasksService.setTaskStatus(ctx.primeTaskSupply_id, 'to do')
+        await ctx.deleteMessage()
+        await deleteMessagePrev(ctx, 1)
+        await sendMessageDriverMenu(ctx)
+        await ctx.scene.leave()
+    } catch (e) {
+        await sendMessageError(ctx, e)
+        await sendMessageDriverMenu(ctx)
+        await ctx.scene.leave()
+    }
+
 })
 
 module.exports = initStepRoute1

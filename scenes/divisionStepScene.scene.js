@@ -17,8 +17,8 @@ divisionStep.action(`openRoute1`, async (ctx) => {
 
     await ctx.deleteMessage()
     await getMessageRouteFromClickAPI(ctx, listIdSupply)
-    await GetTasksService.setTaskStatus(ctx.primeTaskSupply_id, 'in progress')
-    await GetTimeService.startTimeEntry(ctx.team_id, ctx.primeTaskSupply_id)
+    // await GetTasksService.setTaskStatus(ctx.primeTaskSupply_id, 'in progress')
+    // await GetTimeService.startTimeEntry(ctx.team_id, ctx.primeTaskSupply_id)
     await sendMessageUazPhoto(ctx)
 
     return await ctx.wizard.next();
@@ -35,9 +35,15 @@ divisionStep.action(`openRoute2`, async (ctx) => {
 })
 
 divisionStep.action('leaveScene', async (ctx) => {
-    await ctx.deleteMessage()
-    await sendMessageDriverMenu(ctx)
-    ctx.state = {}
-    return await ctx.scene.leave();
+    try {
+        await ctx.deleteMessage()
+        await deleteMessagePrev(ctx, 2)
+        await sendMessageDriverMenu(ctx)
+        await ctx.scene.leave()
+    } catch (e) {
+        await sendMessageError(ctx, e)
+        await sendMessageDriverMenu(ctx)
+        await ctx.scene.leave()
+    }
 })
 module.exports = divisionStep

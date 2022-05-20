@@ -26,4 +26,16 @@ composer.command('/start', async (ctx) => {
   }
 })
 
+composer.action('start', async (ctx) => {
+  composer.use(async (ctx, next) => {
+    await addTasksToCtx(ctx)
+    await next()
+  })
+  try {
+    await sendMessageStart(ctx)
+  } catch (e) {
+    await sendMessageError(ctx, e)
+  }
+})
+
 module.exports = composer
