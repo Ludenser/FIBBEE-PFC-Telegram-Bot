@@ -11,11 +11,26 @@ initStepRoute1.on('photo', async (ctx) => {
     await postAttachment(ctx, ctx.primeTaskSupply_id)
 })
 
-initStepRoute1.on('message', async (ctx) => {
+initStepRoute1.hears('Подтвердить загрузку фото✅', async (ctx) => {
     await sendMessageUazPhotoCheck(ctx)
 })
 
-initStepRoute1.action('point_1', async (ctx) => {
+initStepRoute1.action('get_start', async (ctx) => {
+    await ctx.reply('Выбери',
+        {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        { text: 'Войти', callback_data: `enter` }
+                    ],
+                    [
+                        { text: 'Назад!↩️', callback_data: 'leaveScene' }
+                    ]
+                ]
+            },
+            parse_mode: "Markdown"
+
+        })
     await ctx.scene.enter('POINTS_SUPPLY_WIZARD_ID')
 })
 

@@ -1,14 +1,14 @@
 const { Composer } = require('telegraf');
 const sendMessageStart = require('../keyboards/mainMenu/sendMessageStart');
 const sendMessageError = require('../utils/sendMessageError');
-const addTasksToCtxFeature = require('../features/addTasksToCtx.feature');
+const addTasksToCtx = require('../features/addTasksToCtx.feature');
 
 const composer = new Composer();
 
 composer.start(async (ctx) => {
 
   composer.use(async (ctx, next) => {
-    await addTasksToCtxFeature(ctx)
+    await addTasksToCtx(ctx)
     await next()
   })
   try {
@@ -18,11 +18,11 @@ composer.start(async (ctx) => {
   }
 })
 
-composer.command('/start', (ctx) => {
+composer.command('/start', async (ctx) => {
   try {
-    sendMessageStart(ctx)
+    await sendMessageStart(ctx)
   } catch (e) {
-    sendMessageError(ctx, e)
+    await sendMessageError(ctx, e)
   }
 })
 

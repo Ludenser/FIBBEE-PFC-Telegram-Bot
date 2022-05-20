@@ -15,29 +15,81 @@ module.exports = (arr) => {
             const point_scene = new Composer()
 
             if (arr.length != i) {
-                point_scene.on('message', async (ctx) => {
+                point_scene.hears('Дальше', async (ctx) => {
                     await ctx.deleteMessage()
                     // await sendMessageUazPhotoCheck(ctx)
-                    await ctx.reply(task.name)
-                    console.log(task, task.id)
+                    await ctx.reply('Прикрепи фото если нужно',
+                        {
+                            reply_markup: {
+                                inline_keyboard: [
+                                    [
+                                        { text: 'Назад!↩️', callback_data: 'leaveScene' }
+                                    ]
+                                ]
+                            },
+                            reply_markup: {
+                                keyboard: [
+                                    [{ text: 'Дальше' }]
+                                ],
+                                one_time_keyboard: true,
+                                resize_keyboard: true
+                            },
+                            parse_mode: "Markdown"
+                        })
+                    console.log(task.name, task.id)
                     await ctx.wizard.next()
+                    await ctx.reply(task.name)
                 })
             } else {
-                point_scene.on('message', async (ctx) => {
+                point_scene.hears('Дальше', async (ctx) => {
                     await ctx.deleteMessage()
                     // await sendMessageUazPhotoCheck(ctx)
                     await ctx.reply(task.name)
-                    console.log(task, i)
+                    await ctx.reply('Прикрепи фото если нужно',
+                        {
+                            reply_markup: {
+                                inline_keyboard: [
+                                    [
+                                        { text: 'Назад!↩️', callback_data: 'leaveScene' }
+                                    ]
+                                ]
+                            },
+                            reply_markup: {
+                                keyboard: [
+                                    [{ text: 'Дальше' }]
+                                ],
+                                one_time_keyboard: true,
+                                resize_keyboard: true
+                            },
+                            parse_mode: "Markdown"
+                        })
+                    console.log('FFFFFFFFFFFFFFFFAFASFASFASF', task.name, task.id)
 
                 })
             }
 
-
-            point_scene.action('point_1', async (ctx) => {
+            point_scene.action('enter', async (ctx) => {
                 await ctx.deleteMessage()
-
-                console.log(task, task.id)
-                await ctx.wizard.next()
+                await ctx.reply(`${task.name}`)
+                await ctx.reply('Прикрепи фото если нужно',
+                    {
+                        reply_markup: {
+                            inline_keyboard: [
+                                [
+                                    { text: 'Назад!↩️', callback_data: 'leaveScene' }
+                                ]
+                            ]
+                        },
+                        reply_markup: {
+                            keyboard: [
+                                [{ text: 'Дальше' }]
+                            ],
+                            one_time_keyboard: true,
+                            resize_keyboard: true
+                        },
+                        parse_mode: "Markdown"
+                    })
+                console.log(task.name, task.id)
             })
 
             point_scene.action('leaveScene', async (ctx) => {

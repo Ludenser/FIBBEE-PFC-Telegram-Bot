@@ -13,13 +13,6 @@ const {
 
 const divisionStep = new Composer()
 
-divisionStep.action('leaveScene', async (ctx) => {
-    await ctx.deleteMessage()
-    await sendMessageDriverMenu(ctx)
-    ctx.state = {}
-    return await ctx.scene.leave();
-})
-
 divisionStep.action(`openRoute1`, async (ctx) => {
 
     await ctx.deleteMessage()
@@ -41,4 +34,10 @@ divisionStep.action(`openRoute2`, async (ctx) => {
     return await ctx.wizard.selectStep(2);
 })
 
+divisionStep.action('leaveScene', async (ctx) => {
+    await ctx.deleteMessage()
+    await sendMessageDriverMenu(ctx)
+    ctx.state = {}
+    return await ctx.scene.leave();
+})
 module.exports = divisionStep
