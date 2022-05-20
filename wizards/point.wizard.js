@@ -1,6 +1,5 @@
-const
-    { Scenes } = require('telegraf'),
-    point_scene = require('../scenes/point.scene');
+const { Scenes } = require('telegraf');
+const point_scene = require('../scenes/point.scene');
 
 const pointSupplyScene = (role, ctx) => {
     switch (role) {

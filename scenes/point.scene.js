@@ -1,9 +1,9 @@
-const { Composer, Scenes } = require('telegraf'),
-    GetTasksService = require('../api/clickupApiTasks.service'),
-    GetTimeService = require('../api/clickupApiTime.service'),
-    sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu'),
-    sendMessageUazPhotoCheck = require('../keyboards/scenes/sendMessageUazPhotoCheck.routeMenu'),
-    deleteMessagePrev = require('../utils/deleteMessagePrev');
+const { Composer, Scenes } = require('telegraf');
+const GetTasksService = require('../api/clickupApiTasks.service');
+const GetTimeService = require('../api/clickupApiTime.service');
+const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
+const sendMessageUazPhotoCheck = require('../keyboards/scenes/sendMessageUazPhotoCheck.routeMenu');
+const deleteMessagePrev = require('../utils/deleteMessagePrev');
 
 
 

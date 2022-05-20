@@ -1,18 +1,18 @@
-const
-    { Composer, Markup } = require('telegraf'),
-    { getMessageRouteFromClickAPI } = require('../features/getRoute.feature'),
-    GetTasksService = require('../api/clickupApiTasks.service'),
-    GetTimeService = require('../api/clickupApiTime.service'),
-    sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu'),
-    sendMessageUazPhoto = require('../keyboards/scenes/sendMessageUazPhoto.routeMenu'),
-    fs = require('fs'),
-    setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
-    {
-        listIdSupply,
-        listIdCleaning
-    } = setting;
+const { Composer, Markup } = require('telegraf');
+const { getMessageRouteFromClickAPI } = require('../features/getRoute.feature');
+const GetTasksService = require('../api/clickupApiTasks.service');
+const GetTimeService = require('../api/clickupApiTime.service');
+const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
+const sendMessageUazPhoto = require('../keyboards/scenes/sendMessageUazPhoto.routeMenu');
+const fs = require('fs');
+const setting = JSON.parse(fs.readFileSync('./lib/setting.json'));
+const {
+    listIdSupply,
+    listIdCleaning
+} = setting;
 
 const divisionStep = new Composer()
+
 divisionStep.action('leaveScene', async (ctx) => {
     await ctx.deleteMessage()
     await sendMessageDriverMenu(ctx)

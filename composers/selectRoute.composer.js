@@ -1,10 +1,9 @@
-const { Composer, Scenes, session } = require('telegraf'),
-    routeScene = require('../wizards/route.wizard'),
-    sendMessageError = require('../utils/sendMessageError'),
-    { getTaskIdArrFromApi } = require('../features/getRoute.feature'),
-    getTasks = require('../api/clickupApiTasks.service'),
-    pointScene = require('../wizards/point.wizard'),
-    sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu');
+const { Composer, Scenes, session } = require('telegraf');
+const routeScene = require('../wizards/route.wizard');
+const sendMessageError = require('../utils/sendMessageError');
+const { getTaskIdArrFromApi } = require('../features/getRoute.feature');
+const pointScene = require('../wizards/point.wizard');
+const sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu');
 
 module.exports = (ctx) => {
 

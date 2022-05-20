@@ -1,12 +1,11 @@
-const
-  fs = require('fs'),
-  setting = JSON.parse(fs.readFileSync('./lib/setting.json')),
-  {
-    urlFact,
-    urlNewInfo,
-    urlShedule,
-    urlSupplyDemand
-  } = setting
+const fs = require('fs');
+const setting = JSON.parse(fs.readFileSync('./lib/setting.json'));
+const {
+  urlFact,
+  urlNewInfo,
+  urlShedule,
+  urlSupplyDemand
+} = setting
 
 module.exports = async (ctx) => {
   await ctx.reply(ctx.i18n.t('docs'),

@@ -1,10 +1,9 @@
-const
-  routes = require('../lib/routesNew.json'),
-  fs = require('fs'),
-  json = JSON.stringify(routes),
-  objByJson = JSON.parse(json),
-  GetTasksService = require('../api/clickupApiTasks.service'),
-  sendMessageError = require('../utils/sendMessageError');
+const routes = require('../lib/routesNew.json');
+const fs = require('fs');
+const json = JSON.stringify(routes);
+const objByJson = JSON.parse(json);
+const GetTasksService = require('../api/clickupApiTasks.service');
+const sendMessageError = require('../utils/sendMessageError');
 
 module.exports = {
 
