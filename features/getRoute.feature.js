@@ -1,10 +1,9 @@
-const
-  routes = require('../lib/routesNew.json'),
-  fs = require('fs'),
-  json = JSON.stringify(routes),
-  objByJson = JSON.parse(json),
-  GetTasksService = require('../api/clickupApiTasks.service'),
-  sendMessageError = require('../utils/sendMessageError');
+const routes = require('../lib/routesNew.json');
+const fs = require('fs');
+const json = JSON.stringify(routes);
+const objByJson = JSON.parse(json);
+const GetTasksService = require('../api/clickupApiTasks.service');
+const sendMessageError = require('../utils/sendMessageError');
 
 module.exports = {
 
@@ -74,8 +73,8 @@ module.exports = {
       const nameValues = response.data.tasks.reverse().map((value, index) => {
 
         if (!value.start_date) {
-          const tsCreate = new Date(Number.parseInt(value.date_created))
-          return `${index + 1}. ${value.name}, время не указано, дата создания ${tsCreate.toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}`
+          const tsDue = new Date(Number.parseInt(value.due_date))
+          return `${index + 1}. ${value.name}, время не указано, выполнить до ${tsDue.toLocaleTimeString([], { timeStyle: 'short' })}`
         } else {
           const tsStart = new Date(Number.parseInt(value.start_date))
           const tsDue = new Date(Number.parseInt(value.due_date))
