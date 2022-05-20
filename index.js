@@ -86,29 +86,11 @@ bot.use(
 // })
 
 bot.use(i18n.middleware())
-
+bot.use(startComposer)
 bot.use(async (ctx, next) => {
-    const all_tasksSupply = await getTasks.getAllTasks(listIdSupply)
-    const all_tasksClean = await getTasks.getAllTasks(listIdCleaning)
-    ctx.all_tasksSupply = all_tasksSupply.data.tasks
-    ctx.all_tasksClean = all_tasksClean.data.tasks
-    await ctx.all_tasksSupply.forEach((element, i) => {
-        if (element.name.includes('водителя' || 'оператора')) {
-            ctx.primeTaskSupply_id = element.id
-            const r = ctx.all_tasksSupply.splice(i, 1)
-
-        }
-    })
-    await ctx.all_tasksClean.forEach((element, i) => {
-        if (element.name.includes('водителя' || 'оператора')) {
-            ctx.primeTaskClean_id = element.id
-            const r = ctx.all_tasksClean.splice(i, 1)
-        }
-    })
     bot.use(selectRouteComposer(ctx))
     await next()
 })
-bot.use(startComposer)
 bot.use(mainMenuComposer)
 bot.use(routesInfoComposer)
 

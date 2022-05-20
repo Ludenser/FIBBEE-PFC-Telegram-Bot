@@ -14,7 +14,7 @@ module.exports = (arr) => {
         if (task.name.includes('Обслуживание')) {
             const point_scene = new Composer()
 
-            if (arr.length - 1 != i) {
+            if (arr.length != i) {
                 point_scene.on('message', async (ctx) => {
                     await ctx.deleteMessage()
                     // await sendMessageUazPhotoCheck(ctx)

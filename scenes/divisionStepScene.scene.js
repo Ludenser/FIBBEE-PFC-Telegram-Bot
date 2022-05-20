@@ -21,6 +21,7 @@ divisionStep.action('leaveScene', async (ctx) => {
 })
 
 divisionStep.action(`openRoute1`, async (ctx) => {
+
     await ctx.deleteMessage()
     await getMessageRouteFromClickAPI(ctx, listIdSupply)
     await GetTasksService.setTaskStatus(ctx.primeTaskSupply_id, 'in progress')
@@ -31,6 +32,7 @@ divisionStep.action(`openRoute1`, async (ctx) => {
 })
 
 divisionStep.action(`openRoute2`, async (ctx) => {
+
     await ctx.deleteMessage()
     await getMessageRouteFromClickAPI(ctx, listIdCleaning)
     await GetTasksService.setTaskStatus(ctx.primeTaskClean_id, 'in progress')
