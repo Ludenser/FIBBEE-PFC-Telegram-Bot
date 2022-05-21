@@ -34,7 +34,10 @@ class PostAttachmentsService {
             data: {
                 'comment': [
                     {
-                        "text": ctx.update.message.text
+                        'text': ctx.update.message.text,
+                        'attributes': {
+                            'mention': '@Sergei Vedeneev'
+                        }
                     }
                 ]
             },
