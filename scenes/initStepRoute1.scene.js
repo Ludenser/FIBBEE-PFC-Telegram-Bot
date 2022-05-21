@@ -20,9 +20,11 @@ initStepRoute1.hears('Подтвердить загрузку фото✅', asyn
 
 initStepRoute1.action('get_start', async (ctx) => {
     await ctx.deleteMessage()
-    await ctx.reply('Приступить к',
+    await deleteMessagePrev(ctx, 2)
+    await deleteMessagePrev(ctx, 3)
+    await ctx.reply('Приступить к обслуживанию',
         Markup.inlineKeyboard([
-            Markup.button.callback('обслуживанию первого комплекса', 'enter')
+            Markup.button.callback('первого комплекса', 'enter')
         ])
     )
     await ctx.scene.enter('POINTS_SUPPLY_WIZARD_ID')

@@ -35,9 +35,8 @@ class PostAttachmentsService {
                 'comment': [
                     {
                         'text': ctx.update.message.text,
-                        'attributes': {
-                            'mention': '@Sergei Vedeneev'
-                        }
+                        'mention': '@Sergei Vedeneev'
+
                     }
                 ]
             },
