@@ -26,7 +26,8 @@ class PostAttachmentsService {
 
     };
 
-    static async createCommentAttachment(ctx, task_id) {
+
+    static async createCommentAttachment(ctx, task_id, user_id) {
 
         await axios({
             method: 'post',
@@ -34,9 +35,10 @@ class PostAttachmentsService {
             data: {
                 'comment': [
                     {
-                        "text": ctx.update.message.text
+                        'text': ctx.update.message.text,
                     }
-                ]
+                ],
+                'assignee': user_id
             },
             headers: {
                 'Authorization': token,
