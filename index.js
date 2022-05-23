@@ -1,4 +1,4 @@
-const { Telegraf, session, Scenes } = require('telegraf');
+const { Telegraf } = require('telegraf');
 const TelegrafI18n = require('telegraf-i18n');
 const updateLogger = require('telegraf-update-logger');
 const chalk = require('chalk');
