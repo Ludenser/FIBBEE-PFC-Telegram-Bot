@@ -7,6 +7,7 @@ const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMe
 const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
 const deleteMessagePrev = require('../utils/deleteMessagePrev');
 const sendMessageError = require('../utils/sendMessageError');
+const postCommentFeature = require('../features/postComment.feature');
 
 module.exports = (arr) => {
     const newArr = arr.reverse().map((task, i) => {
@@ -63,7 +64,7 @@ module.exports = (arr) => {
             point_scene.action('upl_comment', async (ctx) => {
                 await ctx.reply('Напиши комментарий к таску, если нужно кого-то тегнуть, добавь @nickname')
                 point_scene.on('message', async (ctx) => {
-                    await PostAttachmentsService.createCommentAttachment(ctx, task.id)
+                    await postCommentFeature(ctx, task.id)
                     await ctx.deleteMessage()
                 })
 
