@@ -1,6 +1,6 @@
 const { Composer, Markup } = require('telegraf');
-const GetTasksService = require('../api/clickupApiTasks.service');
-const GetTimeService = require('../api/clickupApiTime.service');
+const { Task, Time } = require('../api/clickUpApi.service');
+
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
 const deleteMessagePrev = require('../utils/deleteMessagePrev');
@@ -32,8 +32,8 @@ initStepRoute1.action('get_start', async (ctx) => {
 
 initStepRoute1.action('leaveScene', async (ctx) => {
     try {
-        await GetTimeService.stopTimeEntry(ctx.team_id, ctx.primeTaskSupply_id)
-        await GetTasksService.setTaskStatus(ctx.primeTaskSupply_id, 'to do')
+        await Time.stopTimeEntry(ctx.team_id, ctx.primeTaskSupply_id)
+        await Task.setTaskStatus(ctx.primeTaskSupply_id, 'to do')
         await ctx.deleteMessage()
         await deleteMessagePrev(ctx, 1)
         await sendMessageDriverMenu(ctx)

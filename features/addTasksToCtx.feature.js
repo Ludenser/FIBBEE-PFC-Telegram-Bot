@@ -1,5 +1,5 @@
 
-const getTasks = require('../api/clickupApiTasks.service');
+const { Task } = require('../api/clickUpApi.service');
 const fs = require('fs');
 const setting = JSON.parse(fs.readFileSync('./lib/setting.json'));
 const {
@@ -9,8 +9,8 @@ const {
 } = setting;
 
 module.exports = async (ctx) => {
-    const all_tasksSupply = await getTasks.getAllTasks(listIdSupply)
-    const all_tasksClean = await getTasks.getAllTasks(listIdCleaning)
+    const all_tasksSupply = await Task.getAllTasks(listIdSupply)
+    const all_tasksClean = await Task.getAllTasks(listIdCleaning)
     ctx.all_tasksSupply = all_tasksSupply.data.tasks
     ctx.all_tasksClean = all_tasksClean.data.tasks
     ctx.team_id = team_id
