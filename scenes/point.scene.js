@@ -1,7 +1,5 @@
 const { Composer, Markup } = require('telegraf');
-const GetTasksService = require('../api/clickupApiTasks.service');
-const GetTimeService = require('../api/clickupApiTime.service');
-const PostAttachmentsService = require('../api/clickupApiAttachments.service')
+const { Task, Time } = require('../api/clickUpApi.service');
 const postAttachmentsFeature = require('../features/postAttachments.feature');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
@@ -18,8 +16,8 @@ module.exports = (arr) => {
 
             point_scene.action('enter', async (ctx) => {
                 try {
-                    await GetTasksService.setTaskStatus(task.id, 'in progress')
-                    await GetTimeService.startTimeEntry(ctx.team_id, task.id)
+                    await Task.setTaskStatus(task.id, 'in progress')
+                    // await Time.startTimeEntry(ctx.team_id, task.id)
                 } catch (e) {
                     await sendMessageError(ctx, e)
                 }
@@ -92,6 +90,13 @@ module.exports = (arr) => {
             })
 
             point_scene.action('next_step', async (ctx) => {
+                try {
+                    await Task.setTaskStatus(task.id, 'done')
+                    // await Time.stopTimeEntry(ctx.team_id, task.id)
+                } catch (error) {
+
+                }
+
                 await ctx.deleteMessage()
                 await ctx.reply(`Заканчиваем ${task.name}`, Markup
                     .inlineKeyboard([
@@ -102,8 +107,8 @@ module.exports = (arr) => {
 
             point_scene.action('leaveScene', async (ctx) => {
                 try {
-                    // await GetTimeService.stopTimeEntry(ctx.team_id, task.id)
-                    // await GetTasksService.setTaskStatus(task.id, 'to do')
+                    // await Time.stopTimeEntry(ctx.team_id, task.id)
+                    // await Task.setTaskStatus(task.id, 'to do')
                     await ctx.deleteMessage()
                     await deleteMessagePrev(ctx, 2)
                     await sendMessageDriverMenu(ctx)

@@ -1,4 +1,4 @@
-const PostAttachmentsService = require('../api/clickupApiAttachments.service')
+const { Attachment } = require('../api/clickUpApi.service')
 const fs = require('fs')
 const axios = require('axios')
 
@@ -14,7 +14,7 @@ module.exports = async (ctx, task_id) => {
 
         .on('finish', async () => {
             console.log(`Файл ${ctx.update.message.message_id}.jpg загружен`)
-            await PostAttachmentsService.createTaskAttachment(ctx, task_id)
+            await Attachment.createTaskAttachment(ctx, task_id)
             fs.rmSync(`./test/download/${ctx.update.message.message_id}.jpg`, {
                 force: true
             })

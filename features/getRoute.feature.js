@@ -1,8 +1,7 @@
 const routes = require('../lib/routesNew.json');
-const fs = require('fs');
 const json = JSON.stringify(routes);
 const objByJson = JSON.parse(json);
-const GetTasksService = require('../api/clickupApiTasks.service');
+const { Task } = require('../api/clickUpApi.service');
 const sendMessageError = require('../utils/sendMessageError');
 
 module.exports = {
@@ -69,7 +68,7 @@ module.exports = {
 
   getMessageRouteFromClickAPI: async function getMessageRoutesFromClickAPI(ctx, list_id) {
     try {
-      const response = await GetTasksService.getAllTasks(list_id)
+      const response = await Task.getAllTasks(list_id)
       const nameValues = response.data.tasks.reverse().map((value, index) => {
 
         if (!value.start_date) {
@@ -89,7 +88,7 @@ module.exports = {
 
   getTaskIdArrFromApi: async function getTaskIdArrFromApi(list_id) {
     try {
-      const response = await GetTasksService.getAllTasks(list_id)
+      const response = await Task.getAllTasks(list_id)
       const newArr = response.data.tasks.reverse().map(value => {
         return value.id
       })
