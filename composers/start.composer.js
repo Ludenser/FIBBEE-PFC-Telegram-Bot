@@ -3,6 +3,10 @@ const sendMessageStart = require('../keyboards/mainMenu/sendMessageStart');
 const sendMessageError = require('../utils/sendMessageError');
 const addTasksToCtx = require('../features/addTasksToCtx.feature');
 
+/**
+  * Обработчик стартовых команд.
+  * Добавление в контекст инфы о тасках из ClickUp
+  */
 const composer = new Composer();
 
 composer.start(async (ctx) => {

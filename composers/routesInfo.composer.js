@@ -1,13 +1,16 @@
 const { Composer } = require('telegraf');
-const sendMessageRoutesInfo = require('../keyboards/mainMenu/sendMessageRoutesInfo');
+const { getMessageRouteFromClickAPI } = require('../features/getRoute.feature');
 const sendMessageError = require('../utils/sendMessageError');
 
+/**
+  * Обработчик меню с информацией о маршрутах
+  */
 const composer = new Composer();
 
 composer.action('routesInfo', async (ctx) => {
   try {
     await ctx.deleteMessage()
-    sendMessageRoutesInfo(ctx)
+    await getMessageRouteFromClickAPI(ctx, { one: '192501456', two: '192502344' }, 'driverInfo')
   } catch (e) {
     console.log(e)
     sendMessageError(ctx, e)

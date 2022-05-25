@@ -5,6 +5,11 @@ const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck
 const deleteMessagePrev = require('../utils/deleteMessagePrev');
 const postAttachment = require('../features/postAttachments.feature');
 
+/**
+  * Сцена инициализации назначенного роута.
+  * 
+  * Обработка фото рабочего автомобиля. Открытие роута.
+  */
 const initStepRoute2 = new Composer()
 
 initStepRoute2.on('photo', async (ctx) => {
@@ -27,8 +32,8 @@ initStepRoute2.action('get_start', async (ctx) => {
 })
 
 initStepRoute2.action('leaveScene', async (ctx) => {
-    await Time.stopTimeEntry(ctx.team_id, ctx.primeTaskClean_id)
-    await Task.setTaskStatus(ctx.primeTaskClean_id, 'to do')
+    await Time.stopEntry(ctx.team_id, ctx.primeTaskClean_id)
+    await Task.setStatus(ctx.primeTaskClean_id, 'to do')
     await ctx.deleteMessage()
     await deleteMessagePrev(ctx, 1)
     await sendMessageDriverMenu(ctx)
