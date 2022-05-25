@@ -258,6 +258,8 @@ class Users {
 
     /**
         * Получение объекта всех юзеров, имеющих доступ к таск-листу "по умолчанию"
+        * 
+        * @listId берется из settings
         */
     static async getUsers_id() {
         const response = await axios.get(`https://api.clickup.com/api/v2/list/${listId}/member`,

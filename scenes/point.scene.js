@@ -78,6 +78,7 @@ module.exports = (arr) => {
             })
 
             point_scene.action('upl_comment', async (ctx) => {
+                await ctx.deleteMessage()
                 await ctx.reply('Напиши комментарий к таску, если нужно кого-то тегнуть, добавь в конце комментария "@имя фамилия"',
                     Markup
                         .inlineKeyboard([

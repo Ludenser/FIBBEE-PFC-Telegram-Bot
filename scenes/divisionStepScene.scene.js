@@ -6,6 +6,7 @@ const sendMessageUazPhoto = require('../keyboards/scenes/sendMessageUazPhoto.rou
 const fs = require('fs');
 const sendMessageError = require('../utils/sendMessageError');
 const setAssigneeFeature = require('../features/setAssignee.feature');
+const deleteMessagePrev = require('../utils/deleteMessagePrev')
 const setting = JSON.parse(fs.readFileSync('./lib/setting.json'));
 const {
     listIdSupply,
@@ -22,10 +23,10 @@ const divisionStep = new Composer()
 divisionStep.action(`openRoute1`, async (ctx) => {
     try {
         await ctx.deleteMessage()
-        await getMessageRouteFromClickAPI(ctx, listIdSupply)
-        // await Task.setStatus(ctx.primeTaskSupply_id, 'in progress')
-        // await setAssigneeFeature(ctx.primeTaskSupply_id)
-        // const response = await Time.startEntry(ctx.team_id, ctx.primeTaskSupply_id)
+        await getMessageRouteFromClickAPI(ctx, { one: listIdSupply })
+        await Task.setStatus(ctx.primeTaskSupply_id, 'in progress')
+        await setAssigneeFeature(ctx.primeTaskSupply_id)
+        const response = await Time.startEntry(ctx.team_id, ctx.primeTaskSupply_id)
         ctx.main_timer_id = response.data.data.id
         await sendMessageUazPhoto(ctx)
         return await ctx.wizard.next();
@@ -39,7 +40,7 @@ divisionStep.action(`openRoute1`, async (ctx) => {
 divisionStep.action(`openRoute2`, async (ctx) => {
     try {
         await ctx.deleteMessage()
-        await getMessageRouteFromClickAPI(ctx, listIdCleaning)
+        await getMessageRouteFromClickAPI(ctx, { one: listIdCleaning })
         // await Task.setStatus(ctx.primeTaskClean_id, 'in progress')
         // await setAssigneeFeature(ctx.primeTaskClean_id)
         // await Time.startEntry(ctx.team_id, ctx.primeTaskClean_id)
