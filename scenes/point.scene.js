@@ -1,11 +1,12 @@
 const { Composer, Markup } = require('telegraf');
-const { Task, Time } = require('../api/clickUpApi.service');
+const { Task, Time, Users } = require('../api/clickUpApi.service');
 const postAttachmentsFeature = require('../features/postAttachments.feature');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
 const deleteMessagePrev = require('../utils/deleteMessagePrev');
 const sendMessageError = require('../utils/sendMessageError');
 const postCommentFeature = require('../features/postComment.feature');
+const setAssigneeFeature = require('../features/setAssignee.feature');
 
 module.exports = (arr) => {
     const newArr = arr.reverse().map((task, i) => {
@@ -16,8 +17,9 @@ module.exports = (arr) => {
 
             point_scene.action('enter', async (ctx) => {
                 try {
-                    await Task.setTaskStatus(task.id, 'in progress')
-                    // await Time.startTimeEntry(ctx.team_id, task.id)
+                    await Task.setStatus(task.id, 'in progress')
+                    await setAssigneeFeature(task.id)
+                    await Time.startEntry(ctx.team_id, task.id)
                 } catch (e) {
                     await sendMessageError(ctx, e)
                 }
@@ -76,7 +78,7 @@ module.exports = (arr) => {
             })
 
             point_scene.action('upl_comment', async (ctx) => {
-                await ctx.reply('Напиши комментарий к таску, если нужно кого-то тегнуть, добавь @nickname',
+                await ctx.reply('Напиши комментарий к таску, если нужно кого-то тегнуть, добавь в конце комментария "@имя фамилия"',
                     Markup
                         .inlineKeyboard([
                             Markup.button.callback('Вернуться в меню осблуживания комплекса', 'enter_more'),
@@ -91,10 +93,10 @@ module.exports = (arr) => {
 
             point_scene.action('next_step', async (ctx) => {
                 try {
-                    await Task.setTaskStatus(task.id, 'done')
-                    // await Time.stopTimeEntry(ctx.team_id, task.id)
-                } catch (error) {
-
+                    await Task.setStatus(task.id, 'done')
+                    await Time.stopEntry(ctx.team_id, task.id)
+                } catch (e) {
+                    await sendMessageError(ctx, e)
                 }
 
                 await ctx.deleteMessage()
@@ -107,8 +109,8 @@ module.exports = (arr) => {
 
             point_scene.action('leaveScene', async (ctx) => {
                 try {
-                    // await Time.stopTimeEntry(ctx.team_id, task.id)
-                    // await Task.setTaskStatus(task.id, 'to do')
+                    // await Time.stopEntry(ctx.team_id, task.id)
+                    // await Task.setStatus(task.id, 'to do')
                     await ctx.deleteMessage()
                     await deleteMessagePrev(ctx, 2)
                     await sendMessageDriverMenu(ctx)

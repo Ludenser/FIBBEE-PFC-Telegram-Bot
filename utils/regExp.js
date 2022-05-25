@@ -1,3 +1,6 @@
+/**
+* Функция для обработки строки регулярным выражением
+*/
 module.exports = (re, str) => {
     const regex = new RegExp(re, 'i')
 

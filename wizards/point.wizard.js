@@ -1,6 +1,9 @@
 const { Scenes } = require('telegraf');
 const point_scene = require('../scenes/point.scene');
 
+/**
+  * Сцена инициализации назначенного роута.
+  */
 const pointSupplyScene = (role, ctx) => {
     switch (role) {
         case 'supply':

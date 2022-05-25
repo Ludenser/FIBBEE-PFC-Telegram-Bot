@@ -25,8 +25,8 @@ bot.context.routeNumber = undefined
 bot.context.team_id = undefined
 bot.context.primeTaskSupply_id = undefined
 bot.context.primeTaskClean_id = undefined
+bot.context.main_timer_id = undefined
 
-/* Log Function */
 bot.use(
     updateLogger({
         colors: {
@@ -47,9 +47,7 @@ bot.use(async (ctx, next) => {
 bot.use(mainMenuComposer)
 bot.use(routesInfoComposer)
 
-// bot.use(selectRouteComposer)
 bot.launch()
 
-// Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'))
 process.once('SIGTERM', () => bot.stop('SIGTERM'))

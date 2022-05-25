@@ -4,6 +4,9 @@ const sendMessageDocs = require('../keyboards/mainMenu/sendMessageDocs');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 const sendMessageError = require('../utils/sendMessageError');
 
+/**
+  * Обработчик главного меню
+  */
 const composer = new Composer();
 
 composer.action('info', (ctx) => {

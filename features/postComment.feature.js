@@ -1,6 +1,9 @@
 const { Attachment, Users } = require('../api/clickUpApi.service')
 const userRegEx = require('../utils/regExp')
 
+/**
+  * Функция для отправки комментария и обработки введенного сообщения на наличие назначений сотрудников
+  */
 module.exports = async (ctx, task_id) => {
 
     const usernameQuery = userRegEx('(?<=@).+', ctx.update.message.text)
@@ -11,6 +14,6 @@ module.exports = async (ctx, task_id) => {
     }
 
     const username = response.data.members.find(hasUserFrom(usernameQuery))
-    await Attachment.createCommentAttachment(ctx, task_id, username.id)
+    await Attachment.createComment(ctx, task_id, username.id)
 
 }

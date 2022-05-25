@@ -6,9 +6,15 @@ const FormData = require('form-data');
 const settings = JSON.parse(fs.readFileSync('./lib/setting.json'));
 const { listId } = settings;
 
+/**
+    * Взаимодействия с аттачментами в тасках
+    */
 class Attachment {
 
-    static async createTaskAttachment(ctx, task_id) {
+    /**
+        * Создание аттачмента в таске
+        */
+    static async createAttachment(ctx, task_id) {
         const form = new FormData();
         form.append('attachment', fs.createReadStream(`./test/download/${ctx.update.message.message_id}.jpg`))
         form.append('filename', `${ctx.update.message.message_id}.jpg`)
@@ -28,8 +34,10 @@ class Attachment {
 
     };
 
-
-    static async createCommentAttachment(ctx, task_id, user_id) {
+    /**
+        * Создание комментария в таске
+        */
+    static async createComment(ctx, task_id, user_id) {
 
         await axios({
             method: 'post',
@@ -53,10 +61,15 @@ class Attachment {
     }
 
 }
-
+/**
+    * Взаимодействия с тасками
+    */
 class Task {
 
-    static async getAllTasks(list_id, archived = false, page) {
+    /**
+        * Получение списка всех тасков в таск-листе
+        */
+    static async getAll(list_id, archived = false, page) {
         const response = await axios.get(`https://api.clickup.com/api/v2/list/${list_id}/task`,
             {
                 params: {
@@ -71,25 +84,10 @@ class Task {
         return response
     }
 
-    static async getAllTasksToArrFromList(list_id, archived = false, page) {
-        const response = await axios.get(`https://api.clickup.com/api/v2/list/${list_id}/task`,
-            {
-                params: {
-                    archived: archived,
-                    page: page
-                },
-                headers: {
-                    'Authorization': token,
-                    'Content-Type': 'application/json'
-                }
-            })
-        const newArr = response.data.tasks.reverse().map(value => {
-            return value.id
-        })
-        return newArr
-    }
-
-    static async setTaskStatus(task_id, updatedStatus) {
+    /**
+        * Установка статуса таску
+        */
+    static async setStatus(task_id, updatedStatus) {
         const response = await axios.put(`https://api.clickup.com/api/v2/task/${task_id}/`,
             {
                 'status': updatedStatus
@@ -103,11 +101,38 @@ class Task {
         return response
     }
 
+    /**
+        * Назначение юзера к таску
+        */
+    static async setAssignee(task_id, user_id) {
+        const response = await axios.put(`https://api.clickup.com/api/v2/task/${task_id}/`,
+            {
+                'assignees': {
+                    'add': [
+                        user_id
+                    ]
+                }
+            },
+            {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            })
+        return response
+    }
+
 }
 
+/**
+    * Взаимодействия с таймером
+    */
 class Time {
 
-    static async getTrackedTime(task_id) { //Получение информации о таймере в задаче
+    /**
+        * Получение информации о таймере в задаче
+        */
+    static async getTrackedTime(task_id) {
         const response = await axios.get(`https://api.clickup.com/api/v2/task/${task_id}/time/`,
             {
                 headers: {
@@ -118,7 +143,10 @@ class Time {
         return response
     }
 
-    static async postTrackTime(task_id) { //Создание уже готового отслеженного времени, (сколько затрачено на задачу), время нужно получать из логики приложения. в теле запроса указывается либо total, либо start и end в UNIX
+    /**
+        * Создание уже готового отслеженного времени
+        */
+    static async postTrackTime(task_id) {
         const response = await axios.post(`https://api.clickup.com/api/v2/task/${task_id}/time/`,
             {
                 'time': 180000
@@ -132,10 +160,13 @@ class Time {
         return response
     }
 
-    static async createTimeEntry(team_id, task_id) {//Создание уже готового отслеженного времени, (сколько затрачено на задачу), время нужно получать из логики приложения. в теле запроса указывается либо total, либо start и end в UNIX
+    /**
+        * Создание уже готового отслеженного времени
+        */
+    static async createEntry(team_id, task_id) {  //(сколько затрачено на задачу), время нужно получать из логики приложения. в теле запроса указывается либо total, либо start и end в UNIX
         const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/`,
             {
-                "description": "from api",
+                "description": "received from Bot",
                 "start": Date.now(),
                 "duration": 5,
                 "tid": task_id
@@ -149,10 +180,13 @@ class Time {
         return response
     }
 
-    static async startTimeEntry(team_id, task_id) { //Запуск встроенного таймера в ClickUp
+    /**
+        * Запуск встроенного таймера в ClickUp
+        */
+    static async startEntry(team_id, task_id) {
         const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/start/`,
             {
-                "description": "from api",
+                "description": "received from Bot",
                 "tid": task_id
             },
             {
@@ -164,10 +198,34 @@ class Time {
         return response
     }
 
-    static async stopTimeEntry(team_id, task_id) { //Остановка встроенного таймера в ClickUp
+    /**
+        * Обновление встроенного таймера в ClickUp
+        */
+    static async updateEntry(team_id, task_id, unix_time) {
+
+
+        const response = await axios.put(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/${timer_id}/`,
+            {
+                "end": unix_time,
+                "tid": task_id
+            },
+            {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            })
+        return response
+    }
+
+    /**
+        * Остановка встроенного таймера в ClickUp
+        */
+    static async stopEntry(team_id, task_id) {
+
         const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/stop`,
             {
-                "description": "from api",
+                "description": "received from Bot",
                 "tid": task_id
             },
             {
@@ -180,8 +238,27 @@ class Time {
     }
 }
 
+/**
+    * Взаимодействия с юзерами
+    */
 class Users {
 
+    /**
+        * Получение объекта юзера, аутентифицированного под текущим токеном
+        */
+    static async getUser_ByToken() {
+        const response = await axios.get('https://api.clickup.com/api/v2/user',
+            {
+                headers: {
+                    'Authorization': token
+                }
+            })
+        return response
+    }
+
+    /**
+        * Получение объекта всех юзеров, имеющих доступ к таск-листу "по умолчанию"
+        */
     static async getUsers_id() {
         const response = await axios.get(`https://api.clickup.com/api/v2/list/${listId}/member`,
             {

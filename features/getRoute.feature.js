@@ -6,6 +6,9 @@ const sendMessageError = require('../utils/sendMessageError');
 
 module.exports = {
 
+  /**
+    * Получение объекта комплексов
+    */
   getObjRoutes: function getObjRoutes(numRoute) {
     const targetArr = [];
     if (numRoute == 1) {
@@ -30,6 +33,9 @@ module.exports = {
     return targetArr
   },
 
+  /**
+    * Получение комплексов в виде строки для сообщения
+    */
   getMessageRoutes: function getMessageRoutes(ctx, numRoute) {
 
     let targetArr = [];
@@ -66,18 +72,22 @@ module.exports = {
     return `${targetArr.join("\n")} `
   },
 
+  /**
+    * Получение списка тасков из ClickUp в виде строк
+    */
   getMessageRouteFromClickAPI: async function getMessageRoutesFromClickAPI(ctx, list_id) {
     try {
-      const response = await Task.getAllTasks(list_id)
+      const response = await Task.getAll(list_id)
       const nameValues = response.data.tasks.reverse().map((value, index) => {
 
         if (!value.start_date) {
           const tsDue = new Date(Number.parseInt(value.due_date))
-          return `${index + 1}. ${value.name}, время не указано, выполнить до ${tsDue.toLocaleTimeString([], { timeStyle: 'short' })}`
+          const options = { weekday: 'long', month: 'short', day: 'numeric', hour: numeric, minutes: numeric }
+          return `${index + 1}. ${value.name}, по плану до ${tsDue.toLocaleTimeString([], { timeStyle: 'short' }), tsDue.toLocaleDateString([], options)}`
         } else {
           const tsStart = new Date(Number.parseInt(value.start_date))
           const tsDue = new Date(Number.parseInt(value.due_date))
-          return `${index + 1}. ${value.name} c ${tsStart.toLocaleTimeString([], { timeStyle: 'short' })} до ${tsDue.toLocaleTimeString([], { timeStyle: 'short' })}`
+          return `${index + 1}. ${value.name} c ${tsStart.toLocaleString([], { timeStyle: 'short' })} до ${tsDue.toLocaleString([], { timeStyle: 'short' })}`
         }
       })
       await ctx.reply(nameValues.join("\n\n"))
@@ -86,9 +96,12 @@ module.exports = {
     }
   },
 
+  /**
+    * Получение списка id тасков из ClickUp
+    */
   getTaskIdArrFromApi: async function getTaskIdArrFromApi(list_id) {
     try {
-      const response = await Task.getAllTasks(list_id)
+      const response = await Task.getAll(list_id)
       const newArr = response.data.tasks.reverse().map(value => {
         return value.id
       })

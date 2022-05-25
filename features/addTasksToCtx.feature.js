@@ -8,9 +8,12 @@ const {
     team_id
 } = setting;
 
+/**
+  * Добавление в контекст объекта тасков из ClickUp.
+  */
 module.exports = async (ctx) => {
-    const all_tasksSupply = await Task.getAllTasks(listIdSupply)
-    const all_tasksClean = await Task.getAllTasks(listIdCleaning)
+    const all_tasksSupply = await Task.getAll(listIdSupply)
+    const all_tasksClean = await Task.getAll(listIdCleaning)
     ctx.all_tasksSupply = all_tasksSupply.data.tasks
     ctx.all_tasksClean = all_tasksClean.data.tasks
     ctx.team_id = team_id
