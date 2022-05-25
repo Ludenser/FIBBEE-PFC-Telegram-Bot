@@ -1,12 +1,12 @@
 menu: |
-  ●▬▬▬🦾▬▬FIBBEE▬▬🦿▬▬▬●
+  ●▬🦾 FIBBEE 🦿▬●
 
   🔸 NameBot : *${ctx.botInfo.first_name}*
   🔸 Version : 0.1.0
   🔸 Owner : *${ownerbot}*
 
 info: |
-  ●▬▬▬🦾▬▬Информация▬▬🦿▬▬▬●
+  ●▬🦾 Информация 🦿▬●
 
   This is corporate chat-bot 
       by Foodtronics team
@@ -14,7 +14,7 @@ info: |
                 ⌤⌤⌤⌤⌤
 
 docs: |
-  ●▬▬▬🦾▬▬Рабочие документы▬▬🦿▬▬▬●
+  ●▬🦾 Рабочие документы 🦿▬●
   Нажми одну из кнопок снизу
 
 helper: |

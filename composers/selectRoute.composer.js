@@ -5,6 +5,14 @@ const { getTaskIdArrFromApi } = require('../features/getRoute.feature');
 const pointScene = require('../wizards/point.wizard');
 const sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu');
 
+
+/**
+  * Обработчик сцены выбора роута. 
+  * 
+  * Динамическое создание Wizard`а со сценами из таск.листа ClickUp.
+  * 
+  * Главная регистрация всех сцен бота.
+  */
 module.exports = (ctx) => {
 
     const composer = new Composer();

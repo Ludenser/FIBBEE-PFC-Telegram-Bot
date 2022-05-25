@@ -2,6 +2,9 @@ const { Attachment } = require('../api/clickUpApi.service')
 const fs = require('fs')
 const axios = require('axios')
 
+/**
+  * Функция для обработки отправляемых файлов в телеграме и и отправке их в ClickUp
+  */
 module.exports = async (ctx, task_id) => {
     // Берем здесь фотки из сообщения и отправляем в кликап в текущий таск
     const files = ctx.update.message.photo
@@ -14,7 +17,7 @@ module.exports = async (ctx, task_id) => {
 
         .on('finish', async () => {
             console.log(`Файл ${ctx.update.message.message_id}.jpg загружен`)
-            await Attachment.createTaskAttachment(ctx, task_id)
+            await Attachment.createAttachment(ctx, task_id)
             fs.rmSync(`./test/download/${ctx.update.message.message_id}.jpg`, {
                 force: true
             })

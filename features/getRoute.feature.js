@@ -3,9 +3,13 @@ const json = JSON.stringify(routes);
 const objByJson = JSON.parse(json);
 const { Task } = require('../api/clickUpApi.service');
 const sendMessageError = require('../utils/sendMessageError');
+const { Markup } = require('telegraf');
 
 module.exports = {
 
+  /**
+    * Получение объекта комплексов
+    */
   getObjRoutes: function getObjRoutes(numRoute) {
     const targetArr = [];
     if (numRoute == 1) {
@@ -30,6 +34,9 @@ module.exports = {
     return targetArr
   },
 
+  /**
+    * Получение списка комплексов в виде строки для сообщения
+    */
   getMessageRoutes: function getMessageRoutes(ctx, numRoute) {
 
     let targetArr = [];
@@ -66,29 +73,93 @@ module.exports = {
     return `${targetArr.join("\n")} `
   },
 
-  getMessageRouteFromClickAPI: async function getMessageRoutesFromClickAPI(ctx, list_id) {
+  /**
+    * Отправка сообщения из списка тасков в листе ClickUp в виде строк.
+    * 
+    * @list_id имеет два поля one и two
+    */
+  getMessageRouteFromClickAPI: async function getMessageRoutesFromClickAPI(ctx, list_id = {}) {
     try {
-      const response = await Task.getAllTasks(list_id)
-      const nameValues = response.data.tasks.reverse().map((value, index) => {
+
+      const responseOne = await Task.getAll(list_id.one)
+
+      const options = { weekday: 'short', month: 'numeric', day: 'numeric' }
+
+      const nameValuesOne = responseOne.data.tasks.reverse().map((value, index) => {
 
         if (!value.start_date) {
-          const tsDue = new Date(Number.parseInt(value.due_date))
-          return `${index + 1}. ${value.name}, время не указано, выполнить до ${tsDue.toLocaleTimeString([], { timeStyle: 'short' })}`
+
+          const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+
+          const time = timeStamp_Due.toLocaleTimeString([], { timeStyle: 'short' })
+          const date = timeStamp_Due.toLocaleDateString([], options)
+
+          return `${index + 1}. ${value.name}, по плану до ${time},${date}`
+
         } else {
-          const tsStart = new Date(Number.parseInt(value.start_date))
-          const tsDue = new Date(Number.parseInt(value.due_date))
-          return `${index + 1}. ${value.name} c ${tsStart.toLocaleTimeString([], { timeStyle: 'short' })} до ${tsDue.toLocaleTimeString([], { timeStyle: 'short' })}`
+
+          const timeStamp_Start = new Date(Number.parseInt(value.start_date))
+          const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+
+          const timeStart = timeStamp_Start.toLocaleString([], { timeStyle: 'short' })
+          const timeDue = timeStamp_Due.toLocaleString([], { timeStyle: 'short' })
+
+          return `${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
         }
       })
-      await ctx.reply(nameValues.join("\n\n"))
+
+      if (list_id.two) {
+
+        const responseTwo = await Task.getAll(list_id.two)
+        const nameValuesTwo = responseTwo.data.tasks.reverse().map((value, index) => {
+
+          if (!value.start_date) {
+
+            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+
+            const time = timeStamp_Due.toLocaleTimeString([], { timeStyle: 'short' })
+            const date = timeStamp_Due.toLocaleDateString([], options)
+
+            return `${index + 1}. ${value.name}, по плану до ${time},${date}`
+          } else {
+
+            const timeStamp_Start = new Date(Number.parseInt(value.start_date))
+            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+
+            const timeStart = timeStamp_Start.toLocaleString([], { timeStyle: 'short' })
+            const timeDue = timeStamp_Due.toLocaleString([], { timeStyle: 'short' })
+
+            return `${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
+          }
+        })
+
+        const replyOne = nameValuesOne.join("\n\n")
+        const replyTwo = nameValuesTwo.join("\n\n")
+
+        const msg = `🔸  <b>1️⃣ маршрут:</b>\n\n\n${replyOne},\n\n\n🔸  <b>2️⃣ маршрут</b> \n\n\n${replyTwo}`
+
+        await ctx.replyWithHTML(msg,
+          Markup.inlineKeyboard([
+            Markup.button.callback('Назад!↩️', 'driverMenu')
+          ]))
+
+      } else {
+
+        const reply = nameValuesOne.join("\n\n")
+        await ctx.reply(reply)
+      }
+
     } catch (e) {
       sendMessageError(ctx, e)
     }
   },
 
+  /**
+    * Получение списка id тасков из ClickUp
+    */
   getTaskIdArrFromApi: async function getTaskIdArrFromApi(list_id) {
     try {
-      const response = await Task.getAllTasks(list_id)
+      const response = await Task.getAll(list_id)
       const newArr = response.data.tasks.reverse().map(value => {
         return value.id
       })
