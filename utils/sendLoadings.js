@@ -1,5 +1,7 @@
 module.exports = {
-
+  /**
+    * Обработка ошибки и отправка сообщения об ошибке с последующим удалением сообщения об ошибке.
+    */
   sendError: async function sendError(ctx, e) {
     ctx.reply(`Ошибка! Сообщите об этом в чате supply-team, ${e}`)
       .then((result) => {
@@ -9,7 +11,9 @@ module.exports = {
       })
       .catch(e => console.log(e))
   },
-
+  /**
+    * Отправка сообщения с его последующим удалением.
+    */
   sendProses: async function sendProses(ctx, str) {
     ctx.reply(str)
       .then((result) => {
@@ -19,7 +23,9 @@ module.exports = {
       })
       .catch(e => console.log(e))
   },
-
+  /**
+    * Отправка сообщения о загрузке данных.
+    */
   sendLoading: function sendLoading(ctx) {
     let botReply = "Подождите, данные загружаются..."
     ctx.reply(botReply)
