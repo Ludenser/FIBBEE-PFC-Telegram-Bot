@@ -2,14 +2,16 @@ const { Attachment, Users } = require('../api/clickUpApi.service')
 const userRegEx = require('../utils/regExp')
 const sendMessageRouteEnter = require('../keyboards/scenes/sendMessageRouteEnter')
 const deleteMessagePrev = require('../utils/deleteMessagePrev')
-const sendMessageError = require('../utils/sendMessageError')
-const { sendProses } = require('../utils/sendLoadings')
+
+const { sendProses, sendError } = require('../utils/sendLoadings')
+
 
 /**
   * Функция для отправки комментария и обработки введенного сообщения на наличие назначений сотрудников
   */
 module.exports = async (ctx, task_id) => {
   try {
+
     const usernameQuery = userRegEx('(?<=@).+', ctx.update.message.text)
     if (usernameQuery == ctx.update.message.text) {
       await Attachment.createComment(ctx, task_id)
@@ -19,6 +21,7 @@ module.exports = async (ctx, task_id) => {
     } else {
 
       const response = await Users.getUsers_id()
+
 
       function hasUserFrom(env) {
         return user => user.username === env;
@@ -30,7 +33,6 @@ module.exports = async (ctx, task_id) => {
       await sendProses(ctx, 'Комментарий отправлен. Все ОК.')
       await sendMessageRouteEnter(ctx)
     }
-
 
   } catch (e) {
     await sendError(ctx, e)
