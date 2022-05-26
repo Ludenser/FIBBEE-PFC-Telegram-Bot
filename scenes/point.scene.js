@@ -20,9 +20,11 @@ module.exports = (arr) => {
             point_scene.action('enter', async (ctx) => {
                 try {
                     await ctx.deleteMessage()
+
                     await Task.setStatus(task.id, 'in progress')
                     await setAssigneeFeature(task.id)
                     await Time.startEntry(ctx.team_id, task.id)
+
                     await sendMessageRouteEnter(ctx, task.name)
                 } catch (e) {
                     await sendError(ctx, e)
@@ -63,9 +65,11 @@ module.exports = (arr) => {
                             Markup.button.callback('Подтвердить загрузку фото✅')
                         ]).resize(true).oneTime(true)
                     )
+
                     point_scene.on('photo', async (ctx) => {
                         await postAttachmentsFeature(ctx, task.id)
                     })
+
                 } catch (e) {
                     await sendError(ctx, e)
                     await sendMessageRouteEnter(ctx, task.name)
@@ -81,6 +85,7 @@ module.exports = (arr) => {
                             .inlineKeyboard([
                                 Markup.button.callback('Вернуться в меню осблуживания комплекса', 'enter_more'),
                             ]))
+
                     point_scene.on('text', async (ctx) => {
                         if (ctx.update.message.text !== undefined) {
                             await ctx.deleteMessage()
@@ -89,6 +94,7 @@ module.exports = (arr) => {
                             console.log('Опять')
                         }
                     })
+
                 } catch (e) {
                     await sendError(ctx, e)
                     await sendMessageRouteEnter(ctx, task.name)
