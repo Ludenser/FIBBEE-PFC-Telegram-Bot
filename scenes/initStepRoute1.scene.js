@@ -5,7 +5,7 @@ const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMe
 const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
 const deleteMessagePrev = require('../utils/deleteMessagePrev');
 const postAttachment = require('../features/postAttachments.feature');
-const sendMessageError = require('../utils/sendMessageError');
+const { sendError } = require('../utils/sendLoadings');
 
 /**
   * Сцена инициализации назначенного роута.
@@ -27,9 +27,9 @@ initStepRoute1.action('get_start', async (ctx) => {
     await ctx.deleteMessage()
     await deleteMessagePrev(ctx, 2)
     await deleteMessagePrev(ctx, 3)
-    await ctx.reply('Приступить к обслуживанию',
+    await ctx.reply('Приступить к обслуживанию первого комплекса? ',
         Markup.inlineKeyboard([
-            Markup.button.callback('первого комплекса', 'enter')
+            Markup.button.callback('🔘 Нажми, чтобы начать 🔘', 'enter')
         ])
     )
     await ctx.scene.enter('POINTS_SUPPLY_WIZARD_ID')
@@ -40,11 +40,12 @@ initStepRoute1.action('leaveScene', async (ctx) => {
         await Time.stopEntry(ctx.team_id, ctx.primeTaskSupply_id)
         await Task.setStatus(ctx.primeTaskSupply_id, 'to do')
         await ctx.deleteMessage()
-        await deleteMessagePrev(ctx, 1)
+        await deleteMessagePrev(ctx, 2)
+        await deleteMessagePrev(ctx, 3)
         await sendMessageDriverMenu(ctx)
         await ctx.scene.leave()
     } catch (e) {
-        await sendMessageError(ctx, e)
+        await sendError(ctx, e)
         await sendMessageDriverMenu(ctx)
         await ctx.scene.leave()
     }

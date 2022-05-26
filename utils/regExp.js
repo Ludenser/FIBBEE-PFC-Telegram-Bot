@@ -1,6 +1,10 @@
 /**
-* Функция для обработки строки регулярным выражением
-*/
+ *  Функция для отбработки строки регулярным выржением
+ *  * @re - regExp.
+ *  * @str - string.
+ * 
+ * Если соответствие не найдено возвращает строку
+ * */
 module.exports = (re, str) => {
     const regex = new RegExp(re, 'i')
     let s
@@ -17,5 +21,3 @@ module.exports = (re, str) => {
 
     return s.toString()
 }
-
-
