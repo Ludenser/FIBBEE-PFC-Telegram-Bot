@@ -1,22 +1,20 @@
 module.exports = {
 
-  sendSearch: function sendSearch(ctx) {
-    let botReply = "Подождите, идет поиск..."
-    ctx.reply(botReply)
+  sendError: async function sendError(ctx, e) {
+    ctx.reply(`Ошибка! Сообщите об этом в чате supply-team, ${e}`)
       .then((result) => {
         setTimeout(() => {
-          ctx.reply(result.message_id)
-        }, 10 * 250)
+          ctx.deleteMessage(result.message_id)
+        }, 10 * 500)
       })
       .catch(e => console.log(e))
   },
 
-  sendProses: function sendProses(ctx) {
-    let botReply = "Подождите, в процессе"
-    ctx.reply(botReply)
+  sendProses: async function sendProses(ctx, str) {
+    ctx.reply(str)
       .then((result) => {
         setTimeout(() => {
-          ctx.reply(result.message_id)
+          ctx.deleteMessage(result.message_id)
         }, 10 * 500)
       })
       .catch(e => console.log(e))
