@@ -37,7 +37,29 @@ class Attachment {
     /**
         * Создание комментария в таске
         */
-    static async createComment(ctx, task_id, user_id) {
+    static async createComment(ctx, task_id) {
+
+        await axios({
+            method: 'post',
+            url: `https://api.clickup.com/api/v2/task/${task_id}/comment`,
+            data: {
+                'comment': [
+                    {
+                        'text': ctx.update.message.text,
+                    }
+                ]
+            },
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(() => console.log('Коммент прикреплен к таску!'))
+            .catch((e) => console.log(e))
+
+    }
+
+    static async createCommentWithAssignee(ctx, task_id, user_id) {
 
         await axios({
             method: 'post',
