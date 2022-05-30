@@ -4,6 +4,7 @@ const token = process.env.CLICKUP_TOKEN;
 const fs = require('fs');
 const FormData = require('form-data');
 const settings = JSON.parse(fs.readFileSync('./lib/setting.json'));
+const qs = require('qs')
 const { listId } = settings;
 
 /**
@@ -91,12 +92,22 @@ class Task {
     /**
         * Получение списка всех тасков в таск-листе
         */
-    static async getAll(list_id, archived = false, page) {
+    static async getAll(list_id, archived = false, page = 0) {
+        const time = new Date(Date.now())
+        const due = new Date(time.setHours(time.getHours() + 24))
+
+
         const response = await axios.get(`https://api.clickup.com/api/v2/list/${list_id}/task`,
             {
                 params: {
+                    statuses: ['to do'],
                     archived: archived,
+                    order_by: 'due_date',
+                    due_date_lt: Date.parse(due),
                     page: page
+                },
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
                 },
                 headers: {
                     'Authorization': token,
