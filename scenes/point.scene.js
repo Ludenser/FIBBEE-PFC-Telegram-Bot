@@ -96,8 +96,8 @@ module.exports = (arr) => {
 
         point_scene.action('next_step', async (ctx) => {
             try {
-                await Task.setStatus(task.id, 'done')
-                await Time.stopEntry(ctx.team_id, task.id)
+                // await Task.setStatus(task.id, 'done')
+                // await Time.stopEntry(ctx.team_id, task.id)
                 await ctx.deleteMessage()
                 await ctx.reply(`Заканчиваем ${task.name}`, Markup
                     .inlineKeyboard([
@@ -126,10 +126,10 @@ module.exports = (arr) => {
             }
 
         })
-
+        console.log(task.name)
         return point_scene
     })
-
+    console.dir(newArr)
     return newArr
 
 }
