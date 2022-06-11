@@ -9,6 +9,7 @@ module.exports = {
 
   /**
     * Получение объекта комплексов
+    * outdated  
     */
   getObjRoutes: function getObjRoutes(numRoute) {
     const targetArr = [];
@@ -36,6 +37,7 @@ module.exports = {
 
   /**
     * Получение списка комплексов в виде строки для сообщения
+    * outdated
     */
   getMessageRoutes: function getMessageRoutes(ctx, numRoute) {
 
@@ -78,10 +80,10 @@ module.exports = {
     * 
     * @list_id имеет два поля one и two
     */
-  getMessageRouteFromClickAPI: async function getMessageRoutesFromClickAPI(ctx, list_id = {}) {
+  getMessageRouteFromClickAPI: async function getMessageRoutesFromClickAPI(ctx, [one, two] = []) {
     try {
 
-      const responseOne = await Task.getAll(list_id.one)
+      const responseOne = await Task.getAll(one)
 
       const options = { weekday: 'short', month: 'numeric', day: 'numeric' }
 
@@ -108,9 +110,9 @@ module.exports = {
         }
       })
 
-      if (list_id.two) {
+      if (two) {
 
-        const responseTwo = await Task.getAll(list_id.two)
+        const responseTwo = await Task.getAll(two)
         const nameValuesTwo = responseTwo.data.tasks.reverse().map((value, index) => {
 
           if (!value.start_date) {

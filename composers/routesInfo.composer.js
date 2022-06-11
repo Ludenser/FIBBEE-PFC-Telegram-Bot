@@ -7,6 +7,8 @@ const {
   listIdSupply,
   listIdCleaning
 } = setting;
+const listIdArray = [listIdSupply,
+  listIdCleaning]
 
 /**
   * Обработчик меню с информацией о маршрутах
@@ -16,7 +18,7 @@ const composer = new Composer();
 composer.action('routesInfo', async (ctx) => {
   try {
     await ctx.deleteMessage()
-    await getMessageRouteFromClickAPI(ctx, { one: listIdSupply, two: listIdCleaning }, 'driverInfo')
+    await getMessageRouteFromClickAPI(ctx, listIdArray)
   } catch (e) {
     console.log(e)
     sendMessageError(ctx, e)

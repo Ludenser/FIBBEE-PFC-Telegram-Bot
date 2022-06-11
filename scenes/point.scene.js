@@ -12,20 +12,13 @@ const sendMessageRouteEnter = require('../keyboards/scenes/sendMessageRouteEnter
 const { sendError } = require('../utils/sendLoadings');
 
 module.exports = (arr) => {
-    console.log('Последний таск', arr.at(-1).name)
+
     const newArr = arr.map((task) => {
 
         const point_scene = new Composer()
 
         point_scene.action('enter', async (ctx) => {
             try {
-                // if (task.name === arr.at(-1).name) {
-                //     await ctx.deleteMessage()
-                //     // await Task.setStatus(task.id, 'in progress')
-                //     // await setAssigneeFeature(task.id)
-                //     // await Time.startEntry(ctx.team_id, task.id)
-                //     await sendMessageRouteEnterEx(ctx, task.name)
-                // } else {
                 await ctx.deleteMessage()
                 // await Task.setStatus(task.id, 'in progress')
                 // await setAssigneeFeature(task.id)
@@ -136,6 +129,5 @@ module.exports = (arr) => {
         console.log(task.name)
         return point_scene
     })
-    console.log(newArr)
     return newArr
 }
