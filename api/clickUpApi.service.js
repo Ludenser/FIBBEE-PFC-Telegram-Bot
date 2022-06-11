@@ -4,6 +4,8 @@ const token = process.env.CLICKUP_TOKEN;
 const fs = require('fs');
 const FormData = require('form-data');
 const settings = JSON.parse(fs.readFileSync('./lib/setting.json'));
+const qs = require('qs');
+const dueTime = require('../utils/time24')
 const { listId } = settings;
 
 /**
@@ -13,6 +15,8 @@ class Attachment {
 
     /**
         * Создание аттачмента в таске
+        * @param ctx
+        * @param number
         */
     static async createAttachment(ctx, task_id) {
         const form = new FormData();
@@ -36,6 +40,8 @@ class Attachment {
 
     /**
         * Создание комментария в таске
+        * @param ctx
+        * @param number
         */
     static async createComment(ctx, task_id) {
 
@@ -58,7 +64,12 @@ class Attachment {
             .catch((e) => console.log(e))
 
     }
-
+    /**
+        * Создание комментария в таске c тегом
+        * @param ctx
+        * @param number
+        * @param number
+        */
     static async createCommentWithAssignee(ctx, task_id, user_id) {
 
         await axios({
@@ -90,13 +101,19 @@ class Task {
 
     /**
         * Получение списка всех тасков в таск-листе
+        * @param number
         */
-    static async getAll(list_id, archived = false, page) {
+    static async getAll(list_id) {
+
         const response = await axios.get(`https://api.clickup.com/api/v2/list/${list_id}/task`,
             {
                 params: {
-                    archived: archived,
-                    page: page
+                    statuses: ['to do', 'in progress'],
+                    order_by: 'due_date',
+                    due_date_lt: dueTime(24)
+                },
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
                 },
                 headers: {
                     'Authorization': token,
@@ -108,6 +125,8 @@ class Task {
 
     /**
         * Установка статуса таску
+        * @param number
+        * @param string
         */
     static async setStatus(task_id, updatedStatus) {
         const response = await axios.put(`https://api.clickup.com/api/v2/task/${task_id}/`,
@@ -153,6 +172,7 @@ class Time {
 
     /**
         * Получение информации о таймере в задаче
+        * @param number
         */
     static async getTrackedTime(task_id) {
         const response = await axios.get(`https://api.clickup.com/api/v2/task/${task_id}/time/`,
@@ -167,6 +187,7 @@ class Time {
 
     /**
         * Создание уже готового отслеженного времени
+        * @param number
         */
     static async postTrackTime(task_id) {
         const response = await axios.post(`https://api.clickup.com/api/v2/task/${task_id}/time/`,
@@ -184,6 +205,8 @@ class Time {
 
     /**
         * Создание уже готового отслеженного времени
+        * @param number
+        * @param number
         */
     static async createEntry(team_id, task_id) {  //(сколько затрачено на задачу), время нужно получать из логики приложения. в теле запроса указывается либо total, либо start и end в UNIX
         const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/`,
@@ -204,6 +227,8 @@ class Time {
 
     /**
         * Запуск встроенного таймера в ClickUp
+        * @param number
+        * @param number
         */
     static async startEntry(team_id, task_id) {
         const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/start/`,
@@ -222,6 +247,9 @@ class Time {
 
     /**
         * Обновление встроенного таймера в ClickUp
+        * @param number
+        * @param number
+        * @param number
         */
     static async updateEntry(team_id, task_id, unix_time) {
 
@@ -242,6 +270,8 @@ class Time {
 
     /**
         * Остановка встроенного таймера в ClickUp
+        * @param number
+        * @param number
         */
     static async stopEntry(team_id, task_id) {
 
@@ -280,8 +310,6 @@ class Users {
 
     /**
         * Получение объекта всех юзеров, имеющих доступ к таск-листу "по умолчанию"
-        * 
-        * @listId берется из settings
         */
     static async getUsers_id() {
         const response = await axios.get(`https://api.clickup.com/api/v2/list/${listId}/member`,

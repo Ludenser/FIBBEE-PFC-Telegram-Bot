@@ -20,8 +20,8 @@
   "author": "Ludenser",
   "license": "ISC",
   "dependencies": {
+    "@grammyjs/i18n": "^0.5.1",
     "axios": "^0.21.1",
-    "canvacord": "^5.2.3",
     "clickup-wrapper": "^1.0.1",
     "clickup.js": "^3.0.1",
     "dotenv": "^16.0.0",
@@ -29,12 +29,13 @@
     "form-data": "^4.0.0",
     "grammy": "^1.7.0",
     "grammy-inline-menu": "^7.0.2",
+    "lodash": "^4.17.21",
     "moment-timezone": "^0.5.33",
-    "nodemon": "^2.0.15",
+    "nodemon": "^2.0.16",
     "os": "^0.1.1",
     "performance-now": "^2.1.0",
+    "qs": "^6.10.3",
     "telegraf": "^4.7.0",
-    "telegraf-i18n": "^6.6.0",
     "telegraf-update-logger": "^1.4.0"
   }
 }

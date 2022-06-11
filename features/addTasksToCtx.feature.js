@@ -21,13 +21,16 @@ module.exports = async (ctx) => {
     ctx.all_tasksSupply.forEach((element, i) => {
         if (element.name.includes('водителя' || 'оператора')) {
             ctx.primeTaskSupply_id = element.id
-            const r = ctx.all_tasksSupply.splice(i, 1)
+            ctx.all_tasksSupply.splice(i, 1)
         }
     })
+    ctx.all_tasksSupply = ctx.all_tasksSupply.filter(element => element.name.includes('Обслуживание') || element.name.includes('Пополнение')).reverse()
+
     ctx.all_tasksClean.forEach((element, i) => {
         if (element.name.includes('водителя' || 'оператора')) {
             ctx.primeTaskClean_id = element.id
-            const r = ctx.all_tasksClean.splice(i, 1)
+            ctx.all_tasksClean.splice(i, 1)
         }
     })
+    ctx.all_tasksClean = ctx.all_tasksClean.filter(element => element.name.includes('Обслуживание') || element.name.includes('Пополнение')).reverse()
 }
