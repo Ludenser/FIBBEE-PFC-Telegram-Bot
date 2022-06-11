@@ -1,5 +1,5 @@
 const { Telegraf } = require('telegraf');
-const TelegrafI18n = require('telegraf-i18n');
+const { I18n } = require('@grammyjs/i18n');
 const updateLogger = require('telegraf-update-logger');
 const chalk = require('chalk');
 const path = require('path');
@@ -10,7 +10,7 @@ const selectRouteComposer = require('./composers/selectRoute.composer');
 
 require('dotenv').config();
 
-const i18n = new TelegrafI18n({
+const i18n = new I18n({
     defaultLanguage: 'ru',
     allowMissing: false, // Default true
     directory: path.resolve(__dirname, 'locales')
