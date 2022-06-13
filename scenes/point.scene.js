@@ -79,6 +79,7 @@ module.exports = (arr) => {
                 await ctx.deleteMessage()
                 await ctx.reply('Напиши комментарий к таску, если нужно кого-то тегнуть, добавь в конце комментария "@имя фамилия"',
                     Markup
+
                         .inlineKeyboard([
                             Markup.button.callback('Вернуться в меню осблуживания комплекса', 'enter_more'),
                         ]))
