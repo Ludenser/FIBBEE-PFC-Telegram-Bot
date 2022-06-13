@@ -80,6 +80,49 @@ module.exports = {
     * 
     * @list_id имеет два поля one и two
     */
+
+  getMessageAnyRoute: async function getMessageAnyRoute(ctx, [...list_ids] = []) {
+    const response = await Task.getAll(...list_ids)
+    const resArray = list_ids.map((point) => {
+
+      const options = { weekday: 'short', month: 'numeric', day: 'numeric' }
+      const nameValues = response.data.tasks.reverse().map((value, index) => {
+        if (!value.start_date) {
+
+          const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+
+          const time = timeStamp_Due.toLocaleTimeString([], { timeStyle: 'short' })
+          const date = timeStamp_Due.toLocaleDateString([], options)
+
+          return `\n\n\n${index + 1}. ${value.name}, по плану до ${time},${date}`
+
+        } else {
+
+          const timeStamp_Start = new Date(Number.parseInt(value.start_date))
+          const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+
+          const timeStart = timeStamp_Start.toLocaleString([], { timeStyle: 'short' })
+          const timeDue = timeStamp_Due.toLocaleString([], { timeStyle: 'short' })
+
+          return `\n\n\n${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
+        }
+
+      })
+
+      return nameValues
+    })
+
+    const msg = resArray.map((value, i) => {
+
+      return `🔸 <b>${i + 1} маршрут:</b>\n${value},\n\n\n`
+    })
+
+    await ctx.replyWithHTML(...msg,
+      Markup.inlineKeyboard([
+        Markup.button.callback('Назад!↩️', 'driverMenu')
+      ]))
+  },
+
   getMessageRouteFromClickAPI: async function getMessageRoutesFromClickAPI(ctx, [one, two] = []) {
     try {
 

@@ -8,7 +8,7 @@ const sendMessageError = require('../utils/sendMessageError');
 const postCommentFeature = require('../features/postComment.feature');
 const setAssigneeFeature = require('../features/setAssignee.feature');
 const sendMessageRouteEnter = require('../keyboards/scenes/sendMessageRouteEnter');
-// const sendMessageRouteEnterEx = require('../keyboards/scenes/sendMessageRouteEnterEx');
+const sendMessageRouteEnterEx = require('../keyboards/scenes/sendMessageRouteEnterEx');
 const { sendError } = require('../utils/sendLoadings');
 
 module.exports = (arr) => {
@@ -19,27 +19,27 @@ module.exports = (arr) => {
 
         point_scene.action('enter', async (ctx) => {
             try {
+                console.log(!task.id.includes(ctx.all_tasksSupply.at(-1).id))
                 await ctx.deleteMessage()
                 // await Task.setStatus(task.id, 'in progress')
                 // await setAssigneeFeature(task.id)
                 // await Time.startEntry(ctx.team_id, task.id)
-                await sendMessageRouteEnter(ctx, task.name)
+                await sendMessageRouteEnter(ctx, task.name, task.id)
 
 
             } catch (e) {
                 await sendError(ctx, e)
-                await sendMessageRouteEnter(ctx, task.name)
+                await sendMessageRouteEnter(ctx, task.name, task.id)
             }
-            console.log(task.name, task.id)
         })
 
         point_scene.action('enter_more', async (ctx) => {
             try {
                 await ctx.deleteMessage()
-                await sendMessageRouteEnter(ctx, task.name)
+                await sendMessageRouteEnter(ctx, task.name, task.id)
             } catch (e) {
                 await sendError(ctx, e)
-                await sendMessageRouteEnter(ctx, task.name)
+                await sendMessageRouteEnter(ctx, task.name, task.id)
             }
 
         })
@@ -51,7 +51,7 @@ module.exports = (arr) => {
                 await sendMessagePhotoCheck('point', ctx)
             } catch (e) {
                 await sendError(ctx, e)
-                await sendMessageRouteEnter(ctx, task.name)
+                await sendMessageRouteEnter(ctx, task.name, task.id)
             }
 
         })
@@ -70,7 +70,7 @@ module.exports = (arr) => {
                 })
             } catch (e) {
                 await sendError(ctx, e)
-                await sendMessageRouteEnter(ctx, task.name)
+                await sendMessageRouteEnter(ctx, task.name, task.id)
             }
         })
 
@@ -92,7 +92,7 @@ module.exports = (arr) => {
                 })
             } catch (e) {
                 await sendError(ctx, e)
-                await sendMessageRouteEnter(ctx, task.name)
+                await sendMessageRouteEnter(ctx, task.name, task.id)
             }
         })
 
@@ -108,8 +108,23 @@ module.exports = (arr) => {
                 await ctx.wizard.next()
             } catch (e) {
                 await sendError(ctx, e)
-                await sendMessageRouteEnter(ctx, task.name)
+                await sendMessageRouteEnter(ctx, task.name, task.id)
             }
+        })
+
+        point_scene.action('exit', async (ctx) => {
+            try {
+                // await Task.setStatus(task.id, 'done')
+                // await Time.stopEntry(ctx.team_id, task.id)
+                await ctx.deleteMessage()
+                await sendMessageRouteEnterEx(ctx) // нужно добавить подтверждения закрытия роута
+                await ctx.scene.enter('ROUTE_WIZARD_ID')
+            } catch (e) {
+                await sendError(ctx, e)
+                await sendMessageRouteEnterEx(ctx)
+                await ctx.scene.enter('ROUTE_WIZARD_ID')
+            }
+
         })
 
         point_scene.action('leaveScene', async (ctx) => {
@@ -126,8 +141,9 @@ module.exports = (arr) => {
             }
 
         })
-        console.log(task.name)
+
         return point_scene
     })
+
     return newArr
 }

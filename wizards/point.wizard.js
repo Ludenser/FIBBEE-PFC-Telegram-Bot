@@ -4,7 +4,7 @@ const point_scene = require('../scenes/point.scene');
 /**
   * Сцена инициализации назначенного роута.
   */
-const pointSupplyScene = (role, ctx) => {
+const pointScene = (role, ctx) => {
     switch (role) {
         case 'supply':
             return new Scenes.WizardScene('POINTS_SUPPLY_WIZARD_ID', ...point_scene(ctx.all_tasksSupply))
@@ -16,4 +16,4 @@ const pointSupplyScene = (role, ctx) => {
 
 }
 
-module.exports = pointSupplyScene
+module.exports = pointScene

@@ -1,14 +1,11 @@
 const { Markup } = require('telegraf')
 
-module.exports = async (ctx, msg = 'Меню') => {
-
+module.exports = async (ctx) => {
+    const msg = 'Чтобы завершть роут и выйти в главное меню нажми кнопку ниже'
     await ctx.reply(msg,
         Markup.inlineKeyboard(
             [
-                Markup.button.callback('Загрузить фото', 'upl_photo'),
-                Markup.button.callback('Оставить комментарий', 'upl_comment'),
-                Markup.button.callback('Закончить обслуживание', 'exit'),
-                Markup.button.callback('Выйти', 'leaveScene')
+                Markup.button.callback('Закрыть роут', 'closeRoute'),
             ], {
             wrap: (btn, index, currentRow) => currentRow.length >= (index + 1) / 2
         })

@@ -12,6 +12,7 @@ const {
   * Добавление в контекст объекта тасков из ClickUp.
   */
 module.exports = async (ctx) => {
+
     const all_tasksSupply = await Task.getAll(listIdSupply)
     const all_tasksClean = await Task.getAll(listIdCleaning)
     ctx.all_tasksSupply = all_tasksSupply.data.tasks
@@ -33,4 +34,5 @@ module.exports = async (ctx) => {
         }
     })
     ctx.all_tasksClean = ctx.all_tasksClean.filter(element => element.name.includes('Обслуживание') || element.name.includes('Пополнение')).reverse()
+
 }
