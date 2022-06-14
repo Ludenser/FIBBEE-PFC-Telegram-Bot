@@ -4,7 +4,7 @@
   "description": "Bot telegram use lib telegraf",
   "main": "index.js",
   "scripts": {
-    "start": "forever start nodemon --exitcrash index.js",
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,7 +26,6 @@
     "clickup.js": "^3.0.1",
     "dotenv": "^16.0.0",
     "easytimer.js": "^4.5.3",
-    "forever": "^4.0.3",
     "form-data": "^4.0.0",
     "grammy": "^1.7.0",
     "grammy-inline-menu": "^7.0.2",
