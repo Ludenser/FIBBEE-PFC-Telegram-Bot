@@ -23,7 +23,7 @@ module.exports = {
 
           const timeStamp_Due = new Date(Number.parseInt(value.due_date))
 
-          const time = timeStamp_Due.toLocaleTimeString('RU-ru', { timeStyle: 'short' })
+          const time = timeStamp_Due.toLocaleTimeString('ru-RU', { timeStyle: 'short' })
           const date = timeStamp_Due.toLocaleDateString([], options)
 
           return `\n\n\n${index + 1}. ${value.name}, по плану до ${time},${date}`
@@ -33,8 +33,8 @@ module.exports = {
           const timeStamp_Start = new Date(Number.parseInt(value.start_date))
           const timeStamp_Due = new Date(Number.parseInt(value.due_date))
 
-          const timeStart = timeStamp_Start.toLocaleString('RU-ru', { timeStyle: 'short' })
-          const timeDue = timeStamp_Due.toLocaleString('RU-ru', { timeStyle: 'short' })
+          const timeStart = timeStamp_Start.toLocaleString('ru-RU', { timeStyle: 'short' })
+          const timeDue = timeStamp_Due.toLocaleString('ru-RU', { timeStyle: 'short' })
 
           return `\n\n\n${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
         }
