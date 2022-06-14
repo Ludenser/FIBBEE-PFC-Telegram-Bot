@@ -1,12 +1,16 @@
 const { Composer } = require('telegraf');
-const { getMessageRouteFromClickAPI } = require('../features/getRoute.feature');
-const sendMessageError = require('../utils/sendMessageError');
+const { getMessageAnyRoute } = require('../features/getRoute.feature');
 const fs = require('fs');
+const { sendError } = require('../utils/sendLoadings');
 const setting = JSON.parse(fs.readFileSync('./lib/setting.json'));
 const {
   listIdSupply,
   listIdCleaning
 } = setting;
+const listIdArray = [
+  Number(listIdSupply),
+  Number(listIdCleaning)
+]
 
 /**
   * Обработчик меню с информацией о маршрутах
@@ -16,10 +20,9 @@ const composer = new Composer();
 composer.action('routesInfo', async (ctx) => {
   try {
     await ctx.deleteMessage()
-    await getMessageRouteFromClickAPI(ctx, { one: listIdSupply, two: listIdCleaning }, 'driverInfo')
+    await getMessageAnyRoute(ctx, listIdArray)
   } catch (e) {
-    console.log(e)
-    sendMessageError(ctx, e)
+    await sendError(ctx, e)
   }
 
 })

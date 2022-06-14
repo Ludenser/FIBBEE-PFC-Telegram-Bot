@@ -108,9 +108,10 @@ class Task {
         const response = await axios.get(`https://api.clickup.com/api/v2/list/${list_id}/task`,
             {
                 params: {
-                    statuses: ['to do', 'in progress'],
+                    statuses: ['to do'],
                     order_by: 'due_date',
-                    due_date_lt: dueTime(24)
+                    due_date_gt: Date.parse(new Date(Date.now())),
+                    due_date_lt: dueTime(20)
                 },
                 paramsSerializer: params => {
                     return qs.stringify(params, { arrayFormat: 'brackets' })

@@ -29,9 +29,9 @@ composer.action('docs', (ctx) => {
 
 })
 
-composer.action('driverMenu', async (ctx) => {
+composer.action('driverMenu', (ctx) => {
   try {
-    await ctx.deleteMessage()
+    ctx.deleteMessage()
     sendMessageDriverMenu(ctx)
   } catch (e) {
     sendMessageError(ctx, e)

@@ -30,11 +30,7 @@ composer.command('/start', async (ctx) => {
   }
 })
 
-composer.action(['start', 'exit'], async (ctx) => {
-  composer.use(async (ctx, next) => {
-    await addTasksToCtx(ctx)
-    await next()
-  })
+composer.action('start', async (ctx) => {
   try {
     await sendMessageStart(ctx)
   } catch (e) {
