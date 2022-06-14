@@ -7,8 +7,10 @@ const {
   listIdSupply,
   listIdCleaning
 } = setting;
-const listIdArray = [listIdSupply,
-  listIdCleaning]
+const listIdArray = [
+  Number(listIdSupply),
+  Number(listIdCleaning)
+]
 
 /**
   * Обработчик меню с информацией о маршрутах
