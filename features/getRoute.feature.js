@@ -24,7 +24,7 @@ module.exports = {
           const timeStamp_Due = new Date(Number.parseInt(value.due_date))
 
           const time = timeStamp_Due.toLocaleTimeString('ru-RU', { timeStyle: 'short' })
-          const date = timeStamp_Due.toLocaleDateString([], options)
+          const date = timeStamp_Due.toLocaleDateString('ru-RU', options)
 
           return `\n\n\n${index + 1}. ${value.name}, по плану до ${time},${date}`
 
