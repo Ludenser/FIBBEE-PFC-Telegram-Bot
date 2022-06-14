@@ -10,10 +10,10 @@ module.exports = {
   /**
     * Отправка сообщения из списка тасков в листе ClickUp в виде строк.
     * 
-    * @param list_id - массив из list_id
+    * @param {Number[]} list_ids массив цифр из list_id из файла settings
     */
 
-  getMessageAnyRoute: async function getMessageAllRoutes(ctx, [...list_ids] = []) {
+  getMessageAnyRoute: async (ctx, [...list_ids] = []) => {
     const response = await Task.getAll(...list_ids)
     const resArray = list_ids.map((point) => {
 
@@ -58,9 +58,9 @@ module.exports = {
   /**
       * Отправка сообщения из списка тасков в листе ClickUp в виде строк.
       * 
-      * @param list_id имеет два поля one и two
+      * @param list_id пока что имеет два поля one и two, по мере потребности будет добавляться.
       */
-  getMessageRouteFromClickAPI: async function getMessageRoutesFromClickAPI(ctx, [one, two] = []) {
+  getMessageRouteFromClickAPI: async (ctx, [one, two] = []) => {
     try {
 
       const responseOne = await Task.getAll(one)
@@ -139,7 +139,7 @@ module.exports = {
   /**
     * Получение списка id тасков из ClickUp
     */
-  getTaskIdArrFromApi: async function getTaskIdArrFromApi(list_id) {
+  getTaskIdArrFromApi: async (list_id) => {
     try {
       const response = await Task.getAll(list_id)
       const newArr = response.data.tasks.reverse().map(value => {
