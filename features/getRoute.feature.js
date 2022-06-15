@@ -21,36 +21,6 @@ module.exports = {
     const response2 = await Task.getAll(two)
 
 
-    let resp_data = []
-    for (resp of list_ids) {
-      const response = await Task.getAll(resp)
-      resp_data.push(...response.data.tasks)
-    }
-
-
-    let arr = resp_data.filter((i) => {
-      let dupl = resp_data.filter((x) => {
-        return x.list.id === i.list.id
-      })
-      return dupl.length > 1
-    })
-    arr.forEach(el => console.log(el.list.id))
-
-    // for (let i = 0; i < resp_data.length; i++) {
-    //   if (resp.data[i].list.id === resp.data[i + 1].list.id) {
-    //     return
-    //   } else {
-    //     resp_data[i + 1].list.id.slice(i, resp_data.length - i)
-    //   }
-    // }
-
-
-    // const respArray = resp_data.map((task) => {
-
-    //   console.log(task.list)
-    // })
-
-
     const resArray = list_ids.map((point) => {
 
       const options = { weekday: 'short', month: 'numeric', day: 'numeric' }
