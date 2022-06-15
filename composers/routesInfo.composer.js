@@ -22,6 +22,7 @@ composer.action('routesInfo', async (ctx) => {
     await ctx.deleteMessage()
     await getMessageAnyRoute(ctx, listIdArray)
   } catch (e) {
+    console.log(e)
     await sendError(ctx, e)
   }
 
