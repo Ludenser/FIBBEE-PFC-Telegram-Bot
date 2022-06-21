@@ -19,13 +19,14 @@ const token = process.env.TOKEN;
 
 const bot = new Telegraf(token)
 
-bot.context.all_tasksSupply = undefined
-bot.context.all_tasksClean = undefined
+bot.context.all_tasksSupply = []
+bot.context.all_tasksClean = []
 bot.context.routeNumber = undefined
 bot.context.team_id = undefined
 bot.context.primeTaskSupply_id = undefined
 bot.context.primeTaskClean_id = undefined
 bot.context.main_timer_id = undefined
+bot.context.lastTask_id = undefined
 
 bot.use(
     updateLogger({

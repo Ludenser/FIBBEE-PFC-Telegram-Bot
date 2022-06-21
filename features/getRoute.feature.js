@@ -8,80 +8,98 @@ const { Markup } = require('telegraf');
 module.exports = {
 
   /**
-    * Получение объекта комплексов
-    */
-  getObjRoutes: function getObjRoutes(numRoute) {
-    const targetArr = [];
-    if (numRoute == 1) {
-      const filtered = objByJson.filter(obj => obj.route == 1);
-      for (i in filtered) {
-
-        newObj = Object.assign({ name: filtered[i].name }, { value: filtered[i].time });
-        targetArr.push(newObj);
-      }
-    } else if (!numRoute) {
-      return objByJson
-    } else {
-      const filtered = objByJson.filter(obj => obj.route == 2);
-      for (i in filtered) {
-
-        newObj = Object.assign({ name: filtered[i].name }, { value: filtered[i].time });
-        targetArr.push(newObj);
-      }
-
-    }
-
-    return targetArr
-  },
-
-  /**
-    * Получение списка комплексов в виде строки для сообщения
-    */
-  getMessageRoutes: function getMessageRoutes(ctx, numRoute) {
-
-    let targetArr = [];
-    if (numRoute == 1) {
-      const filtered = objByJson.filter(obj => obj.route == 1);
-      for (i in filtered) {
-        targetArr.push(filtered[i].name);
-      }
-    } else if (!numRoute) {
-      const
-        filteredArr1 = [],
-        filteredArr2 = []
-      const filtered1 = objByJson.filter(obj => obj.route == 1);
-      for (i in filtered1) {
-        filteredArr1.push(filtered1[i].name);
-      }
-      const filtered2 = objByJson.filter(obj => obj.route == 2);
-      for (i in filtered2) {
-        filteredArr2.push(filtered2[i].name);
-      }
-      for (i in objByJson) {
-        targetArr.push(objByJson[i].name);
-      } return `
-      ${ctx.i18n.t('decoreRoute1Number')}
-      ${filteredArr1.join("\n\n")};
-      ${ctx.i18n.t('decoreRoute2Number')}
-      ${filteredArr2.join("\n\n")}`
-    } else {
-      const filtered = objByJson.filter(obj => obj.route == 2);
-      for (i in filtered) {
-        targetArr.push(filtered[i].name);
-      }
-    }
-    return `${targetArr.join("\n")} `
-  },
-
-  /**
     * Отправка сообщения из списка тасков в листе ClickUp в виде строк.
     * 
-    * @list_id имеет два поля one и two
+    * @param {Number[]} list_ids массив цифр из list_id из файла settings
     */
-  getMessageRouteFromClickAPI: async function getMessageRoutesFromClickAPI(ctx, list_id = {}) {
+
+  getMessageAnyRoute: async (ctx, [...list_ids] = []) => {
+
+    const [one, two] = list_ids
+
+    const response1 = await Task.getAll(one)
+    const response2 = await Task.getAll(two)
+
+
+    const resArray = list_ids.map((point) => {
+
+      const options = { weekday: 'short', month: 'numeric', day: 'numeric' }
+
+      if (point == response1.data.tasks[0].list.id) {
+
+        const nameValues = response1.data.tasks.reverse().map((value, index) => {
+          if (!value.start_date) {
+
+            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+
+            const time = timeStamp_Due.toLocaleTimeString('ru-RU', { timeStyle: 'short' })
+            const date = timeStamp_Due.toLocaleDateString('ru-RU', options)
+
+            return `\n\n\n${index + 1}. ${value.name}, по плану до ${time},${date}`
+
+          } else {
+
+            const timeStamp_Start = new Date(Number.parseInt(value.start_date))
+            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+
+            const timeStart = timeStamp_Start.toLocaleString('ru-RU', { timeStyle: 'short' })
+            const timeDue = timeStamp_Due.toLocaleString('ru-RU', { timeStyle: 'short' })
+
+            return `\n\n\n${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
+          }
+
+        })
+        return nameValues
+
+      } else if (point == response2.data.tasks[0].list.id) {
+
+        const nameValues = response2.data.tasks.reverse().map((value, index) => {
+          if (!value.start_date) {
+
+            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+
+            const time = timeStamp_Due.toLocaleTimeString('ru-RU', { timeStyle: 'short' })
+            const date = timeStamp_Due.toLocaleDateString('ru-RU', options)
+
+            return `\n\n\n${index + 1}. ${value.name}, по плану до ${time},${date}`
+
+          } else {
+
+            const timeStamp_Start = new Date(Number.parseInt(value.start_date))
+            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+
+            const timeStart = timeStamp_Start.toLocaleString('ru-RU', { timeStyle: 'short' })
+            const timeDue = timeStamp_Due.toLocaleString('ru-RU', { timeStyle: 'short' })
+
+            return `\n\n\n${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
+          }
+
+        })
+        return nameValues
+      }
+
+    })
+
+    const msg = resArray.map((value, i) => {
+
+      return `\n\n🔸<b>${i + 1} маршрут:</b>${value}`
+    })
+
+    ctx.replyWithHTML(msg.toString(),
+      Markup.inlineKeyboard([
+        Markup.button.callback('Назад!↩️', 'driverMenu')
+      ]))
+  },
+
+  /**
+      * Отправка сообщения из списка тасков в листе ClickUp в виде строк.
+      * 
+      * @param list_id пока что имеет два поля one и two, по мере потребности будет добавляться.
+      */
+  getMessageRouteFromClickAPI: async (ctx, [one, two] = []) => {
     try {
 
-      const responseOne = await Task.getAll(list_id.one)
+      const responseOne = await Task.getAll(one)
 
       const options = { weekday: 'short', month: 'numeric', day: 'numeric' }
 
@@ -108,9 +126,9 @@ module.exports = {
         }
       })
 
-      if (list_id.two) {
+      if (two) {
 
-        const responseTwo = await Task.getAll(list_id.two)
+        const responseTwo = await Task.getAll(two)
         const nameValuesTwo = responseTwo.data.tasks.reverse().map((value, index) => {
 
           if (!value.start_date) {
@@ -157,7 +175,7 @@ module.exports = {
   /**
     * Получение списка id тасков из ClickUp
     */
-  getTaskIdArrFromApi: async function getTaskIdArrFromApi(list_id) {
+  getTaskIdArrFromApi: async (list_id) => {
     try {
       const response = await Task.getAll(list_id)
       const newArr = response.data.tasks.reverse().map(value => {
