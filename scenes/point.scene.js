@@ -12,7 +12,6 @@ const sendMessageRouteEnterEx = require('../keyboards/scenes/sendMessageRouteEnt
 const { sendError } = require('../utils/sendLoadings');
 
 module.exports = (arr) => {
-
     const newArr = arr.map((task) => {
 
         const point_scene = new Composer()

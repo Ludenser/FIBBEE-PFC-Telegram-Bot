@@ -14,34 +14,70 @@ module.exports = {
     */
 
   getMessageAnyRoute: async (ctx, [...list_ids] = []) => {
-    const response = await Task.getAll(...list_ids)
+
+    const [one, two] = list_ids
+
+    const response1 = await Task.getAll(one)
+    const response2 = await Task.getAll(two)
+
+
     const resArray = list_ids.map((point) => {
 
       const options = { weekday: 'short', month: 'numeric', day: 'numeric' }
-      const nameValues = response.data.tasks.map((value, index) => {
-        if (!value.start_date) {
 
-          const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+      if (point == response1.data.tasks[0].list.id) {
 
-          const time = timeStamp_Due.toLocaleTimeString('ru-RU', { timeStyle: 'short' })
-          const date = timeStamp_Due.toLocaleDateString('ru-RU', options)
+        const nameValues = response1.data.tasks.reverse().map((value, index) => {
+          if (!value.start_date) {
 
-          return `\n\n\n${index + 1}. ${value.name}, по плану до ${time},${date}`
+            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
 
-        } else {
+            const time = timeStamp_Due.toLocaleTimeString('ru-RU', { timeStyle: 'short' })
+            const date = timeStamp_Due.toLocaleDateString('ru-RU', options)
 
-          const timeStamp_Start = new Date(Number.parseInt(value.start_date))
-          const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+            return `\n\n\n${index + 1}. ${value.name}, по плану до ${time},${date}`
 
-          const timeStart = timeStamp_Start.toLocaleString('ru-RU', { timeStyle: 'short' })
-          const timeDue = timeStamp_Due.toLocaleString('ru-RU', { timeStyle: 'short' })
+          } else {
 
-          return `\n\n\n${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
-        }
+            const timeStamp_Start = new Date(Number.parseInt(value.start_date))
+            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
 
-      })
+            const timeStart = timeStamp_Start.toLocaleString('ru-RU', { timeStyle: 'short' })
+            const timeDue = timeStamp_Due.toLocaleString('ru-RU', { timeStyle: 'short' })
 
-      return nameValues
+            return `\n\n\n${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
+          }
+
+        })
+        return nameValues
+
+      } else if (point == response2.data.tasks[0].list.id) {
+
+        const nameValues = response2.data.tasks.reverse().map((value, index) => {
+          if (!value.start_date) {
+
+            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+
+            const time = timeStamp_Due.toLocaleTimeString('ru-RU', { timeStyle: 'short' })
+            const date = timeStamp_Due.toLocaleDateString('ru-RU', options)
+
+            return `\n\n\n${index + 1}. ${value.name}, по плану до ${time},${date}`
+
+          } else {
+
+            const timeStamp_Start = new Date(Number.parseInt(value.start_date))
+            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
+
+            const timeStart = timeStamp_Start.toLocaleString('ru-RU', { timeStyle: 'short' })
+            const timeDue = timeStamp_Due.toLocaleString('ru-RU', { timeStyle: 'short' })
+
+            return `\n\n\n${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
+          }
+
+        })
+        return nameValues
+      }
+
     })
 
     const msg = resArray.map((value, i) => {
