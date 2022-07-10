@@ -19,6 +19,7 @@ module.exports = (arr) => {
 
         point_scene.action('enter', async (ctx) => {
             try {
+                console.log(task);
                 console.log(!task.id.includes(ctx.all_tasksSupply.at(-1).id))
                 await ctx.deleteMessage()
                 // await Task.setStatus(task.id, 'in progress')
