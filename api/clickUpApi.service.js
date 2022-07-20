@@ -18,10 +18,10 @@ class Attachment {
         * @param ctx
         * @param number
         */
-    static async createAttachment(ctx, task_id) {
+    static async createAttachment(message_id, task_id) {
         const form = new FormData();
         form.append('attachment', fs.createReadStream(`./test/download/${ctx.update.message.message_id}.jpg`))
-        form.append('filename', `${ctx.update.message.message_id}.jpg`)
+        form.append('filename', `${message_id}.jpg`)
 
         await axios({
             method: 'post',
@@ -43,7 +43,7 @@ class Attachment {
         * @param ctx
         * @param number
         */
-    static async createComment(ctx, task_id) {
+    static async createComment(message_text, task_id) {
 
         await axios({
             method: 'post',
@@ -51,7 +51,7 @@ class Attachment {
             data: {
                 'comment': [
                     {
-                        'text': ctx.update.message.text,
+                        'text': message_text,
                     }
                 ]
             },
@@ -70,7 +70,7 @@ class Attachment {
         * @param number
         * @param number
         */
-    static async createCommentWithAssignee(ctx, task_id, user_id) {
+    static async createCommentWithAssignee(message_text, task_id, user_id) {
 
         await axios({
             method: 'post',
@@ -78,7 +78,7 @@ class Attachment {
             data: {
                 'comment': [
                     {
-                        'text': ctx.update.message.text,
+                        'text': message_text,
                     }
                 ],
                 'assignee': user_id
@@ -103,7 +103,7 @@ class Task {
         * Получение списка всех тасков в таск-листе
         * @param number
         */
-    static async getAll(list_id) {
+    static async getTodayTasksWithStatusTodo(list_id) {
 
         const response = await axios.get(`https://api.clickup.com/api/v2/list/${list_id}/task`,
             {
