@@ -18,7 +18,6 @@ module.exports = (arr) => {
 
         point_scene.action('enter', async (ctx) => {
             try {
-                console.log(!task.id.includes(ctx.all_tasksSupply.at(-1).id))
                 await ctx.deleteMessage()
                 // await Task.setStatus(task.id, 'in progress')
                 // await setAssigneeFeature(task.id)
@@ -32,7 +31,7 @@ module.exports = (arr) => {
             }
         })
 
-        point_scene.action('enter_more', async (ctx) => {
+        point_scene.action('reenter', async (ctx) => {
             try {
                 await ctx.deleteMessage()
                 await sendMessageRouteEnter(ctx, task.name, task.id)
@@ -65,7 +64,7 @@ module.exports = (arr) => {
                     ]).resize(true).oneTime(true)
                 )
                 point_scene.on('photo', async (ctx) => {
-                    await postAttachmentsFeature(ctx, task.id)
+                    await postAttachmentsFeature(ctx, task)
                 })
             } catch (e) {
                 await sendError(ctx, e)
@@ -80,7 +79,7 @@ module.exports = (arr) => {
                     Markup
 
                         .inlineKeyboard([
-                            Markup.button.callback('Вернуться в меню осблуживания комплекса', 'enter_more'),
+                            Markup.button.callback('Вернуться в меню осблуживания комплекса', 'reenter'),
                         ]))
                 point_scene.on('text', async (ctx) => {
                     if (ctx.update.message.text !== undefined) {

@@ -15,11 +15,13 @@ const simulation = require('../lib/simulation')
   */
 module.exports = async (ctx) => {
 
-    const all_tasksSupply = await Task.getAll(listIdSupply)
-    const all_tasksClean = await Task.getAll(listIdCleaning)
+    const all_tasksSupply = await Task.getTodayTasksWithStatusTodo(listIdSupply)
+    const all_tasksClean = await Task.getTodayTasksWithStatusTodo(listIdCleaning)
 
     if (!all_tasksSupply.data.tasks.length && all_tasksClean.data.tasks.length) {
+
         console.log(chalk.blueBright('Лист taskSupply пустой, а taskClean-нет, вместо taskSupply добавлена заглушка'))
+
         ctx.all_tasksSupply = simulation
         ctx.team_id = team_id
         ctx.all_tasksClean = all_tasksClean.data.tasks
@@ -38,7 +40,9 @@ module.exports = async (ctx) => {
         })
         ctx.all_tasksClean = ctx.all_tasksClean.filter(element => element.name.includes('Обслуживание') || element.name.includes('Пополнение')).reverse()
     } else if (!all_tasksClean.data.tasks.length && all_tasksSupply.data.tasks.length) {
+
         console.log(chalk.blueBright('Лист taskClean пустой, а taskSupply-нет, вместо taskClean добавлена заглушка '))
+
         ctx.all_tasksClean = simulation
         ctx.team_id = team_id
 

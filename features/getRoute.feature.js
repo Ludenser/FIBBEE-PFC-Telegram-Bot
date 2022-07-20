@@ -17,8 +17,8 @@ module.exports = {
 
     const [one, two] = list_ids
 
-    const response1 = await Task.getAll(one)
-    const response2 = await Task.getAll(two)
+    const response1 = await Task.getTodayTasksWithStatusTodo(one)
+    const response2 = await Task.getTodayTasksWithStatusTodo(two)
 
 
     const resArray = list_ids.map((point) => {
@@ -99,7 +99,7 @@ module.exports = {
   getMessageRouteFromClickAPI: async (ctx, [one, two] = []) => {
     try {
 
-      const responseOne = await Task.getAll(one)
+      const responseOne = await Task.getTodayTasksWithStatusTodo(one)
 
       const options = { weekday: 'short', month: 'numeric', day: 'numeric' }
 
@@ -128,7 +128,7 @@ module.exports = {
 
       if (two) {
 
-        const responseTwo = await Task.getAll(two)
+        const responseTwo = await Task.getTodayTasksWithStatusTodo(two)
         const nameValuesTwo = responseTwo.data.tasks.reverse().map((value, index) => {
 
           if (!value.start_date) {
@@ -177,7 +177,7 @@ module.exports = {
     */
   getTaskIdArrFromApi: async (list_id) => {
     try {
-      const response = await Task.getAll(list_id)
+      const response = await Task.getTodayTasksWithStatusTodo(list_id)
       const newArr = response.data.tasks.reverse().map(value => {
         return value.id
       })
