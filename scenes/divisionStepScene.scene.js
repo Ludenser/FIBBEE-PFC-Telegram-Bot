@@ -56,7 +56,7 @@ divisionStep.action(`openRoute2`, async (ctx) => {
 divisionStep.action('closeRoute', async (ctx) => {
     try {
         await ctx.deleteMessage()
-        await getMessageRouteFromClickAPI(ctx, [listIdCleaning])
+        await sendMessageDriverMenu(ctx)
         // await Task.setStatus(ctx.primeTaskClean_id, 'done')
         // await Time.startEntry(ctx.team_id, ctx.primeTaskClean_id)
         await ctx.scene.leave();
