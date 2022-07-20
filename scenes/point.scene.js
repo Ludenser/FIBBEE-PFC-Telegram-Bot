@@ -19,9 +19,9 @@ module.exports = (arr) => {
         point_scene.action('enter', async (ctx) => {
             try {
                 await ctx.deleteMessage()
-                // await Task.setStatus(task.id, 'in progress')
-                // await setAssigneeFeature(task.id)
-                // await Time.startEntry(ctx.team_id, task.id)
+                await Task.setStatus(task.id, 'in progress')
+                await setAssigneeFeature(task.id)
+                await Time.startEntry(ctx.team_id, task.id)
                 await sendMessageRouteEnter(ctx, task.name, task.id)
 
 
@@ -97,8 +97,8 @@ module.exports = (arr) => {
 
         point_scene.action('next_step', async (ctx) => {
             try {
-                // await Task.setStatus(task.id, 'done')
-                // await Time.stopEntry(ctx.team_id, task.id)
+                await Task.setStatus(task.id, 'done')
+                await Time.stopEntry(ctx.team_id, task.id)
                 await ctx.deleteMessage()
                 await ctx.reply(`Заканчиваем ${task.name}`, Markup
                     .inlineKeyboard([
@@ -113,8 +113,8 @@ module.exports = (arr) => {
 
         point_scene.action('exit', async (ctx) => {
             try {
-                // await Task.setStatus(task.id, 'done')
-                // await Time.stopEntry(ctx.team_id, task.id)
+                await Task.setStatus(task.id, 'done')
+                await Time.stopEntry(ctx.team_id, task.id)
                 await ctx.deleteMessage()
                 await sendMessageRouteEnterEx(ctx) // нужно добавить подтверждения закрытия роута
                 await ctx.scene.enter('ROUTE_WIZARD_ID')
@@ -128,8 +128,8 @@ module.exports = (arr) => {
 
         point_scene.action('leaveScene', async (ctx) => {
             try {
-                // await Time.stopEntry(ctx.team_id, task.id)
-                // await Task.setStatus(task.id, 'to do')
+                await Time.stopEntry(ctx.team_id, task.id)
+                await Task.setStatus(task.id, 'to do')
                 await ctx.deleteMessage()
                 await sendMessageDriverMenu(ctx)
                 await ctx.scene.leave()
