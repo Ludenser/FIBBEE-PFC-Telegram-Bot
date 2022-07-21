@@ -24,10 +24,12 @@ divisionStep.action(`openRoute1`, async (ctx) => {
     try {
         await ctx.deleteMessage()
         await getMessageRouteFromClickAPI(ctx, [listIdSupply])
-        await Task.setStatus(ctx.primeTaskSupply_id, 'in progress')
-        await setAssigneeFeature(ctx.primeTaskSupply_id)
-        const response = await Time.startEntry(ctx.team_id, ctx.primeTaskSupply_id)
-        ctx.main_timer_id = response.data.data.id
+
+        // await Task.setStatus(ctx.primeTaskSupply_id, 'in progress')
+        // await setAssigneeFeature(ctx.primeTaskSupply_id)
+        // const response = await Time.startEntry(ctx.team_id, ctx.primeTaskSupply_id)
+        // ctx.main_timer_id = response.data.data.id
+
         await sendMessageUazPhoto(ctx)
         return await ctx.wizard.next();
 

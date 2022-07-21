@@ -18,9 +18,9 @@ class Attachment {
         * @param ctx
         * @param number
         */
-    static async createAttachment(message_id, task_id) {
+    static async createAttachment(message_id, task_id, stream) {
         const form = new FormData();
-        form.append('attachment', fs.createReadStream(`./test/download/${ctx.update.message.message_id}.jpg`))
+        form.append('attachment', stream)
         form.append('filename', `${message_id}.jpg`)
 
         await axios({
