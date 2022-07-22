@@ -24,11 +24,12 @@ divisionStep.action(`openRoute1`, async (ctx) => {
     try {
         await ctx.deleteMessage()
         await getMessageRouteFromClickAPI(ctx, [listIdSupply])
+        ctx.session.primeTask = ctx.primeTaskSupply_id
 
-        await Task.setStatus(ctx.primeTaskSupply_id, 'in progress')
-        await setAssigneeFeature(ctx.primeTaskSupply_id)
-        const response = await Time.startEntry(ctx.team_id, ctx.primeTaskSupply_id)
-        ctx.main_timer_id = response.data.data.id
+        await Task.setStatus(ctx.session.primeTask, 'in progress')
+        await setAssigneeFeature(ctx.session.primeTask)
+        const response = await Time.startEntry(ctx.team_id, ctx.session.primeTask)
+        // ctx.main_timer_id = response.data.data.id
 
         await sendMessageUazPhoto(ctx)
         return await ctx.wizard.next();
@@ -44,10 +45,10 @@ divisionStep.action(`openRoute2`, async (ctx) => {
     try {
         await ctx.deleteMessage()
         await getMessageRouteFromClickAPI(ctx, [listIdCleaning])
-
-        await Task.setStatus(ctx.primeTaskClean_id, 'in progress')
-        await setAssigneeFeature(ctx.primeTaskClean_id)
-        await Time.startEntry(ctx.team_id, ctx.primeTaskClean_id)
+        ctx.session.primeTask = ctx.primeTaskClean_id
+        await Task.setStatus(ctx.session.primeTask, 'in progress')
+        await setAssigneeFeature(ctx.session.primeTask)
+        await Time.startEntry(ctx.team_id, ctx.session.primeTask)
 
         await sendMessageUazPhoto(ctx)
         return await ctx.wizard.selectStep(2);

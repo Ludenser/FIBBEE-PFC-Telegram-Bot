@@ -19,6 +19,7 @@ module.exports = (arr) => {
         point_scene.action('enter', async (ctx) => {
             try {
                 await ctx.deleteMessage()
+
                 await Task.setStatus(task.id, 'in progress')
                 await setAssigneeFeature(task.id)
                 await Time.startEntry(ctx.team_id, task.id)
@@ -64,7 +65,7 @@ module.exports = (arr) => {
                     ]).resize(true).oneTime(true)
                 )
                 point_scene.on('photo', async (ctx) => {
-                    await postAttachmentsFeature(ctx, task)
+                    await postAttachmentsFeature(ctx, task.id)
                 })
             } catch (e) {
                 await sendError(ctx, e)

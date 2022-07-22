@@ -16,14 +16,4 @@ module.exports = async (ctx, task_id) => {
 
   await Attachment.createAttachment(ctx.update.message.message_id, task_id, response.data)
 
-  // readableStream.pipe(fs.createWriteStream(`./test/download/${ctx.update.message.message_id}.jpg`))
-
-  //     .on('finish', async () => {
-  //         console.log(`Файл ${ctx.update.message.message_id}.jpg загружен`)
-  //         await Attachment.createAttachment(ctx.update.message.message_id, task_id)
-  //         fs.rmSync(`./test/download/${ctx.update.message.message_id}.jpg`, {
-  //             force: true
-  //         })
-  //     })
-  //     .on('error', e => ctx.reply(`Ошибка, ${e}`))
 }

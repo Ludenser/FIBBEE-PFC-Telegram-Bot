@@ -15,7 +15,7 @@ const { sendError } = require('../utils/sendLoadings');
 const initStepRoute1 = new Composer()
 
 initStepRoute1.on('photo', async (ctx) => {
-    await postAttachment(ctx, ctx.primeTaskSupply_id)
+    await postAttachment(ctx, ctx.session.primeTask)
 })
 
 initStepRoute1.hears('Подтвердить загрузку фото✅', async (ctx) => {

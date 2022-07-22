@@ -19,7 +19,7 @@ module.exports = async (area = 'string', ctx) => {
         case 'point':
             await ctx.reply(ctx.i18n.t('messageSceneUazPhotoCheck'),
                 Markup.inlineKeyboard([
-                    Markup.button.callback('Вернуться в меню', 'enter_more')
+                    Markup.button.callback('Вернуться в меню', 'reenter')
                 ]
                 )
             )
