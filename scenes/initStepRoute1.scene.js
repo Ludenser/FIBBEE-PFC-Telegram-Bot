@@ -24,6 +24,7 @@ initStepRoute1.hears('Подтвердить загрузку фото✅', asyn
 })
 
 initStepRoute1.action('get_start', async (ctx) => {
+
     await ctx.deleteMessage()
     await deleteMessagePrev(ctx, 2)
     await deleteMessagePrev(ctx, 3)
@@ -40,8 +41,8 @@ initStepRoute1.action('get_start', async (ctx) => {
 initStepRoute1.action('leaveScene', async (ctx) => {
     try {
 
-        await Time.stopEntry(ctx.team_id, ctx.primeTaskSupply_id)
-        await Task.setStatus(ctx.primeTaskSupply_id, 'to do')
+        await Time.stopEntry(ctx.team_id, ctx.session.primeTask)
+        await Task.setStatus(ctx.session.primeTask, 'to do')
 
         await ctx.deleteMessage()
         await deleteMessagePrev(ctx, 2)

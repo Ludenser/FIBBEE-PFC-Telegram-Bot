@@ -109,8 +109,8 @@ module.exports = {
 
           const timeStamp_Due = new Date(Number.parseInt(value.due_date))
 
-          const time = timeStamp_Due.toLocaleTimeString([], { timeStyle: 'short' })
-          const date = timeStamp_Due.toLocaleDateString([], options)
+          const time = timeStamp_Due.toLocaleTimeString('ru-RU', { timeStyle: 'short' })
+          const date = timeStamp_Due.toLocaleDateString('ru-RU', options)
 
           return `${index + 1}. ${value.name}, по плану до ${time},${date}`
 
@@ -119,8 +119,8 @@ module.exports = {
           const timeStamp_Start = new Date(Number.parseInt(value.start_date))
           const timeStamp_Due = new Date(Number.parseInt(value.due_date))
 
-          const timeStart = timeStamp_Start.toLocaleString([], { timeStyle: 'short' })
-          const timeDue = timeStamp_Due.toLocaleString([], { timeStyle: 'short' })
+          const timeStart = timeStamp_Start.toLocaleString('ru-RU', { timeStyle: 'short' })
+          const timeDue = timeStamp_Due.toLocaleString('ru-RU', { timeStyle: 'short' })
 
           return `${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
         }
@@ -135,8 +135,8 @@ module.exports = {
 
             const timeStamp_Due = new Date(Number.parseInt(value.due_date))
 
-            const time = timeStamp_Due.toLocaleTimeString([], { timeStyle: 'short' })
-            const date = timeStamp_Due.toLocaleDateString([], options)
+            const time = timeStamp_Due.toLocaleTimeString('ru-RU', { timeStyle: 'short' })
+            const date = timeStamp_Due.toLocaleDateString('ru-RU', options)
 
             return `${index + 1}. ${value.name}, по плану до ${time},${date}`
           } else {
@@ -144,8 +144,8 @@ module.exports = {
             const timeStamp_Start = new Date(Number.parseInt(value.start_date))
             const timeStamp_Due = new Date(Number.parseInt(value.due_date))
 
-            const timeStart = timeStamp_Start.toLocaleString([], { timeStyle: 'short' })
-            const timeDue = timeStamp_Due.toLocaleString([], { timeStyle: 'short' })
+            const timeStart = timeStamp_Start.toLocaleString('ru-RU', { timeStyle: 'short' })
+            const timeDue = timeStamp_Due.toLocaleString('ru-RU', { timeStyle: 'short' })
 
             return `${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
           }

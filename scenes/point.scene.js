@@ -77,11 +77,12 @@ module.exports = (arr) => {
             try {
                 await ctx.deleteMessage()
                 await ctx.reply('Напиши комментарий к таску, если нужно кого-то тегнуть, добавь в конце комментария "@имя фамилия"',
-                    Markup
 
+                    Markup
                         .inlineKeyboard([
                             Markup.button.callback('Вернуться в меню осблуживания комплекса', 'reenter'),
                         ]))
+
                 point_scene.on('text', async (ctx) => {
                     if (ctx.update.message.text !== undefined) {
                         await ctx.deleteMessage()
@@ -90,6 +91,7 @@ module.exports = (arr) => {
                         console.log('Опять')
                     }
                 })
+
             } catch (e) {
                 await sendError(ctx, e)
                 await sendMessageRouteEnter(ctx, task.name, task.id)
@@ -115,9 +117,10 @@ module.exports = (arr) => {
         point_scene.action('exit', async (ctx) => {
             try {
                 await Task.setStatus(task.id, 'done')
+                await Task.setStatus(ctx.session.primeTask, 'done')
                 await Time.stopEntry(ctx.team_id, task.id)
                 await ctx.deleteMessage()
-                await sendMessageRouteEnterEx(ctx) // нужно добавить подтверждения закрытия роута
+                await sendMessageRouteEnterEx(ctx)
                 await ctx.scene.enter('ROUTE_WIZARD_ID')
             } catch (e) {
                 await sendError(ctx, e)
@@ -131,6 +134,7 @@ module.exports = (arr) => {
             try {
                 await Time.stopEntry(ctx.team_id, task.id)
                 await Task.setStatus(task.id, 'to do')
+                await Task.setStatus(ctx.session.primeTask, 'to do')
                 await ctx.deleteMessage()
                 await sendMessageDriverMenu(ctx)
                 await ctx.scene.leave()

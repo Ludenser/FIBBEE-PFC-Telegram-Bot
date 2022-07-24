@@ -110,7 +110,7 @@ class Task {
                 params: {
                     statuses: ['to do'],
                     order_by: 'due_date',
-                    due_date_gt: Date.parse(new Date(Date.now())),
+                    due_date_gt: dueTime(-5),
                     due_date_lt: dueTime(20)
                 },
                 paramsSerializer: params => {

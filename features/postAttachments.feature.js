@@ -1,5 +1,4 @@
 const { Attachment } = require('../api/clickUpApi.service')
-const fs = require('fs')
 const axios = require('axios')
 
 /**
