@@ -2,7 +2,7 @@ const { Composer, Scenes, session } = require('telegraf');
 const routeScene = require('../wizards/route.wizard');
 const { sendError } = require('../utils/sendLoadings');
 const { getTaskIdArrFromApi } = require('../features/getRoute.feature');
-const pointScene = require('../wizards/point.wizard');
+const complexScene = require('../wizards/complex.wizard');
 const sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu');
 
 
@@ -17,7 +17,7 @@ module.exports = (ctx) => {
 
     const composer = new Composer();
 
-    const stage = new Scenes.Stage([routeScene, pointScene('supply', ctx), pointScene('clean', ctx)])
+    const stage = new Scenes.Stage([routeScene, complexScene('1', ctx), complexScene('2', ctx)])
 
     composer.use(session())
     composer.use(stage.middleware())

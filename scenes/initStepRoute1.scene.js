@@ -35,7 +35,7 @@ initStepRoute1.action('get_start', async (ctx) => {
         ])
     )
 
-    await ctx.scene.enter('POINTS_SUPPLY_WIZARD_ID')
+    await ctx.scene.enter('ROUTE_1_WIZARD_ID')
 })
 
 initStepRoute1.action('leaveScene', async (ctx) => {

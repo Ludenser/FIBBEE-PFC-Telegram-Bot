@@ -9,7 +9,6 @@ const {
 } = setting;
 const chalk = require('chalk')
 const simulation = require('../lib/simulation');
-const { sendProses } = require('../utils/sendLoadings');
 
 /**
   * Добавление в контекст объекта тасков из ClickUp.

@@ -32,7 +32,7 @@ initStepRoute2.action('get_start', async (ctx) => {
             Markup.button.callback('🔘 Нажми, чтобы начать 🔘', 'enter')
         ])
     )
-    await ctx.scene.enter('POINTS_CLEAN_WIZARD_ID')
+    await ctx.scene.enter('ROUTE_2_WIZARD_ID')
 })
 
 initStepRoute2.action('leaveScene', async (ctx) => {

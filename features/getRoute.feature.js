@@ -21,11 +21,11 @@ module.exports = {
     const response2 = await Task.getTodayTasksWithStatusTodo(two)
 
 
-    const resArray = list_ids.map((point) => {
+    const resArray = list_ids.map((complex) => {
 
       const options = { weekday: 'short', month: 'numeric', day: 'numeric' }
 
-      if (point == response1.data.tasks[0].list.id) {
+      if (complex == response1.data.tasks[0].list.id) {
 
         const nameValues = response1.data.tasks.reverse().map((value, index) => {
           if (!value.start_date) {
@@ -51,7 +51,7 @@ module.exports = {
         })
         return nameValues
 
-      } else if (point == response2.data.tasks[0].list.id) {
+      } else if (complex == response2.data.tasks[0].list.id) {
 
         const nameValues = response2.data.tasks.reverse().map((value, index) => {
           if (!value.start_date) {
