@@ -4,6 +4,7 @@ const objByJson = JSON.parse(json);
 const { Task } = require('../api/clickUpApi.service');
 const sendMessageError = require('../utils/sendMessageError');
 const { Markup } = require('telegraf');
+const toLocalTime = require('../utils/toLocalTime');
 
 module.exports = {
 
@@ -28,51 +29,19 @@ module.exports = {
       if (complex == response1.data.tasks[0].list.id) {
 
         const nameValues = response1.data.tasks.reverse().map((value, index) => {
-          if (!value.start_date) {
 
-            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
-
-            const time = timeStamp_Due.toLocaleTimeString('ru-RU', { timeStyle: 'short' })
-            const date = timeStamp_Due.toLocaleDateString('ru-RU', options)
-
-            return `\n\n\n${index + 1}. ${value.name}, по плану до ${time},${date}`
-
-          } else {
-
-            const timeStamp_Start = new Date(Number.parseInt(value.start_date))
-            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
-
-            const timeStart = timeStamp_Start.toLocaleString('ru-RU', { timeStyle: 'short' })
-            const timeDue = timeStamp_Due.toLocaleString('ru-RU', { timeStyle: 'short' })
-
-            return `\n\n\n${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
-          }
-
-        })
+          const timeStamp = toLocalTime(value)
+          return `\n\n\n${index + 1}. ${value.name} c ${timeStamp.timeStart} до ${timeStamp.timeDue}`
+        }
+        )
         return nameValues
 
       } else if (complex == response2.data.tasks[0].list.id) {
 
         const nameValues = response2.data.tasks.reverse().map((value, index) => {
-          if (!value.start_date) {
 
-            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
-
-            const time = timeStamp_Due.toLocaleTimeString('ru-RU', { timeStyle: 'short' })
-            const date = timeStamp_Due.toLocaleDateString('ru-RU', options)
-
-            return `\n\n\n${index + 1}. ${value.name}, по плану до ${time},${date}`
-
-          } else {
-
-            const timeStamp_Start = new Date(Number.parseInt(value.start_date))
-            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
-
-            const timeStart = timeStamp_Start.toLocaleString('ru-RU', { timeStyle: 'short' })
-            const timeDue = timeStamp_Due.toLocaleString('ru-RU', { timeStyle: 'short' })
-
-            return `\n\n\n${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
-          }
+          const timeStamp = toLocalTime(value)
+          return `\n\n\n${index + 1}. ${value.name} c ${timeStamp.timeStart} до ${timeStamp.timeDue}`
 
         })
         return nameValues
@@ -104,51 +73,16 @@ module.exports = {
       const options = { weekday: 'short', month: 'numeric', day: 'numeric' }
 
       const nameValuesOne = responseOne.data.tasks.reverse().map((value, index) => {
-
-        if (!value.start_date) {
-
-          const timeStamp_Due = new Date(Number.parseInt(value.due_date))
-
-          const time = timeStamp_Due.toLocaleTimeString('ru-RU', { timeStyle: 'short' })
-          const date = timeStamp_Due.toLocaleDateString('ru-RU', options)
-
-          return `${index + 1}. ${value.name}, по плану до ${time},${date}`
-
-        } else {
-
-          const timeStamp_Start = new Date(Number.parseInt(value.start_date))
-          const timeStamp_Due = new Date(Number.parseInt(value.due_date))
-
-          const timeStart = timeStamp_Start.toLocaleString('ru-RU', { timeStyle: 'short' })
-          const timeDue = timeStamp_Due.toLocaleString('ru-RU', { timeStyle: 'short' })
-
-          return `${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
-        }
+        const timeStamp = toLocalTime(value)
+        return `\n\n\n${index + 1}. ${value.name} c ${timeStamp.timeStart} до ${timeStamp.timeDue}`
       })
 
       if (two) {
 
         const responseTwo = await Task.getTodayTasksWithStatusTodo(two)
         const nameValuesTwo = responseTwo.data.tasks.reverse().map((value, index) => {
-
-          if (!value.start_date) {
-
-            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
-
-            const time = timeStamp_Due.toLocaleTimeString('ru-RU', { timeStyle: 'short' })
-            const date = timeStamp_Due.toLocaleDateString('ru-RU', options)
-
-            return `${index + 1}. ${value.name}, по плану до ${time},${date}`
-          } else {
-
-            const timeStamp_Start = new Date(Number.parseInt(value.start_date))
-            const timeStamp_Due = new Date(Number.parseInt(value.due_date))
-
-            const timeStart = timeStamp_Start.toLocaleString('ru-RU', { timeStyle: 'short' })
-            const timeDue = timeStamp_Due.toLocaleString('ru-RU', { timeStyle: 'short' })
-
-            return `${index + 1}. ${value.name} c ${timeStart} до ${timeDue}`
-          }
+          const timeStamp = toLocalTime(value)
+          return `\n\n\n${index + 1}. ${value.name} c ${timeStamp.timeStart} до ${timeStamp.timeDue}`
         })
 
         const replyOne = nameValuesOne.join("\n\n")

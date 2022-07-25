@@ -1,7 +1,7 @@
 const { Composer } = require('telegraf');
 const { getMessageAnyRoute } = require('../features/getRoute.feature');
 const { sendError } = require('../utils/sendLoadings');
-const stringToNumber = require('../features/stringToNumber.feature')
+const stringToNumber = require('../utils/stringToNumber.feature')
 const list_ids = require('../lib/list_idsFromClickUp')
 
 /**
