@@ -1,9 +1,9 @@
 const { Composer, Scenes, session } = require('telegraf');
-const routeScene = require('../wizards/route.wizard');
 const { sendError } = require('../utils/sendLoadings');
 const { getTaskIdArrFromApi } = require('../features/getRoute.feature');
 const complexScene = require('../wizards/complex.wizard');
 const sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu');
+const initialScene = require('../wizards/route.wizard');
 
 
 /**
@@ -16,10 +16,8 @@ const sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu')
 module.exports = (ctx) => {
 
     const composer = new Composer();
+    const stage = new Scenes.Stage([initialScene(ctx), ...complexScene(ctx)])
 
-    const stage = new Scenes.Stage([routeScene, complexScene('1', ctx), complexScene('2', ctx)])
-
-    composer.use(session())
     composer.use(stage.middleware())
 
     composer.action('route1', async (ctx) => {
@@ -27,7 +25,7 @@ module.exports = (ctx) => {
             await ctx.deleteMessage()
             ctx.routeNumber = 1
             await sendMessageInit(ctx)
-            await ctx.scene.enter('ROUTE_WIZARD_ID')
+            await ctx.scene.enter('INITIAL_WIZARD_ID')
         } catch (e) {
             await sendError(ctx, e)
         }
@@ -39,7 +37,7 @@ module.exports = (ctx) => {
             await ctx.deleteMessage()
             ctx.routeNumber = 2
             await sendMessageInit(ctx)
-            await ctx.scene.enter('ROUTE_WIZARD_ID')
+            await ctx.scene.enter('INITIAL_WIZARD_ID')
         } catch (e) {
             await sendError(ctx, e)
         }

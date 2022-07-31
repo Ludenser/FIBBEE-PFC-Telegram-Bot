@@ -38,7 +38,7 @@ initStepRoute2.action('get_start', async (ctx) => {
 initStepRoute2.action('leaveScene', async (ctx) => {
     try {
 
-        await Time.stopEntry(ctx.team_id, ctx.session.primeTask)
+        await Time.stopEntry(ctx.session.team_id, ctx.session.primeTask)
         await Task.setStatus(ctx.session.primeTask, 'to do')
 
         await ctx.deleteMessage()

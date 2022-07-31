@@ -18,68 +18,50 @@ const {
   * 
   * Запуск таймера главного чек/листа, получение его id
   */
-const divisionStep = new Composer()
 
-divisionStep.action(`openRoute1`, async (ctx) => {
-    try {
-        await ctx.deleteMessage()
-        await getMessageRouteFromClickAPI(ctx, [listIdSupply])
-        ctx.session.primeTask = ctx.primeTaskSupply_id
+module.exports = (ctx) => {
+    const divisionStep = new Composer()
 
-        await Task.setStatus(ctx.session.primeTask, 'in progress')
-        await setAssigneeFeature(ctx.session.primeTask)
-        const response = await Time.startEntry(ctx.team_id, ctx.session.primeTask)
-        // ctx.main_timer_id = response.data.data.id
+    const division = ctx.session.all_lists.map((el, i) => {
 
-        await sendMessageUazPhoto(ctx)
-        return await ctx.wizard.next();
+        divisionStep.action(`openRoute${i + 1}`, async (ctx) => {
 
-    } catch (e) {
-        console.log(e)
-        await sendError(ctx, e)
-    }
+            try {
 
-})
+                await ctx.deleteMessage()
+                await getMessageRouteFromClickAPI(ctx, [ctx.session.all_lists[i].allTasks])
 
-divisionStep.action(`openRoute2`, async (ctx) => {
-    try {
-        await ctx.deleteMessage()
-        await getMessageRouteFromClickAPI(ctx, [listIdCleaning])
-        ctx.session.primeTask = ctx.primeTaskClean_id
-        await Task.setStatus(ctx.session.primeTask, 'in progress')
-        await setAssigneeFeature(ctx.session.primeTask)
-        await Time.startEntry(ctx.team_id, ctx.session.primeTask)
+                await Task.setStatus(ctx.session.all_lists[i].mainTask, 'in progress')
+                await setAssigneeFeature(ctx.session.all_lists[i].mainTask)
+                const response = await Time.startEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask)
+                // ctx.main_timer_id = response.data.data.id
 
-        await sendMessageUazPhoto(ctx)
-        return await ctx.wizard.selectStep(2);
-    } catch (e) {
-        await sendError(ctx, e)
-    }
+                await sendMessageUazPhoto(ctx)
+                return await ctx.wizard.next();
 
-})
+            } catch (e) {
+                console.log(e)
+                await sendError(ctx, e)
+            }
 
-divisionStep.action('closeRoute', async (ctx) => {
-    try {
-        await ctx.deleteMessage()
-        await sendMessageDriverMenu(ctx)
+        })
 
-        await Task.setStatus(ctx.primeTaskClean_id, 'done')
-        await Time.startEntry(ctx.team_id, ctx.primeTaskClean_id)
+        divisionStep.action('closeRoute', async (ctx) => {
+            try {
+                await ctx.deleteMessage()
+                await sendMessageDriverMenu(ctx)
 
-        await ctx.scene.leave();
-    } catch (e) {
-        await sendError(ctx, e)
-    }
-})
+                await Task.setStatus(ctx.session.all_lists[i].mainTask, 'done')
+                await Time.startEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask)
 
-divisionStep.action('leaveScene', async (ctx) => {
-    try {
-        await ctx.deleteMessage()
-        await sendMessageDriverMenu(ctx)
-        await ctx.scene.leave()
-    } catch (e) {
-        await sendError(ctx, e)
-        await ctx.scene.leave()
-    }
-})
-module.exports = divisionStep
+                await ctx.scene.leave();
+            } catch (e) {
+                await sendError(ctx, e)
+            }
+        })
+        return divisionStep
+    })
+
+    return division
+
+}

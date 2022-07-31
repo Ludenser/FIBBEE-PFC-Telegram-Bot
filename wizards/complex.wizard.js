@@ -4,16 +4,13 @@ const complex_scene = require('../scenes/complex.scene');
 /**
   * Сцена инициализации назначенного роута.
   */
-const complexScene = (role, ctx) => {
-    switch (role) {
-        case '1':
-            return new Scenes.WizardScene('ROUTE_1_WIZARD_ID', ...complex_scene(ctx.all_tasksSupply))
+const complexScene = (ctx) => {
 
-        case '2':
-            return new Scenes.WizardScene('ROUTE_2_WIZARD_ID', ...complex_scene(ctx.all_tasksClean))
+  const wizardScene = ctx.session.all_lists.map((element, i) => {
+    return new Scenes.WizardScene(`ROUTE_${i}_WIZARD_ID`, ...complex_scene(ctx.session.all_lists[i].tasksWithoutMain))
+  })
 
-    }
-
+  return wizardScene
 }
 
 module.exports = complexScene

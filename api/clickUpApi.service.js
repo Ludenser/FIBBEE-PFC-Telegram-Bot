@@ -6,7 +6,7 @@ const FormData = require('form-data');
 const settings = JSON.parse(fs.readFileSync('./lib/setting.json'));
 const qs = require('qs');
 const dueTime = require('../utils/timePeriodDate')
-const { listId } = settings;
+const { listId, team_id } = settings;
 
 /**
     * Взаимодействия с аттачментами в тасках
@@ -98,6 +98,28 @@ class Attachment {
     * Взаимодействия с тасками
     */
 class Task {
+
+    static async getTodayTasksWithStatusTodoFromTeamId(list_ids) {
+
+        const response = await axios.get(`https://api.clickup.com/api/v2/team/${team_id}/task`,
+            {
+                params: {
+                    statuses: ['to do'],
+                    list_ids,
+                    order_by: 'due_date',
+                    // due_date_gt: dueTime(-5),
+                    due_date_lt: dueTime(20)
+                },
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
+                },
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            })
+        return response
+    }
 
     /**
         * Получение списка всех тасков в таск-листе

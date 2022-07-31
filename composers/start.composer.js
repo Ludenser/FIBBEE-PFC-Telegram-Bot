@@ -10,9 +10,12 @@ const addTasksToCtx = require('../features/addTasksToCtx.feature');
 const composer = new Composer();
 
 composer.start(async (ctx) => {
-
+  ctx.session = null
   composer.use(async (ctx, next) => {
-    await addTasksToCtx(ctx)
+    if (!ctx.session.isAlreadyFilled) {
+      console.log('ОТРАБОТАЛО')
+      await addTasksToCtx(ctx)
+    }
     await next()
   })
   try {

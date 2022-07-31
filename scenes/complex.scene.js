@@ -12,6 +12,7 @@ const sendMessageRouteEnterEx = require('../keyboards/scenes/sendMessageRouteEnt
 const { sendError } = require('../utils/sendLoadings');
 
 module.exports = (arr) => {
+
     const newArr = arr.map((task) => {
 
         const complex_scene = new Composer()
@@ -22,7 +23,7 @@ module.exports = (arr) => {
 
                 await Task.setStatus(task.id, 'in progress')
                 await setAssigneeFeature(task.id)
-                await Time.startEntry(ctx.team_id, task.id)
+                await Time.startEntry(ctx.session.team_id, task.id)
                 await sendMessageRouteEnter(ctx, task.name, task.id)
 
 
@@ -101,7 +102,7 @@ module.exports = (arr) => {
         complex_scene.action('next_step', async (ctx) => {
             try {
                 await Task.setStatus(task.id, 'done')
-                await Time.stopEntry(ctx.team_id, task.id)
+                await Time.stopEntry(ctx.session.team_id, task.id)
                 await ctx.deleteMessage()
                 await ctx.reply(`Заканчиваем ${task.name}`, Markup
                     .inlineKeyboard([
@@ -118,7 +119,7 @@ module.exports = (arr) => {
             try {
                 await Task.setStatus(task.id, 'done')
                 await Task.setStatus(ctx.session.primeTask, 'done')
-                await Time.stopEntry(ctx.team_id, task.id)
+                await Time.stopEntry(ctx.session.team_id, task.id)
                 await ctx.deleteMessage()
                 await sendMessageRouteEnterEx(ctx)
                 await ctx.scene.enter('ROUTE_WIZARD_ID')
@@ -132,7 +133,7 @@ module.exports = (arr) => {
 
         complex_scene.action('leaveScene', async (ctx) => {
             try {
-                await Time.stopEntry(ctx.team_id, task.id)
+                await Time.stopEntry(ctx.session.team_id, task.id)
                 await Task.setStatus(task.id, 'to do')
                 await Task.setStatus(ctx.session.primeTask, 'to do')
                 await ctx.deleteMessage()
