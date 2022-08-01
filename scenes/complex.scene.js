@@ -12,16 +12,18 @@ const sendMessageRouteEnterEx = require('../keyboards/scenes/sendMessageRouteEnt
 const { sendError } = require('../utils/sendLoadings');
 
 module.exports = (arr) => {
+
     const newArr = arr.map((task) => {
 
-        const point_scene = new Composer()
+        const complex_scene = new Composer()
 
-        point_scene.action('enter', async (ctx) => {
+        complex_scene.action('enter', async (ctx) => {
             try {
                 await ctx.deleteMessage()
-                // await Task.setStatus(task.id, 'in progress')
-                // await setAssigneeFeature(task.id)
-                // await Time.startEntry(ctx.team_id, task.id)
+
+                await Task.setStatus(task.id, 'in progress')
+                await setAssigneeFeature(task.id)
+                await Time.startEntry(ctx.session.team_id, task.id)
                 await sendMessageRouteEnter(ctx, task.name, task.id)
 
 
@@ -31,7 +33,7 @@ module.exports = (arr) => {
             }
         })
 
-        point_scene.action('reenter', async (ctx) => {
+        complex_scene.action('reenter', async (ctx) => {
             try {
                 await ctx.deleteMessage()
                 await sendMessageRouteEnter(ctx, task.name, task.id)
@@ -42,11 +44,11 @@ module.exports = (arr) => {
 
         })
 
-        point_scene.hears('Подтвердить загрузку фото✅', async (ctx) => {
+        complex_scene.hears('Подтвердить загрузку фото✅', async (ctx) => {
             try {
                 await ctx.deleteMessage()
                 await deleteMessagePrev(ctx, 1)
-                await sendMessagePhotoCheck('point', ctx)
+                await sendMessagePhotoCheck('complex', ctx)
             } catch (e) {
                 await sendError(ctx, e)
                 await sendMessageRouteEnter(ctx, task.name, task.id)
@@ -54,7 +56,7 @@ module.exports = (arr) => {
 
         })
 
-        point_scene.action('upl_photo', async (ctx) => {
+        complex_scene.action('upl_photo', async (ctx) => {
 
             try {
                 await ctx.deleteMessage()
@@ -63,8 +65,8 @@ module.exports = (arr) => {
                         Markup.button.callback('Подтвердить загрузку фото✅')
                     ]).resize(true).oneTime(true)
                 )
-                point_scene.on('photo', async (ctx) => {
-                    await postAttachmentsFeature(ctx, task)
+                complex_scene.on('photo', async (ctx) => {
+                    await postAttachmentsFeature(ctx, task.id)
                 })
             } catch (e) {
                 await sendError(ctx, e)
@@ -72,16 +74,17 @@ module.exports = (arr) => {
             }
         })
 
-        point_scene.action('upl_comment', async (ctx) => {
+        complex_scene.action('upl_comment', async (ctx) => {
             try {
                 await ctx.deleteMessage()
                 await ctx.reply('Напиши комментарий к таску, если нужно кого-то тегнуть, добавь в конце комментария "@имя фамилия"',
-                    Markup
 
+                    Markup
                         .inlineKeyboard([
                             Markup.button.callback('Вернуться в меню осблуживания комплекса', 'reenter'),
                         ]))
-                point_scene.on('text', async (ctx) => {
+
+                complex_scene.on('text', async (ctx) => {
                     if (ctx.update.message.text !== undefined) {
                         await ctx.deleteMessage()
                         await postCommentFeature(ctx, task.id)
@@ -89,16 +92,17 @@ module.exports = (arr) => {
                         console.log('Опять')
                     }
                 })
+
             } catch (e) {
                 await sendError(ctx, e)
                 await sendMessageRouteEnter(ctx, task.name, task.id)
             }
         })
 
-        point_scene.action('next_step', async (ctx) => {
+        complex_scene.action('next_step', async (ctx) => {
             try {
-                // await Task.setStatus(task.id, 'done')
-                // await Time.stopEntry(ctx.team_id, task.id)
+                await Task.setStatus(task.id, 'done')
+                await Time.stopEntry(ctx.session.team_id, task.id)
                 await ctx.deleteMessage()
                 await ctx.reply(`Заканчиваем ${task.name}`, Markup
                     .inlineKeyboard([
@@ -111,12 +115,13 @@ module.exports = (arr) => {
             }
         })
 
-        point_scene.action('exit', async (ctx) => {
+        complex_scene.action('exit', async (ctx) => {
             try {
-                // await Task.setStatus(task.id, 'done')
-                // await Time.stopEntry(ctx.team_id, task.id)
+                await Task.setStatus(task.id, 'done')
+                await Task.setStatus(ctx.session.primeTask, 'done')
+                await Time.stopEntry(ctx.session.team_id, task.id)
                 await ctx.deleteMessage()
-                await sendMessageRouteEnterEx(ctx) // нужно добавить подтверждения закрытия роута
+                await sendMessageRouteEnterEx(ctx)
                 await ctx.scene.enter('ROUTE_WIZARD_ID')
             } catch (e) {
                 await sendError(ctx, e)
@@ -126,10 +131,11 @@ module.exports = (arr) => {
 
         })
 
-        point_scene.action('leaveScene', async (ctx) => {
+        complex_scene.action('leaveScene', async (ctx) => {
             try {
-                // await Time.stopEntry(ctx.team_id, task.id)
-                // await Task.setStatus(task.id, 'to do')
+                await Time.stopEntry(ctx.session.team_id, task.id)
+                await Task.setStatus(task.id, 'to do')
+                await Task.setStatus(ctx.session.primeTask, 'to do')
                 await ctx.deleteMessage()
                 await sendMessageDriverMenu(ctx)
                 await ctx.scene.leave()
@@ -141,7 +147,7 @@ module.exports = (arr) => {
 
         })
 
-        return point_scene
+        return complex_scene
     })
 
     return newArr

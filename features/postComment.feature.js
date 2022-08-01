@@ -20,7 +20,7 @@ module.exports = async (ctx, task_id) => {
       await sendMessageRouteEnter(ctx)
     } else {
 
-      const response = await Users.getUsers_id()
+      const response = await Users.getUsers_id(ctx.session.all_lists[0].list_id)
 
 
       function hasUserFrom(env) {

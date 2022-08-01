@@ -7,7 +7,7 @@ const { Markup } = require("telegraf")
 module.exports = async (area = 'string', ctx) => {
     switch (area) {
         case 'main':
-            await ctx.reply(ctx.i18n.t('messageSceneUazPhotoCheck'),
+            await ctx.reply(ctx.i18n.t('messageScenePhotoCheck'),
                 Markup.inlineKeyboard([
                     Markup.button.callback('Закончить загрузку✅', 'get_start'),
                     Markup.button.callback('Выйти!❌', 'leaveScene')
@@ -16,10 +16,10 @@ module.exports = async (area = 'string', ctx) => {
             )
             break
 
-        case 'point':
-            await ctx.reply(ctx.i18n.t('messageSceneUazPhotoCheck'),
+        case 'complex':
+            await ctx.reply(ctx.i18n.t('messageScenePhotoCheck'),
                 Markup.inlineKeyboard([
-                    Markup.button.callback('Вернуться в меню', 'enter_more')
+                    Markup.button.callback('Вернуться в меню', 'reenter')
                 ]
                 )
             )

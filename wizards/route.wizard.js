@@ -6,6 +6,10 @@ const initStepRoute2 = require('../scenes/initStepRoute2.scene');
 /**
   * Конструктор распределительной сцены
   */
-const routeScene = new Scenes.WizardScene('ROUTE_WIZARD_ID', divisionStep, initStepRoute1, initStepRoute2)
 
-module.exports = routeScene
+const initialScene = (ctx) => {
+
+  return new Scenes.WizardScene('INITIAL_WIZARD_ID', ...divisionStep(ctx), initStepRoute1, initStepRoute2)
+}
+
+module.exports = initialScene
