@@ -2,6 +2,7 @@ const { Composer } = require('telegraf');
 const sendMessageStart = require('../keyboards/mainMenu/sendMessageStart');
 const sendMessageError = require('../utils/sendMessageError');
 const addTasksToCtx = require('../features/addTasksToCtx.feature');
+const chalk = require('chalk')
 
 /**
   * Обработчик стартовых команд.
@@ -13,8 +14,9 @@ composer.start(async (ctx) => {
   ctx.session = null
   composer.use(async (ctx, next) => {
     if (!ctx.session.isAlreadyFilled) {
-      console.log('ОТРАБОТАЛО')
+      console.log(chalk.redBright.bgBlue('ctx.session is empty'))
       await addTasksToCtx(ctx)
+      console.log(chalk.greenBright.bgBlue('ctx.session was filled'))
     }
     await next()
   })

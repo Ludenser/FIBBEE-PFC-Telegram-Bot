@@ -14,38 +14,16 @@ module.exports = {
     * @param {Number[]} list_ids массив цифр из list_id из файла settings
     */
 
-  getMessageAnyRoute: async (ctx, [...list_ids] = []) => {
+  getMessageAnyRoute: async (ctx) => {
 
-    const [one, two] = list_ids
+    const resArray = ctx.session.all_lists.map((list, i) => {
 
-    const response1 = await Task.getTodayTasksWithStatusTodo(one)
-    const response2 = await Task.getTodayTasksWithStatusTodo(two)
+      const nameValues = list.allTasks.reverse().map((value, index) => {
 
-
-    const resArray = list_ids.map((complex) => {
-
-      const options = { weekday: 'short', month: 'numeric', day: 'numeric' }
-
-      if (complex == response1.data.tasks[0].list.id) {
-
-        const nameValues = response1.data.tasks.reverse().map((value, index) => {
-
-          const timeStamp = toLocalTime(value)
-          return `\n\n\n${index + 1}. ${value.name} c ${timeStamp.timeStart} до ${timeStamp.timeDue}`
-        }
-        )
-        return nameValues
-
-      } else if (complex == response2.data.tasks[0].list.id) {
-
-        const nameValues = response2.data.tasks.reverse().map((value, index) => {
-
-          const timeStamp = toLocalTime(value)
-          return `\n\n\n${index + 1}. ${value.name} c ${timeStamp.timeStart} до ${timeStamp.timeDue}`
-
-        })
-        return nameValues
-      }
+        const timeStamp = toLocalTime(value)
+        return `\n\n\n${index + 1}. ${value.name} c ${timeStamp.timeStart} до ${timeStamp.timeDue}`
+      })
+      return nameValues
 
     })
 

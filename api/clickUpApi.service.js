@@ -6,7 +6,7 @@ const FormData = require('form-data');
 const settings = JSON.parse(fs.readFileSync('./lib/setting.json'));
 const qs = require('qs');
 const dueTime = require('../utils/timePeriodDate')
-const { listId, team_id } = settings;
+const { team_id } = settings;
 
 /**
     * Взаимодействия с аттачментами в тасках
@@ -274,7 +274,7 @@ class Time {
         * @param number
         * @param number
         */
-    static async updateEntry(team_id, task_id, unix_time) {
+    static async updateEntry(task_id, unix_time) {
 
 
         const response = await axios.put(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/${timer_id}/`,
@@ -334,8 +334,8 @@ class Users {
     /**
         * Получение объекта всех юзеров, имеющих доступ к таск-листу "по умолчанию"
         */
-    static async getUsers_id() {
-        const response = await axios.get(`https://api.clickup.com/api/v2/list/${listId}/member`,
+    static async getUsers_id(list_id) {
+        const response = await axios.get(`https://api.clickup.com/api/v2/list/${list_id}/member`,
             {
                 headers: {
                     'Authorization': token,

@@ -7,7 +7,8 @@ const startComposer = require('./composers/start.composer');
 const mainMenuComposer = require('./composers/mainMenu.composer');
 const routesInfoComposer = require('./composers/routesInfo.composer');
 const selectRouteComposer = require('./composers/selectRoute.composer');
-const LocalSession = require('telegraf-session-local')
+const LocalSession = require('telegraf-session-local');
+const totalSceneInitComposer = require('./composers/totalSceneInit.composer');
 
 require('dotenv').config();
 
@@ -20,7 +21,7 @@ const token = process.env.TOKEN;
 
 const bot = new Telegraf(token)
 
-bot.use((new LocalSession({ database: 'example_db.json' })).middleware())
+bot.use((new LocalSession({ database: 'session_db.json' })).middleware())
 
 bot.context.all_tasksSupply = []
 bot.context.all_tasksClean = []
@@ -45,7 +46,8 @@ bot.use(
 bot.use(i18n.middleware())
 bot.use(startComposer)
 bot.use(async (ctx, next) => {
-    bot.use(selectRouteComposer(ctx))
+    bot.use(totalSceneInitComposer(ctx))
+    bot.use(...selectRouteComposer(ctx))
     await next()
 })
 bot.use(mainMenuComposer)

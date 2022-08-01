@@ -3,15 +3,10 @@ const { getMessageRouteFromClickAPI } = require('../features/getRoute.feature');
 const { Task, Time } = require('../api/clickUpApi.service');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 const sendMessageUazPhoto = require('../keyboards/scenes/sendMessageUazPhoto.routeMenu');
-const fs = require('fs');
 const setAssigneeFeature = require('../features/setAssignee.feature');
 const deleteMessagePrev = require('../utils/deleteMessagePrev');
 const { sendError } = require('../utils/sendLoadings')
-const setting = JSON.parse(fs.readFileSync('./lib/setting.json'));
-const {
-    listIdSupply,
-    listIdCleaning
-} = setting;
+
 
 /**
   * Сцена распределения роутов.
@@ -57,6 +52,17 @@ module.exports = (ctx) => {
                 await ctx.scene.leave();
             } catch (e) {
                 await sendError(ctx, e)
+            }
+        })
+
+        divisionStep.action('leaveScene', async (ctx) => {
+            try {
+                await ctx.deleteMessage()
+                await sendMessageDriverMenu(ctx)
+                await ctx.scene.leave()
+            } catch (e) {
+                await sendError(ctx, e)
+                await ctx.scene.leave()
             }
         })
         return divisionStep
