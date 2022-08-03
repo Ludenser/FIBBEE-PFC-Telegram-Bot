@@ -10506,7 +10506,7 @@
                 },
                 "orderindex": "4637816.00000603000000000000000000000000",
                 "date_created": "1659529964177",
-                "date_updated": "1659529964177",
+                "date_updated": "1659531448180",
                 "date_closed": null,
                 "archived": false,
                 "creator": {
@@ -10516,7 +10516,16 @@
                   "email": "s.vedeneev.fibbee@gmail.com",
                   "profilePicture": "https://attachments.clickup.com/profilePictures/6725668_b0e.jpg"
                 },
-                "assignees": [],
+                "assignees": [
+                  {
+                    "id": 6725668,
+                    "username": "Sergei Vedeneev",
+                    "color": "#e040fb",
+                    "initials": "SV",
+                    "email": "s.vedeneev.fibbee@gmail.com",
+                    "profilePicture": "https://attachments.clickup.com/profilePictures/6725668_b0e.jpg"
+                  }
+                ],
                 "watchers": [],
                 "checklists": [
                   {
@@ -12729,7 +12738,7 @@
                 },
                 "orderindex": "4637816.00000603000000000000000000000000",
                 "date_created": "1659529964177",
-                "date_updated": "1659529964177",
+                "date_updated": "1659531448180",
                 "date_closed": null,
                 "archived": false,
                 "creator": {
@@ -12739,7 +12748,16 @@
                   "email": "s.vedeneev.fibbee@gmail.com",
                   "profilePicture": "https://attachments.clickup.com/profilePictures/6725668_b0e.jpg"
                 },
-                "assignees": [],
+                "assignees": [
+                  {
+                    "id": 6725668,
+                    "username": "Sergei Vedeneev",
+                    "color": "#e040fb",
+                    "initials": "SV",
+                    "email": "s.vedeneev.fibbee@gmail.com",
+                    "profilePicture": "https://attachments.clickup.com/profilePictures/6725668_b0e.jpg"
+                  }
+                ],
                 "watchers": [],
                 "checklists": [
                   {
@@ -14211,12 +14229,8 @@
         ],
         "team_id": "2445394",
         "isAlreadyFilled": true,
-        "__scenes": {
-          "current": "ROUTE_1_WIZARD_ID",
-          "state": {},
-          "cursor": 0
-        },
-        "routeNumber": 1
+        "__scenes": {},
+        "currentRouteNumber": 1
       }
     }
   ]
