@@ -5,8 +5,8 @@ const fs = require('fs');
 const FormData = require('form-data');
 const settings = JSON.parse(fs.readFileSync('./lib/setting.json'));
 const qs = require('qs');
-const dueTime = require('../utils/time24')
-const { listId } = settings;
+const dueTime = require('../utils/timePeriodDate')
+const { team_id } = settings;
 
 /**
     * Взаимодействия с аттачментами в тасках
@@ -18,9 +18,9 @@ class Attachment {
         * @param ctx
         * @param number
         */
-    static async createAttachment(message_id, task_id) {
+    static async createAttachment(message_id, task_id, stream) {
         const form = new FormData();
-        form.append('attachment', fs.createReadStream(`./test/download/${ctx.update.message.message_id}.jpg`))
+        form.append('attachment', stream)
         form.append('filename', `${message_id}.jpg`)
 
         await axios({
@@ -99,6 +99,50 @@ class Attachment {
     */
 class Task {
 
+    static async getTodayTasksWithAnyStatusFromTeamId(list_ids) {
+
+        const response = await axios.get(`https://api.clickup.com/api/v2/team/${team_id}/task`,
+            {
+                params: {
+                    statuses: ['to do', 'in progress'],
+                    list_ids,
+                    order_by: 'due_date',
+                    due_date_gt: dueTime(-5),
+                    due_date_lt: dueTime(20)
+                },
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
+                },
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            })
+        return response
+    }
+
+    static async getTodayTasksWithStatusTodoFromTeamId(list_ids) {
+
+        const response = await axios.get(`https://api.clickup.com/api/v2/team/${team_id}/task`,
+            {
+                params: {
+                    statuses: ['to do'],
+                    list_ids,
+                    order_by: 'due_date',
+                    due_date_gt: dueTime(-5),
+                    due_date_lt: dueTime(20)
+                },
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
+                },
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            })
+        return response
+    }
+
     /**
         * Получение списка всех тасков в таск-листе
         * @param number
@@ -110,7 +154,7 @@ class Task {
                 params: {
                     statuses: ['to do'],
                     order_by: 'due_date',
-                    due_date_gt: Date.parse(new Date(Date.now())),
+                    due_date_gt: dueTime(-5),
                     due_date_lt: dueTime(20)
                 },
                 paramsSerializer: params => {
@@ -252,7 +296,7 @@ class Time {
         * @param number
         * @param number
         */
-    static async updateEntry(team_id, task_id, unix_time) {
+    static async updateEntry(task_id, unix_time) {
 
 
         const response = await axios.put(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/${timer_id}/`,
@@ -312,8 +356,8 @@ class Users {
     /**
         * Получение объекта всех юзеров, имеющих доступ к таск-листу "по умолчанию"
         */
-    static async getUsers_id() {
-        const response = await axios.get(`https://api.clickup.com/api/v2/list/${listId}/member`,
+    static async getUsers_id(list_id) {
+        const response = await axios.get(`https://api.clickup.com/api/v2/list/${list_id}/member`,
             {
                 headers: {
                     'Authorization': token,

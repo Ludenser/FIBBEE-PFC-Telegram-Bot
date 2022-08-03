@@ -1,22 +1,26 @@
+const list_ids = require('../../lib/list_idsFromClickUp')
+const { Markup } = require('telegraf')
+
 module.exports = async (ctx) => {
 
-  await ctx.reply(ctx.i18n.t('helper'),
-    {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            { text: '1️⃣ Снабжение 1️⃣', callback_data: 'route1' },
-            { text: '2️⃣ Клининг 2️⃣', callback_data: 'route2' }
-          ],
-          [
-            { text: 'ℹ Обзор всех тасков ℹ️', callback_data: 'routesInfo' }
-          ],
-          [
-            { text: 'Назад!↩️', callback_data: 'start' }
-          ]
-        ]
-      },
-      parse_mode: "Markdown"
-
+  function routesKeyboard() {
+    let buttonsArray = []
+    list_ids.forEach((el, i) => {
+      buttonsArray.push(Markup.button.callback(i + 1, `route${i}`))
     })
+    return buttonsArray
+  }
+
+  await ctx.reply(ctx.i18n.t('helper'),
+    Markup.inlineKeyboard(
+      [
+        ...routesKeyboard(list_ids),
+        Markup.button.callback('ℹ Обзор всех тасков ℹ️', 'routesInfo'),
+        Markup.button.callback('Назад!↩️', 'start')
+      ], {
+      columns: 2,
+      wrap: (btn, index, currentRow) => index != currentRow.length - 1
+    }
+    )
+  )
 }

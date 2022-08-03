@@ -7,6 +7,8 @@ const startComposer = require('./composers/start.composer');
 const mainMenuComposer = require('./composers/mainMenu.composer');
 const routesInfoComposer = require('./composers/routesInfo.composer');
 const selectRouteComposer = require('./composers/selectRoute.composer');
+const LocalSession = require('telegraf-session-local');
+const totalSceneInitComposer = require('./composers/totalSceneInit.composer');
 
 require('dotenv').config();
 
@@ -19,14 +21,10 @@ const token = process.env.TOKEN;
 
 const bot = new Telegraf(token)
 
-bot.context.all_tasksSupply = []
-bot.context.all_tasksClean = []
+bot.use((new LocalSession({ database: 'session_db.json' })).middleware())
+
 bot.context.routeNumber = undefined
-bot.context.team_id = undefined
-bot.context.primeTaskSupply_id = undefined
-bot.context.primeTaskClean_id = undefined
 bot.context.main_timer_id = undefined
-bot.context.lastTask_id = undefined
 
 bot.use(
     updateLogger({
@@ -41,12 +39,16 @@ bot.use(
 
 bot.use(i18n.middleware())
 bot.use(startComposer)
-bot.use(async (ctx, next) => {
-    bot.use(selectRouteComposer(ctx))
-    await next()
-})
 bot.use(mainMenuComposer)
 bot.use(routesInfoComposer)
+bot.use(async (ctx, next) => {
+    bot.use(totalSceneInitComposer(ctx))
+    await next()
+})
+bot.use(async (ctx, next) => {
+    bot.use(...selectRouteComposer(ctx))
+    await next()
+})
 
 bot.launch()
 
