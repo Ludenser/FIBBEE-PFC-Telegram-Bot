@@ -99,6 +99,28 @@ class Attachment {
     */
 class Task {
 
+    static async getTodayTasksWithAnyStatusFromTeamId(list_ids) {
+
+        const response = await axios.get(`https://api.clickup.com/api/v2/team/${team_id}/task`,
+            {
+                params: {
+                    statuses: ['to do', 'in progress'],
+                    list_ids,
+                    order_by: 'due_date',
+                    due_date_gt: dueTime(-5),
+                    due_date_lt: dueTime(20)
+                },
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
+                },
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            })
+        return response
+    }
+
     static async getTodayTasksWithStatusTodoFromTeamId(list_ids) {
 
         const response = await axios.get(`https://api.clickup.com/api/v2/team/${team_id}/task`,
@@ -107,7 +129,7 @@ class Task {
                     statuses: ['to do'],
                     list_ids,
                     order_by: 'due_date',
-                    // due_date_gt: dueTime(-5),
+                    due_date_gt: dueTime(-5),
                     due_date_lt: dueTime(20)
                 },
                 paramsSerializer: params => {

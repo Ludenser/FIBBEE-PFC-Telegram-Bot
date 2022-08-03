@@ -1,5 +1,6 @@
 const { Composer } = require('telegraf');
-const { getMessageRouteFromClickAPI } = require('../features/getRoute.feature');
+_ = require('lodash');
+const { getMessageFromCurrentList } = require('../features/getRoute.feature');
 const { Task, Time } = require('../api/clickUpApi.service');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 const sendMessageUazPhoto = require('../keyboards/scenes/sendMessageUazPhoto.routeMenu');
@@ -15,58 +16,60 @@ const { sendError } = require('../utils/sendLoadings')
   */
 
 module.exports = (ctx) => {
+
     const divisionStep = new Composer()
 
-    const division = ctx.session.all_lists.map((el, i) => {
+    const division = _(ctx.session.all_lists)
+        .map((el, i) => {
 
-        divisionStep.action(`openRoute${i + 1}`, async (ctx) => {
+            divisionStep.action(`openRoute${i}`, async (ctx) => {
 
-            try {
+                try {
 
-                await ctx.deleteMessage()
-                await getMessageRouteFromClickAPI(ctx, [ctx.session.all_lists[i].allTasks])
+                    await ctx.deleteMessage()
+                    await getMessageFromCurrentList(ctx, ctx.session.all_lists[i].tasksWithoutMain)
 
-                await Task.setStatus(ctx.session.all_lists[i].mainTask, 'in progress')
-                await setAssigneeFeature(ctx.session.all_lists[i].mainTask)
-                const response = await Time.startEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask)
-                // ctx.main_timer_id = response.data.data.id
+                    // await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'in progress')
+                    // await setAssigneeFeature(ctx.session.all_lists[i].mainTask[0].id)
+                    // const response = await Time.startEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask[0].id)
+                    // ctx.main_timer_id = response.data.data.id
 
-                await sendMessageUazPhoto(ctx)
-                return await ctx.wizard.next();
+                    await sendMessageUazPhoto(ctx)
+                    return await ctx.wizard.selectStep(i + ctx.session.all_lists.length);
 
-            } catch (e) {
-                console.log(e)
-                await sendError(ctx, e)
-            }
+                } catch (e) {
+                    console.log(e)
+                    await sendError(ctx, e)
+                }
 
+            })
+
+            divisionStep.action('closeRoute', async (ctx) => {
+                try {
+                    await ctx.deleteMessage()
+                    await sendMessageDriverMenu(ctx)
+
+                    // await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'done')
+                    // await Time.startEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask[0].id)
+
+                    await ctx.scene.leave();
+                } catch (e) {
+                    await sendError(ctx, e)
+                }
+            })
+
+            divisionStep.action('leaveScene', async (ctx) => {
+                try {
+                    await ctx.deleteMessage()
+                    await sendMessageDriverMenu(ctx)
+                    await ctx.scene.leave()
+                } catch (e) {
+                    await sendError(ctx, e)
+                    await ctx.scene.leave()
+                }
+            })
+            return divisionStep
         })
-
-        divisionStep.action('closeRoute', async (ctx) => {
-            try {
-                await ctx.deleteMessage()
-                await sendMessageDriverMenu(ctx)
-
-                await Task.setStatus(ctx.session.all_lists[i].mainTask, 'done')
-                await Time.startEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask)
-
-                await ctx.scene.leave();
-            } catch (e) {
-                await sendError(ctx, e)
-            }
-        })
-
-        divisionStep.action('leaveScene', async (ctx) => {
-            try {
-                await ctx.deleteMessage()
-                await sendMessageDriverMenu(ctx)
-                await ctx.scene.leave()
-            } catch (e) {
-                await sendError(ctx, e)
-                await ctx.scene.leave()
-            }
-        })
-        return divisionStep
-    })
 
     return division
 
