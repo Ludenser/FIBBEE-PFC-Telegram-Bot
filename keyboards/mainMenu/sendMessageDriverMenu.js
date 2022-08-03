@@ -6,7 +6,7 @@ module.exports = async (ctx) => {
   function routesKeyboard() {
     let buttonsArray = []
     list_ids.forEach((el, i) => {
-      buttonsArray.push(Markup.button.callback(i + 1, `route${i + 1}`))
+      buttonsArray.push(Markup.button.callback(i + 1, `route${i}`))
     })
     return buttonsArray
   }

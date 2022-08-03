@@ -13,20 +13,22 @@ const list_ids = require('../lib/list_idsFromClickUp')
   */
 module.exports = async (ctx) => {
 
-    const all_tasks = await Task.getTodayTasksWithStatusTodoFromTeamId(list_ids)
+    // const all_tasks = await Task.getTodayTasksWithStatusTodoFromTeamId(list_ids)
+    const all_tasks_any_status = await Task.getTodayTasksWithAnyStatusFromTeamId(list_ids)
 
-    let resultMain = _(all_tasks.data.tasks)
+    let resultMain = _(all_tasks_any_status.data.tasks)
+        .reverse()
         .filter(item => item.name.includes('водителя'))
         .groupBy(item => item.list.id)
         .map((value, key) => ({ list_id: key, mainTask: value }))
         .value();
 
-    let result = _(all_tasks.data.tasks)
+    let result = _(all_tasks_any_status.data.tasks)
         .groupBy(item => item.list.id)
         .map((value, key) => ({ list_id: key, allTasks: value, }))
         .value();
 
-    let resultWithoutMain = _(all_tasks.data.tasks)
+    let resultWithoutMain = _(all_tasks_any_status.data.tasks)
         .filter(item => !item.name.includes('водителя'))
         .groupBy(item => item.list.id)
         .map((value, key) => ({ list_id: key, tasksWithoutMain: value, }))
@@ -35,8 +37,6 @@ module.exports = async (ctx) => {
     let all_result = result.map((element, index) => {
         return Object.assign({}, result[index], resultMain[index], resultWithoutMain[index])
     })
-
-    console.log(all_result);
 
     ctx.session.all_lists = all_result
     ctx.session.team_id = team_id

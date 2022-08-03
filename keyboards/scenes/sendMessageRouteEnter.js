@@ -8,7 +8,7 @@ module.exports = async (ctx, msg = 'Меню', task_id) => {
             [
                 Markup.button.callback('Загрузить фото', 'upl_photo'),
                 Markup.button.callback('Оставить комментарий', 'upl_comment'),
-                Markup.button.callback('Закончить обслуживание', isTaskLast(task_id, ctx) ? 'exit' : 'next_step'),
+                Markup.button.callback('Закончить обслуживание', isTaskLast(ctx.session.all_lists, task_id) ? 'exit' : 'next_step'),
                 Markup.button.callback('Выйти', 'leaveScene')
             ], {
             wrap: (btn, index, currentRow) => currentRow.length >= (index + 1) / 2

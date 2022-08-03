@@ -14,9 +14,9 @@ composer.start(async (ctx) => {
   ctx.session = null
   composer.use(async (ctx, next) => {
     if (!ctx.session.isAlreadyFilled) {
-      console.log(chalk.redBright.bgBlue('ctx.session is empty'))
+      console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
       await addTasksToCtx(ctx)
-      console.log(chalk.greenBright.bgBlue('ctx.session was filled'))
+      console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
     }
     await next()
   })

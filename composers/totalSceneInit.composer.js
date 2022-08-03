@@ -8,6 +8,5 @@ module.exports = (ctx) => {
   const stage = new Scenes.Stage([initialScene(ctx), ...complexScene(ctx)])
 
   totalSceneInitComposer.use(stage.middleware())
-
   return totalSceneInitComposer
 }

@@ -23,14 +23,8 @@ const bot = new Telegraf(token)
 
 bot.use((new LocalSession({ database: 'session_db.json' })).middleware())
 
-bot.context.all_tasksSupply = []
-bot.context.all_tasksClean = []
 bot.context.routeNumber = undefined
-bot.context.team_id = undefined
-bot.context.primeTaskSupply_id = undefined
-bot.context.primeTaskClean_id = undefined
 bot.context.main_timer_id = undefined
-bot.context.lastTask_id = undefined
 
 bot.use(
     updateLogger({
@@ -45,13 +39,16 @@ bot.use(
 
 bot.use(i18n.middleware())
 bot.use(startComposer)
+bot.use(mainMenuComposer)
+bot.use(routesInfoComposer)
 bot.use(async (ctx, next) => {
     bot.use(totalSceneInitComposer(ctx))
+    await next()
+})
+bot.use(async (ctx, next) => {
     bot.use(...selectRouteComposer(ctx))
     await next()
 })
-bot.use(mainMenuComposer)
-bot.use(routesInfoComposer)
 
 bot.launch()
 
