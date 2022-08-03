@@ -45,8 +45,8 @@ module.exports = (ctx) => {
             initStepScene.action('leaveScene', async (ctx) => {
                 try {
 
-                    // await Time.stopEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask[0].id)
-                    // await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'to do')
+                    await Time.stopEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask[0].id)
+                    await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'to do')
 
                     await ctx.deleteMessage()
                     await sendMessageDriverMenu(ctx)

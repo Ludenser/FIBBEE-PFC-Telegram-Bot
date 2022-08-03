@@ -29,10 +29,10 @@ module.exports = (ctx) => {
                     await ctx.deleteMessage()
                     await getMessageFromCurrentList(ctx, ctx.session.all_lists[i].tasksWithoutMain)
 
-                    // await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'in progress')
-                    // await setAssigneeFeature(ctx.session.all_lists[i].mainTask[0].id)
-                    // const response = await Time.startEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask[0].id)
-                    // ctx.main_timer_id = response.data.data.id
+                    await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'in progress')
+                    await setAssigneeFeature(ctx.session.all_lists[i].mainTask[0].id)
+                    const response = await Time.startEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask[0].id)
+                    ctx.main_timer_id = response.data.data.id
 
                     await sendMessageUazPhoto(ctx)
                     return await ctx.wizard.selectStep(i + ctx.session.all_lists.length);
@@ -49,8 +49,8 @@ module.exports = (ctx) => {
                     await ctx.deleteMessage()
                     await sendMessageDriverMenu(ctx)
 
-                    // await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'done')
-                    // await Time.startEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask[0].id)
+                    await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'done')
+                    await Time.startEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask[0].id)
 
                     await ctx.scene.leave();
                 } catch (e) {
