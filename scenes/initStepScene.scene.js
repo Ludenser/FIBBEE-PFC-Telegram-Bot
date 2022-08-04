@@ -48,6 +48,7 @@ module.exports = (ctx) => {
                     await Time.stopEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask[0].id)
                     await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'to do')
 
+                    ctx.session.currentRouteNumber = null
                     await ctx.deleteMessage()
                     await sendMessageDriverMenu(ctx)
                     await ctx.scene.leave()

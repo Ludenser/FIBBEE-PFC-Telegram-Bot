@@ -11,7 +11,7 @@ const chalk = require('chalk')
 const composer = new Composer();
 
 composer.start(async (ctx) => {
-
+  ctx.session = null
   composer.use(async (ctx, next) => {
     if (!ctx.session.isAlreadyFilled) {
       console.log(chalk.whiteBright.bgRed('ctx.session is empty'))

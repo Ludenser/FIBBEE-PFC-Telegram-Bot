@@ -62,6 +62,7 @@ module.exports = (ctx) => {
                 try {
                     await ctx.deleteMessage()
                     await sendMessageDriverMenu(ctx)
+                    ctx.session.currentRouteNumber = null
                     await ctx.scene.leave()
                 } catch (e) {
                     await sendError(ctx, e)

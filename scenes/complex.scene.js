@@ -146,6 +146,7 @@ module.exports = (arr, list) => {
                     await Task.setStatus(list.mainTask[0].id, 'to do')
 
                     await ctx.deleteMessage()
+                    ctx.session.currentRouteNumber = null
                     await sendMessageDriverMenu(ctx)
                     await ctx.scene.leave()
                 } catch (e) {
