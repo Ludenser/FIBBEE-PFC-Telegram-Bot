@@ -26,7 +26,7 @@ helperInitRouteScene: |
 helperSceneLeave: |
   Чтобы выйти напиши /leave
 
-messageSceneUazPhoto: |
+messageSceneCarPhoto: |
   Жду, пока загрузишь машину, потом не забудь ее сфоткать с 4х сторон и прикрепить сюда. Подтверди загрузку кнопкой снизу.
 
 messageScenePhotoCheck: |

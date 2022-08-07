@@ -23,7 +23,6 @@ const bot = new Telegraf(token)
 
 bot.use((new LocalSession({ database: 'session_db.json' })).middleware())
 
-bot.context.routeNumber = undefined
 bot.context.main_timer_id = undefined
 
 bot.use(

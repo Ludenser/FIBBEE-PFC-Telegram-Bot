@@ -1,4 +1,4 @@
-const { Attachment } = require('../api/clickUpApi.service')
+const { Task } = require('../api/clickUpApi.service')
 const axios = require('axios')
 
 /**
@@ -13,6 +13,6 @@ module.exports = async (ctx, task_id) => {
 
   const response = await axios({ url, responseType: 'stream' })
 
-  await Attachment.createAttachment(ctx.update.message.message_id, task_id, response.data)
+  await Task.createAttachment(ctx.update.message.message_id, task_id, response.data)
 
 }
