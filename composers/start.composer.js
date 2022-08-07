@@ -2,17 +2,30 @@ const { Composer } = require('telegraf');
 const sendMessageStart = require('../keyboards/mainMenu/sendMessageStart');
 const sendMessageError = require('../utils/sendMessageError');
 const addTasksToCtx = require('../features/addTasksToCtx.feature');
-const chalk = require('chalk')
+const convertTranslit = require('cyrillic-to-translit-js')
+const chalk = require('chalk');
 
 /**
   * Обработчик стартовых команд.
   * Добавление в контекст инфы о тасках из ClickUp
   */
+
 const composer = new Composer();
+
+const cyrillicToTranslit = new convertTranslit();
 
 composer.start(async (ctx) => {
   ctx.session = null
+  const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name}`
+  ctx.session.userName = cyrillicToTranslit.transform(userName)
+  try {
+    await sendMessageStart(ctx)
+  } catch (e) {
+    await sendMessageError(ctx, e)
+  }
+
   composer.use(async (ctx, next) => {
+
     if (!ctx.session.isAlreadyFilled) {
       console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
       await addTasksToCtx(ctx)
@@ -20,11 +33,7 @@ composer.start(async (ctx) => {
     }
     await next()
   })
-  try {
-    await sendMessageStart(ctx)
-  } catch (e) {
-    await sendMessageError(ctx, e)
-  }
+
 })
 
 composer.command('/start', async (ctx) => {

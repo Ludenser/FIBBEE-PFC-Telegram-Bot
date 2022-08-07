@@ -1,6 +1,5 @@
 const { Task } = require('../api/clickUpApi.service');
 const _ = require('lodash')
-const sendMessageError = require('../utils/sendMessageError');
 const { Markup } = require('telegraf');
 const toLocalTime = require('../utils/toLocalTime');
 
@@ -19,7 +18,7 @@ module.exports = {
     * Отправка сообщения из списка тасков из всех тасклистов ClickUp в виде строк.
     */
 
-  getMessageFromAllLists: async (ctx) => {
+  sendFormatMsgFromAllClickUpLists: async (ctx) => {
 
     const resArray = _(ctx.session.all_lists)
       .map((list) => {
@@ -40,7 +39,7 @@ module.exports = {
   /**
       * Отправка сообщения из списка тасков, указанного в аргументе тасклиста ClickUp, в виде строк.
       */
-  getMessageFromCurrentList: async (ctx, list) => {
+  sendFormatMsgFromCurrentClickUpList: async (ctx, list) => {
 
     const nameValues = _(list)
 

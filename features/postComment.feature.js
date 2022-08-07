@@ -1,4 +1,4 @@
-const { Attachment, Users } = require('../api/clickUpApi.service')
+const { Task, Users } = require('../api/clickUpApi.service')
 const userRegEx = require('../utils/regExp')
 const sendMessageRouteEnter = require('../keyboards/scenes/sendMessageRouteEnter')
 const deleteMessagePrev = require('../utils/deleteMessagePrev')
@@ -14,7 +14,7 @@ module.exports = async (ctx, task_id) => {
 
     const usernameQuery = userRegEx('(?<=@).+', ctx.update.message.text)
     if (usernameQuery == ctx.update.message.text) {
-      await Attachment.createComment(ctx.update.message.text, task_id)
+      await Task.createComment(ctx.update.message.text, task_id)
       await deleteMessagePrev(ctx, 1)
       await sendProses(ctx, 'Комментарий отправлен. Но ты никого не тегнул((')
       await sendMessageRouteEnter(ctx)
@@ -28,7 +28,7 @@ module.exports = async (ctx, task_id) => {
       }
 
       const username = response.data.members.find(hasUserFrom(usernameQuery))
-      await Attachment.createCommentWithAssignee(ctx.update.message.text, task_id, username.id)
+      await Task.createCommentWithAssignee(ctx.update.message.text, task_id, username.id)
       await deleteMessagePrev(ctx, 1)
       await sendProses(ctx, 'Комментарий отправлен. Все ОК.')
       await sendMessageRouteEnter(ctx)

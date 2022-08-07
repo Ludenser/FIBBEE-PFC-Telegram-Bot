@@ -1,17 +1,20 @@
 const { Composer, Markup } = require('telegraf');
 const _ = require('lodash');
-const { Task, Time, Users } = require('../api/clickUpApi.service');
+const { Task, Time } = require('../api/clickUpApi.service');
 const postAttachmentsFeature = require('../features/postAttachments.feature');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
 const deleteMessagePrev = require('../utils/deleteMessagePrev');
-const sendMessageError = require('../utils/sendMessageError');
 const postCommentFeature = require('../features/postComment.feature');
 const setAssigneeFeature = require('../features/setAssignee.feature');
 const sendMessageRouteEnter = require('../keyboards/scenes/sendMessageRouteEnter');
 const sendMessageRouteEnterEx = require('../keyboards/scenes/sendMessageRouteEnterEx');
 const { sendError } = require('../utils/sendLoadings');
-
+const { resolveAllCheckListsAndItems } = require('../features/resolveCheckList.feature');
+/**
+  * Универсальная сцена обслуживания комплекса.
+  * Динамически создается на основании массива тасков из API
+  */
 module.exports = (arr, list) => {
 
     const complexSceneArray = _(arr)
@@ -26,7 +29,7 @@ module.exports = (arr, list) => {
                     await Task.setStatus(task.id, 'in progress')
                     await Time.startEntry(ctx.session.team_id, task.id)
 
-                    await setAssigneeFeature(task.id)
+                    await setAssigneeFeature(ctx.session.userName, task.id)
                     await sendMessageRouteEnter(ctx, task.name, task.id)
 
 
@@ -107,6 +110,7 @@ module.exports = (arr, list) => {
 
                     await Task.setStatus(task.id, 'done')
                     await Time.stopEntry(ctx.session.team_id, task.id)
+                    await resolveAllCheckListsAndItems(task.checklists, 'true')
 
                     await ctx.deleteMessage()
                     await ctx.reply(`Заканчиваем ${task.name}`, Markup
@@ -124,8 +128,9 @@ module.exports = (arr, list) => {
                 try {
 
                     await Task.setStatus(task.id, 'done')
-                    await Task.setStatus(list.mainTask[0].id, 'done')
                     await Time.stopEntry(ctx.session.team_id, task.id)
+                    await Time.startEntry(ctx.session.team_id, list.mainTask[0].id)
+                    await resolveAllCheckListsAndItems(task.checklists, 'true')
 
                     await ctx.deleteMessage()
                     await sendMessageRouteEnterEx(ctx)
@@ -144,6 +149,8 @@ module.exports = (arr, list) => {
                     await Time.stopEntry(ctx.session.team_id, task.id)
                     await Task.setStatus(task.id, 'to do')
                     await Task.setStatus(list.mainTask[0].id, 'to do')
+                    await resolveAllCheckListsAndItems(task.checklists, 'false')
+                    await resolveAllCheckListsAndItems(list.mainTask[0].checklists, 'false')
 
                     await ctx.deleteMessage()
                     ctx.session.currentRouteNumber = null

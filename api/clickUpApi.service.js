@@ -8,92 +8,7 @@ const qs = require('qs');
 const dueTime = require('../utils/timePeriodDate')
 const { team_id } = settings;
 
-/**
-    * Взаимодействия с аттачментами в тасках
-    */
-class Attachment {
 
-    /**
-        * Создание аттачмента в таске
-        * @param ctx
-        * @param number
-        */
-    static async createAttachment(message_id, task_id, stream) {
-        const form = new FormData();
-        form.append('attachment', stream)
-        form.append('filename', `${message_id}.jpg`)
-
-        await axios({
-            method: 'post',
-            url: `https://api.clickup.com/api/v2/task/${task_id}/attachment`,
-            data: form,
-            headers: {
-                'Authorization': token,
-                'content-type': `multipart/form-data; boundary=${form.getBoundary()}`
-            },
-        })
-
-            .then(() => console.log('Загружено в кликап!'))
-            .catch((e) => console.log(e))
-
-    };
-
-    /**
-        * Создание комментария в таске
-        * @param ctx
-        * @param number
-        */
-    static async createComment(message_text, task_id) {
-
-        await axios({
-            method: 'post',
-            url: `https://api.clickup.com/api/v2/task/${task_id}/comment`,
-            data: {
-                'comment': [
-                    {
-                        'text': message_text,
-                    }
-                ]
-            },
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(() => console.log('Коммент прикреплен к таску!'))
-            .catch((e) => console.log(e))
-
-    }
-    /**
-        * Создание комментария в таске c тегом
-        * @param ctx
-        * @param number
-        * @param number
-        */
-    static async createCommentWithAssignee(message_text, task_id, user_id) {
-
-        await axios({
-            method: 'post',
-            url: `https://api.clickup.com/api/v2/task/${task_id}/comment`,
-            data: {
-                'comment': [
-                    {
-                        'text': message_text,
-                    }
-                ],
-                'assignee': user_id
-            },
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(() => console.log('Коммент прикреплен к таску!'))
-            .catch((e) => console.log(e))
-
-    }
-
-}
 /**
     * Взаимодействия с тасками
     */
@@ -108,7 +23,7 @@ class Task {
                     list_ids,
                     order_by: 'due_date',
                     due_date_gt: dueTime(-5),
-                    due_date_lt: dueTime(20)
+                    due_date_lt: dueTime(38)
                 },
                 paramsSerializer: params => {
                     return qs.stringify(params, { arrayFormat: 'brackets' })
@@ -208,6 +123,133 @@ class Task {
         return response
     }
 
+    /**
+        * Создание комментария в таске
+        * @param ctx
+        * @param number
+        */
+    static async createComment(message_text, task_id) {
+
+        await axios({
+            method: 'post',
+            url: `https://api.clickup.com/api/v2/task/${task_id}/comment`,
+            data: {
+                'comment': [
+                    {
+                        'text': message_text,
+                    }
+                ]
+            },
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(() => console.log('Коммент прикреплен к таску!'))
+            .catch((e) => console.log(e))
+
+    }
+    /**
+        * Создание комментария в таске c тегом
+        * @param message_text - ctx
+        * @param task_id - String
+        * @param user_id - Number
+        */
+    static async createCommentWithAssignee(message_text, task_id, user_id) {
+
+        await axios({
+            method: 'post',
+            url: `https://api.clickup.com/api/v2/task/${task_id}/comment`,
+            data: {
+                'comment': [
+                    {
+                        'text': message_text,
+                    }
+                ],
+                'assignee': user_id
+            },
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(() => console.log('Коммент прикреплен к таску!'))
+            .catch((e) => console.log(e))
+
+    };
+
+    /**
+        * Создание аттачмента в таске
+        * @param ctx
+        * @param number
+        */
+    static async createAttachment(message_id, task_id, stream) {
+        const form = new FormData();
+        form.append('attachment', stream)
+        form.append('filename', `${message_id}.jpg`)
+
+        await axios({
+            method: 'post',
+            url: `https://api.clickup.com/api/v2/task/${task_id}/attachment`,
+            data: form,
+            headers: {
+                'Authorization': token,
+                'content-type': `multipart/form-data; boundary=${form.getBoundary()}`
+            },
+        })
+
+            .then(() => console.log('Загружено в кликап!'))
+            .catch((e) => console.log(e))
+
+    };
+
+    /**
+       * Получение чеклиста
+       * @param checklist_id - String
+       */
+    static async getCheckList(checklist_id) {
+
+        const response = await axios({
+            method: 'put',
+            url: `https://api.clickup.com/api/v2/checklist/${checklist_id}`,
+            data:
+            {
+                'position': 0
+            }
+            ,
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            },
+        })
+        return response
+    };
+
+    /**
+       * Получение чеклиста
+       * @param checklist_item_id - String
+       * @param resolved - Boolean ( Default is 'true')
+       */
+    static async resolveCheckListItem(checklist_item_id, resolved = true) {
+
+        const response = await axios({
+            method: 'put',
+            url: `https://api.clickup.com/api/v2/checklist/checklist_id/checklist_item/${checklist_item_id}`,
+            data:
+            {
+                resolved
+            }
+            ,
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            },
+        })
+        return response
+    };
+
+
+
 }
 
 /**
@@ -217,7 +259,7 @@ class Time {
 
     /**
         * Получение информации о таймере в задаче
-        * @param number
+        * @param task_id - Number
         */
     static async getTrackedTime(task_id) {
         const response = await axios.get(`https://api.clickup.com/api/v2/task/${task_id}/time/`,
@@ -232,7 +274,7 @@ class Time {
 
     /**
         * Создание уже готового отслеженного времени
-        * @param number
+        * @param task_id - Number
         */
     static async postTrackTime(task_id) {
         const response = await axios.post(`https://api.clickup.com/api/v2/task/${task_id}/time/`,
@@ -250,8 +292,8 @@ class Time {
 
     /**
         * Создание уже готового отслеженного времени
-        * @param number
-        * @param number
+        * @param team_id - Number
+        * @param task_id - Number
         */
     static async createEntry(team_id, task_id) {  //(сколько затрачено на задачу), время нужно получать из логики приложения. в теле запроса указывается либо total, либо start и end в UNIX
         const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/`,
@@ -272,8 +314,8 @@ class Time {
 
     /**
         * Запуск встроенного таймера в ClickUp
-        * @param number
-        * @param number
+        * @param team_id - Number
+        * @param task_id - Number
         */
     static async startEntry(team_id, task_id) {
         const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/start/`,
@@ -292,7 +334,6 @@ class Time {
 
     /**
         * Обновление встроенного таймера в ClickUp
-        * @param number
         * @param number
         * @param number
         */
@@ -373,7 +414,6 @@ class Users {
 
 
 module.exports = {
-    Attachment,
     Task,
     Time,
     Users

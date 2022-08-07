@@ -1,14 +1,25 @@
-const { Users, Task } = require('../api/clickUpApi.service');
+const { Task } = require('../api/clickUpApi.service');
+const supplyTeam_ids = require('../lib/supplyTeam_ids');
+const _ = require('lodash');
 
 /**
- * Функция установки назначения на пользователя
+ * Функция установки Assignee текущего таска на пользователя
  */
 
-module.exports = async (task_id) => {
+module.exports = async (userName, task_id) => {
 
-    const response = await Users.getUser_ByToken()
-    const user = response.data.user
+    const userIdMatch = _(supplyTeam_ids)
+        .find(['username', userName])
 
-    await Task.setAssignee(task_id, user.id)
+    try {
+
+        await Task.setAssignee(task_id, userIdMatch.id)
+
+    } catch (error) {
+
+        console.log(error)
+
+    }
+
 
 }
