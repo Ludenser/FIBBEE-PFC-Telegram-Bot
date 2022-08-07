@@ -22,8 +22,8 @@ class Task {
                     statuses: ['to do', 'in progress'],
                     list_ids,
                     order_by: 'due_date',
-                    due_date_gt: dueTime(-5),
-                    due_date_lt: dueTime(38)
+                    due_date_gt: dueTime(-3),
+                    due_date_lt: dueTime(20)
                 },
                 paramsSerializer: params => {
                     return qs.stringify(params, { arrayFormat: 'brackets' })
