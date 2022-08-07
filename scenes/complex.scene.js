@@ -15,6 +15,7 @@ const { resolveAllCheckListsAndItems } = require('../features/resolveCheckList.f
   * Универсальная сцена обслуживания комплекса.
   * Динамически создается на основании массива тасков из API
   */
+
 module.exports = (arr, list) => {
 
     const complexSceneArray = _(arr)
@@ -27,7 +28,7 @@ module.exports = (arr, list) => {
                     await ctx.deleteMessage()
 
                     await Task.setStatus(task.id, 'in progress')
-                    await Time.startEntry(ctx.session.team_id, task.id)
+                    await Time.startEntry(task.id)
 
                     await setAssigneeFeature(ctx.session.userName, task.id)
                     await sendMessageRouteEnter(ctx, task.name, task.id)
@@ -109,7 +110,7 @@ module.exports = (arr, list) => {
                 try {
 
                     await Task.setStatus(task.id, 'done')
-                    await Time.stopEntry(ctx.session.team_id, task.id)
+                    await Time.stopEntry(task.id)
                     await resolveAllCheckListsAndItems(task.checklists, 'true')
 
                     await ctx.deleteMessage()
@@ -128,8 +129,8 @@ module.exports = (arr, list) => {
                 try {
 
                     await Task.setStatus(task.id, 'done')
-                    await Time.stopEntry(ctx.session.team_id, task.id)
-                    await Time.startEntry(ctx.session.team_id, list.mainTask[0].id)
+                    await Time.stopEntry(task.id)
+                    await Time.startEntry(list.mainTask[0].id)
                     await resolveAllCheckListsAndItems(task.checklists, 'true')
 
                     await ctx.deleteMessage()
@@ -146,7 +147,7 @@ module.exports = (arr, list) => {
             complex_scene.action('leaveScene', async (ctx) => {
                 try {
 
-                    await Time.stopEntry(ctx.session.team_id, task.id)
+                    await Time.stopEntry(task.id)
                     await Task.setStatus(task.id, 'to do')
                     await Task.setStatus(list.mainTask[0].id, 'to do')
                     await resolveAllCheckListsAndItems(task.checklists, 'false')

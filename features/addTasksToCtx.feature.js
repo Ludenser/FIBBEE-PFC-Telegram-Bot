@@ -11,10 +11,10 @@ const list_ids = require('../lib/list_idsFromClickUp')
 /**
   * Добавление в контекст объекта тасков из ClickUp.
   */
+
 module.exports = async (ctx) => {
 
-    // const all_tasks = await Task.getTodayTasksWithStatusTodoFromTeamId(list_ids)
-    const all_tasks_any_status = await Task.getTodayTasksWithAnyStatusFromTeamId(list_ids)
+    const all_tasks_any_status = await Task.getTodayTasksWithAnyStatus(list_ids)
 
     let resultMain = _(all_tasks_any_status.data.tasks)
         .reverse()

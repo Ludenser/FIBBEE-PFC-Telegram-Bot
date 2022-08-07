@@ -32,7 +32,7 @@ module.exports = (ctx) => {
                     await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'in progress')
 
                     await setAssigneeFeature(ctx.session.userName, ctx.session.all_lists[i].mainTask[0].id)
-                    const response = await Time.startEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask[0].id)
+                    const response = await Time.startEntry(ctx.session.all_lists[i].mainTask[0].id)
                     ctx.main_timer_id = response.data.data.id
 
                     await sendMessageCarPhoto(ctx)
@@ -52,7 +52,7 @@ module.exports = (ctx) => {
 
                     await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'done')
                     await resolveAllCheckListsAndItems(ctx.session.all_lists[i].mainTask[0].checklists, 'true')
-                    await Time.stopEntry(ctx.session.team_id, ctx.session.all_lists[i].mainTask[0].id)
+                    await Time.stopEntry(ctx.session.all_lists[i].mainTask[0].id)
 
                     await ctx.scene.leave();
                 } catch (e) {

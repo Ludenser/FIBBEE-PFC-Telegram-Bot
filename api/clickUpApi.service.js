@@ -13,8 +13,11 @@ const { team_id } = settings;
     * Взаимодействия с тасками
     */
 class Task {
-
-    static async getTodayTasksWithAnyStatusFromTeamId(list_ids) {
+    /**
+        * Получение Object[ ] всех тасков в таск-листе со статусом 'to do' и 'in progress', в диапазоне времени от "3 часов до текущего времени" и "20 часов после текущего времени.
+        * @param {String[]} list_ids - ClickUp-Ids of current task-list
+        */
+    static async getTodayTasksWithAnyStatus(list_ids) {
 
         const response = await axios.get(`https://api.clickup.com/api/v2/team/${team_id}/task`,
             {
@@ -35,8 +38,11 @@ class Task {
             })
         return response
     }
-
-    static async getTodayTasksWithStatusTodoFromTeamId(list_ids) {
+    /**
+        * Получение Object[ ] всех тасков в таск-листе только со статусом 'to do', в диапазоне времени от "3 часов до текущего времени" и "20 часов после текущего времени".
+        * @param {String[]} list_ids - ClickUp-Ids of current task-list
+        */
+    static async getTodayTasksWithStatusTodo(list_ids) {
 
         const response = await axios.get(`https://api.clickup.com/api/v2/team/${team_id}/task`,
             {
@@ -44,32 +50,7 @@ class Task {
                     statuses: ['to do'],
                     list_ids,
                     order_by: 'due_date',
-                    due_date_gt: dueTime(-5),
-                    due_date_lt: dueTime(20)
-                },
-                paramsSerializer: params => {
-                    return qs.stringify(params, { arrayFormat: 'brackets' })
-                },
-                headers: {
-                    'Authorization': token,
-                    'Content-Type': 'application/json'
-                }
-            })
-        return response
-    }
-
-    /**
-        * Получение списка всех тасков в таск-листе
-        * @param number
-        */
-    static async getTodayTasksWithStatusTodo(list_id) {
-
-        const response = await axios.get(`https://api.clickup.com/api/v2/list/${list_id}/task`,
-            {
-                params: {
-                    statuses: ['to do'],
-                    order_by: 'due_date',
-                    due_date_gt: dueTime(-5),
+                    due_date_gt: dueTime(-3),
                     due_date_lt: dueTime(20)
                 },
                 paramsSerializer: params => {
@@ -85,8 +66,8 @@ class Task {
 
     /**
         * Установка статуса таску
-        * @param number
-        * @param string
+        * @param {String} task_id ClickUp-Id of current task
+        * @param {String} updatedStatus Status to be set for the current task. ('to do', 'in progress', 'done', etc.)
         */
     static async setStatus(task_id, updatedStatus) {
         const response = await axios.put(`https://api.clickup.com/api/v2/task/${task_id}/`,
@@ -104,6 +85,8 @@ class Task {
 
     /**
         * Назначение юзера к таску
+        * @param {String} task_id ClickUp-Id of current task
+        * @param {Number} user_id ClickUp-Id of current user
         */
     static async setAssignee(task_id, user_id) {
         const response = await axios.put(`https://api.clickup.com/api/v2/task/${task_id}/`,
@@ -125,8 +108,8 @@ class Task {
 
     /**
         * Создание комментария в таске
-        * @param ctx
-        * @param number
+        * @param {String} message_text text from telegram.update.message
+        * @param {String} task_id ClickUp-Id of current task
         */
     static async createComment(message_text, task_id) {
 
@@ -150,10 +133,10 @@ class Task {
 
     }
     /**
-        * Создание комментария в таске c тегом
-        * @param message_text - ctx
-        * @param task_id - String
-        * @param user_id - Number
+        * Создание комментария в таске c тегом юзера.
+        * @param {String} message_text text from .update.message
+        * @param {String} task_id - ClickUp-Id of current task
+        * @param {Number} user_id - ClickUp-Id of user to be tagged
         */
     static async createCommentWithAssignee(message_text, task_id, user_id) {
 
@@ -180,8 +163,9 @@ class Task {
 
     /**
         * Создание аттачмента в таске
-        * @param ctx
-        * @param number
+        * @param {String} message_id telegram message id from .update.message.message_id
+        * @param {String} task_id ClickUp-Id of current task
+        * @param {ReadableStream} stream - Readable stream from telegram getFileLink() or same type from other source.
         */
     static async createAttachment(message_id, task_id, stream) {
         const form = new FormData();
@@ -205,7 +189,7 @@ class Task {
 
     /**
        * Получение чеклиста
-       * @param checklist_id - String
+       * @param {String} checklist_id - task's checklist ClickUp-uuid
        */
     static async getCheckList(checklist_id) {
 
@@ -226,9 +210,9 @@ class Task {
     };
 
     /**
-       * Получение чеклиста
-       * @param checklist_item_id - String
-       * @param resolved - Boolean ( Default is 'true')
+       * Отметка элемента чек-листа решенным(по-дефолту)/нерешенным
+       * @param {String} checklist_item_id - String
+       * @param {Boolean} resolved - ( Default is 'true')
        */
     static async resolveCheckListItem(checklist_item_id, resolved = true) {
 
@@ -259,7 +243,7 @@ class Time {
 
     /**
         * Получение информации о таймере в задаче
-        * @param task_id - Number
+        * @param {String} task_id ClickUp-Id of current task
         */
     static async getTrackedTime(task_id) {
         const response = await axios.get(`https://api.clickup.com/api/v2/task/${task_id}/time/`,
@@ -274,7 +258,7 @@ class Time {
 
     /**
         * Создание уже готового отслеженного времени
-        * @param task_id - Number
+        * @param {String} task_id ClickUp-Id of current task
         */
     static async postTrackTime(task_id) {
         const response = await axios.post(`https://api.clickup.com/api/v2/task/${task_id}/time/`,
@@ -292,10 +276,9 @@ class Time {
 
     /**
         * Создание уже готового отслеженного времени
-        * @param team_id - Number
-        * @param task_id - Number
+        * @param {String} task_id ClickUp-Id of current task
         */
-    static async createEntry(team_id, task_id) {  //(сколько затрачено на задачу), время нужно получать из логики приложения. в теле запроса указывается либо total, либо start и end в UNIX
+    static async createEntry(task_id) {  //(сколько затрачено на задачу), время нужно получать из логики приложения. в теле запроса указывается либо total, либо start и end в UNIX
         const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/`,
             {
                 "description": "received from Bot",
@@ -314,10 +297,9 @@ class Time {
 
     /**
         * Запуск встроенного таймера в ClickUp
-        * @param team_id - Number
-        * @param task_id - Number
+        * @param {String} task_id - ClickUp-Id from current task
         */
-    static async startEntry(team_id, task_id) {
+    static async startEntry(task_id) {
         const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/start/`,
             {
                 "description": "received from Bot",
@@ -334,8 +316,8 @@ class Time {
 
     /**
         * Обновление встроенного таймера в ClickUp
-        * @param number
-        * @param number
+        * @param {String} task_id - ClickUp-Id of current task
+        * @param {EpochTimeStamp} unix_time - UNIX-time, required by ClickUp API 
         */
     static async updateEntry(task_id, unix_time) {
 
@@ -356,10 +338,9 @@ class Time {
 
     /**
         * Остановка встроенного таймера в ClickUp
-        * @param number
-        * @param number
+        * @param {String} task_id - ClickUp-Id of current task
         */
-    static async stopEntry(team_id, task_id) {
+    static async stopEntry(task_id) {
 
         const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/stop`,
             {
@@ -382,7 +363,7 @@ class Time {
 class Users {
 
     /**
-        * Получение объекта юзера, аутентифицированного под текущим токеном
+        * Получение объекта юзера, аутентифицированного под текущим ClickUp токеном
         */
     static async getUser_ByToken() {
         const response = await axios.get('https://api.clickup.com/api/v2/user',
@@ -395,7 +376,8 @@ class Users {
     }
 
     /**
-        * Получение объекта всех юзеров, имеющих доступ к таск-листу "по умолчанию"
+        * Получение объекта всех юзеров, имеющих доступ к указанному таск-листу "по умолчанию"
+        * @param {String} list_id - ClickUp-Id of current task-list
         */
     static async getUsers_id(list_id) {
         const response = await axios.get(`https://api.clickup.com/api/v2/list/${list_id}/member`,
@@ -408,10 +390,7 @@ class Users {
         return response
     }
 
-
 }
-
-
 
 module.exports = {
     Task,
