@@ -1,7 +1,6 @@
 const { Composer, Markup } = require('telegraf');
 const _ = require('lodash');
 const { Task, Time } = require('../api/clickUpApi.service');
-const postAttachmentsFeature = require('../features/postAttachments.feature');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
 const deleteMessagePrev = require('../utils/deleteMessagePrev');
@@ -9,17 +8,20 @@ const postCommentFeature = require('../features/postComment.feature');
 const setAssigneeFeature = require('../features/setAssignee.feature');
 const sendMessageRouteEnter = require('../keyboards/scenes/sendMessageRouteEnter');
 const sendMessageRouteEnterEx = require('../keyboards/scenes/sendMessageRouteEnterEx');
-const { sendError } = require('../utils/sendLoadings');
+const { sendError, sendProses } = require('../utils/sendLoadings');
 const { resolveAllCheckListsAndItems } = require('../features/resolveCheckList.feature');
+const postAttachmentsWithMessage = require('../features/postAttachments.feature');
 /**
   * Универсальная сцена обслуживания комплекса.
   * Динамически создается на основании массива тасков из API
+  * @param {[Object]} arr - массив с обьектами тасков без главного таска водителя-оператора
+  * @param {[Object]} list - массив с обьектами тасков текущего таск-листа
   */
 
 module.exports = (arr, list) => {
 
     const complexSceneArray = _(arr)
-        .map((task) => {
+        .map((task, i) => {
 
             const complex_scene = new Composer()
 
@@ -29,8 +31,8 @@ module.exports = (arr, list) => {
 
                     await Task.setStatus(task.id, 'in progress')
                     await Time.startEntry(task.id)
-
                     await setAssigneeFeature(ctx.session.userName, task.id)
+
                     await sendMessageRouteEnter(ctx, task.name, task.id)
 
 
@@ -64,17 +66,14 @@ module.exports = (arr, list) => {
             })
 
             complex_scene.action('upl_photo', async (ctx) => {
-
                 try {
                     await ctx.deleteMessage()
-                    await ctx.reply('Прикрепи и отправь фотки',
-                        Markup.keyboard([
-                            Markup.button.callback('Подтвердить загрузку фото✅')
-                        ]).resize(true).oneTime(true)
-                    )
+                    await ctx.reply('Отправь фотки и дождись сообщение об успешной загрузке.')
+
                     complex_scene.on('photo', async (ctx) => {
-                        await postAttachmentsFeature(ctx, task.id)
+                        await postAttachmentsWithMessage(ctx, task.id, 'complex')
                     })
+
                 } catch (e) {
                     await sendError(ctx, e)
                     await sendMessageRouteEnter(ctx, task.name, task.id)
@@ -112,11 +111,12 @@ module.exports = (arr, list) => {
                     await Task.setStatus(task.id, 'done')
                     await Time.stopEntry(task.id)
                     await resolveAllCheckListsAndItems(task.checklists, 'true')
+                    await Time.startEntry(list.mainTask[0].id)
 
                     await ctx.deleteMessage()
-                    await ctx.reply(`Заканчиваем ${task.name}`, Markup
+                    await ctx.reply(`Заканчиваем ${task.name}, следующий комплекс - ${arr[i + 1].name}`, Markup
                         .inlineKeyboard([
-                            Markup.button.callback('Едем дальше', 'enter'),
+                            Markup.button.callback(`Приехал. Приступаем.`, 'enter'),
                         ]))
                     await ctx.wizard.next()
                 } catch (e) {

@@ -41,4 +41,5 @@ module.exports = async (ctx) => {
     ctx.session.all_lists = all_result
     ctx.session.team_id = team_id
     ctx.session.isAlreadyFilled = true
+    ctx.session.photoCounter = 0
 }

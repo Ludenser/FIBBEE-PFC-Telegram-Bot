@@ -2,6 +2,8 @@ module.exports = {
 
   /**
     * Обработка ошибки и отправка сообщения об ошибке с последующим удалением сообщения об ошибке.
+    * @param {Ctx} ctx - контекст telegraf
+    * @param {Error} e - текст сообщения об ошибке
     */
 
   sendError: async function sendError(ctx, e) {
@@ -16,6 +18,8 @@ module.exports = {
 
   /**
     * Отправка сообщения с его последующим удалением.
+    * @param {Ctx} ctx - контекст telegraf
+    * @param {String} str - текст сообщения
     */
 
   sendProses: async function sendProses(ctx, str) {
@@ -27,6 +31,7 @@ module.exports = {
       })
       .catch(e => console.log(e))
   },
+
   /**
     * Отправка сообщения о загрузке данных.
     */

@@ -49,10 +49,7 @@ module.exports = {
 
     const msg = `🔸  <b>Маршрут:</b>\n${reply}`
 
-    await ctx.replyWithHTML(msg,
-      Markup.inlineKeyboard([
-        Markup.button.callback('Назад!↩️', 'driverMenu')
-      ]))
+    await ctx.replyWithHTML(msg)
   },
 
   /**

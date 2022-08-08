@@ -6,6 +6,7 @@ const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck
 const deleteMessagePrev = require('../utils/deleteMessagePrev');
 const postAttachment = require('../features/postAttachments.feature');
 const { sendError } = require('../utils/sendLoadings');
+const postAttachmentsWithMessage = require('../features/postAttachments.feature');
 
 /**
   * Сцена инициализации назначенного роута.
@@ -21,7 +22,7 @@ module.exports = (ctx) => {
         .map((el, i) => {
 
             initStepScene.on('photo', async (ctx) => {
-                await postAttachment(ctx, ctx.session.all_lists[i].mainTask[0].id)
+                await postAttachmentsWithMessage(ctx, ctx.session.all_lists[i].mainTask[0].id, 'main')
             })
 
             initStepScene.hears('Подтвердить загрузку фото✅', async (ctx) => {

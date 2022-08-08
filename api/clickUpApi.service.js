@@ -183,7 +183,6 @@ class Task {
         })
 
             .then(() => console.log('Загружено в кликап!'))
-            .catch((e) => console.log(e))
 
     };
 
@@ -211,7 +210,7 @@ class Task {
 
     /**
        * Отметка элемента чек-листа решенным(по-дефолту)/нерешенным
-       * @param {String} checklist_item_id - String
+       * @param {String} checklist_item_id - ClickUp checklist item id
        * @param {Boolean} resolved - ( Default is 'true')
        */
     static async resolveCheckListItem(checklist_item_id, resolved = true) {
