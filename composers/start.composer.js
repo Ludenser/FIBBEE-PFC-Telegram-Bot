@@ -1,6 +1,6 @@
 const { Composer } = require('telegraf');
 const sendMessageStart = require('../keyboards/mainMenu/sendMessageStart');
-const sendMessageError = require('../utils/sendMessageError');
+const { sendError } = require('../utils/sendLoadings');
 const addTasksToCtx = require('../features/addTasksToCtx.feature');
 const convertTranslit = require('cyrillic-to-translit-js')
 const chalk = require('chalk');
@@ -21,7 +21,7 @@ composer.start(async (ctx) => {
   try {
     await sendMessageStart(ctx)
   } catch (e) {
-    await sendMessageError(ctx, e)
+    await sendError(ctx, e)
   }
 
   composer.use(async (ctx, next) => {
@@ -41,7 +41,7 @@ composer.command('/start', async (ctx) => {
     ctx.session = null
     await sendMessageStart(ctx)
   } catch (e) {
-    await sendMessageError(ctx, e)
+    await sendError(ctx, e)
   }
 })
 
@@ -49,7 +49,7 @@ composer.action('start', async (ctx) => {
   try {
     await sendMessageStart(ctx)
   } catch (e) {
-    await sendMessageError(ctx, e)
+    await sendError(ctx, e)
   }
 })
 

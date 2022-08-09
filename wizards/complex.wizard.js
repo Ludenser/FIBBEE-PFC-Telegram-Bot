@@ -3,7 +3,7 @@ _ = require('lodash');
 const complex_scene = require('../scenes/complex.scene');
 
 /**
-  * Сцена инициализации назначенного роута.
+  * Сцена инициализации роутов.
   */
 const complexScene = (ctx) => {
 

@@ -1,7 +1,7 @@
 const { Markup } = require('telegraf')
 
 module.exports = async (ctx) => {
-    const msg = 'Чтобы завершть роут и выйти в главное меню нажми кнопку ниже'
+    const msg = 'Чтобы заверишть роут и выйти в главное меню нажми кнопку ниже'
     await ctx.reply(msg,
         Markup.inlineKeyboard(
             [
