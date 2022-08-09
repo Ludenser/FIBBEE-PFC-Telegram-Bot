@@ -2,39 +2,39 @@ const { Composer } = require('telegraf');
 const sendMessageInfo = require('../keyboards/mainMenu/sendMessageInfo');
 const sendMessageDocs = require('../keyboards/mainMenu/sendMessageDocs');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
-const sendMessageError = require('../utils/sendMessageError');
+const { sendError } = require('../utils/sendLoadings');
 
 /**
   * Обработчик главного меню
   */
 const composer = new Composer();
 
-composer.action('info', (ctx) => {
+composer.action('info', async (ctx) => {
   try {
-    ctx.deleteMessage()
-    sendMessageInfo(ctx)
+    await ctx.deleteMessage()
+    await sendMessageInfo(ctx)
   } catch (e) {
-    sendMessageError(ctx, e)
+    await sendError(ctx, e)
   }
 
 })
 
-composer.action('docs', (ctx) => {
+composer.action('docs', async (ctx) => {
   try {
-    ctx.deleteMessage()
-    sendMessageDocs(ctx)
+    await ctx.deleteMessage()
+    await sendMessageDocs(ctx)
   } catch (e) {
-    sendMessageError(ctx, e)
+    await sendError(ctx, e)
   }
 
 })
 
-composer.action('driverMenu', (ctx) => {
+composer.action('driverMenu', async (ctx) => {
   try {
-    ctx.deleteMessage()
-    sendMessageDriverMenu(ctx)
+    await ctx.deleteMessage()
+    await sendMessageDriverMenu(ctx)
   } catch (e) {
-    sendMessageError(ctx, e)
+    await sendError(ctx, e)
   }
 
 })

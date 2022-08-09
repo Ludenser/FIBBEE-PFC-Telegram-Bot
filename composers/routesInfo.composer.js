@@ -1,5 +1,5 @@
 const { Composer } = require('telegraf');
-const { getMessageFromAllLists } = require('../features/getRoute.feature');
+const { sendFormatMsgFromAllClickUpLists } = require('../features/getRoute.feature');
 const { sendError } = require('../utils/sendLoadings');
 
 /**
@@ -10,7 +10,7 @@ const composer = new Composer();
 composer.action('routesInfo', async (ctx) => {
   try {
     await ctx.deleteMessage()
-    await getMessageFromAllLists(ctx)
+    await sendFormatMsgFromAllClickUpLists(ctx)
   } catch (e) {
     console.log(e)
     await sendError(ctx, e)
