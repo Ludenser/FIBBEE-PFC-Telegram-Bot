@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { Task } = require('../api/clickUpApi.service');
+const Clickup = require('../api');
 
 /**
    * Функция для отметки элемента чек-листа и вложенных в него элементов решенными.
@@ -7,8 +7,9 @@ const { Task } = require('../api/clickUpApi.service');
    * @param {Boolean} resolved - ( Default is 'true')
    */
 
-const resolveCurrentChecklistAndItems = async (checklist_id, resolved) => {
-  const response = await Task.getCheckList(checklist_id)
+const resolveCurrentChecklistAndItems = async (checklist_id, resolved, CU_Token) => {
+
+  const response = await new Clickup(CU_Token).Tasks.getCheckList(checklist_id)
   const checklistsArr = response.data.checklist
 
   _(checklistsArr.items)
@@ -16,10 +17,10 @@ const resolveCurrentChecklistAndItems = async (checklist_id, resolved) => {
       if (element.children.length) {
         _(element.children)
           .forEach(async (element) => {
-            await Task.resolveCheckListItem(element.id, resolved)
+            await api.Tasks.resolveCheckListItem(element.id, resolved)
           })
       }
-      await Task.resolveCheckListItem(element.id, resolved)
+      await api.Tasks.resolveCheckListItem(element.id, resolved)
     });
 }
 
@@ -29,10 +30,10 @@ const resolveCurrentChecklistAndItems = async (checklist_id, resolved) => {
    * @param {Boolean} resolved - ( Default is 'true')
    */
 
-const resolveAllCheckListsAndItems = async (checklists, resolved) => {
+const resolveAllCheckListsAndItems = async (checklists, resolved, CU_Token) => {
   _(checklists)
     .forEach(async element => {
-      await resolveCurrentChecklistAndItems(element.id, resolved)
+      await resolveCurrentChecklistAndItems(element.id, resolved, CU_Token)
     })
 }
 

@@ -6,12 +6,39 @@ const FormData = require('form-data');
 const settings = JSON.parse(fs.readFileSync('./lib/setting.json'));
 const qs = require('qs');
 const dueTime = require('../utils/timePeriodDate')
-const { team_id } = settings;
-
+const { team_id, client_id, client_secret } = settings;
 
 /**
     * Взаимодействия с тасками
     */
+class Auth {
+    /**
+        * @param {String} client_id
+        * @param {String} client_secret
+        * @param {String} code
+        */
+    static async getAuthorizedUser(code) {
+
+        const response = await axios.post(`https://api.clickup.com/api/v2/oauth/token`,
+            {
+                params: {
+                    client_id,
+                    client_secret,
+                    code
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        return response
+    }
+}
+/**
+
+
+/**
+* Взаимодействия с тасками
+*/
 class Task {
     /**
         * Получение Object[ ] всех тасков в таск-листе со статусом 'to do' и 'in progress', в диапазоне времени от "3 часов до текущего времени" и "20 часов после текущего времени.

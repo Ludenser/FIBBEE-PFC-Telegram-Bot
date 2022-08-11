@@ -11,6 +11,7 @@ const sendMessageRouteEnterEx = require('../keyboards/scenes/sendMessageRouteEnt
 const { sendError, sendProses } = require('../utils/sendLoadings');
 const { resolveAllCheckListsAndItems } = require('../features/resolveCheckList.feature');
 const postAttachmentsWithMessage = require('../features/postAttachments.feature');
+const Clickup = require('../api/index');
 /**
   * Универсальная сцена обслуживания комплекса.
   * Динамически создается на основании массива тасков из API
@@ -21,6 +22,7 @@ const postAttachmentsWithMessage = require('../features/postAttachments.feature'
 module.exports = (arr, list) => {
 
     const complexSceneArray = _(arr)
+
         .map((task, i) => {
 
             const complex_scene = new Composer()
@@ -29,9 +31,9 @@ module.exports = (arr, list) => {
                 try {
                     await ctx.deleteMessage()
 
-                    await Task.setStatus(task.id, 'in progress')
-                    await Time.startEntry(task.id)
-                    await setAssigneeFeature(ctx.session.userName, task.id)
+                    await new Clickup(ctx.session.CU_Token).Tasks.setStatus(task.id, 'in progress')
+                    await new Clickup(ctx.session.CU_Token).TimeTracking.startEntry(task.id)
+                    await setAssigneeFeature(ctx.session.userName, task.id, ctx.session.CU_Token)
 
                     await sendMessageRouteEnter(ctx, task.name, task.id)
 
@@ -71,7 +73,7 @@ module.exports = (arr, list) => {
                     await ctx.reply('Отправь фотки и дождись сообщение об успешной загрузке.')
 
                     complex_scene.on('photo', async (ctx) => {
-                        await postAttachmentsWithMessage(ctx, task.id, 'complex')
+                        await postAttachmentsWithMessage(ctx, task.id, 'complex', ctx.session.CU_Token)
                     })
 
                 } catch (e) {
@@ -108,10 +110,10 @@ module.exports = (arr, list) => {
             complex_scene.action('next_step', async (ctx) => {
                 try {
 
-                    await Task.setStatus(task.id, 'done')
-                    await Time.stopEntry(task.id)
-                    await resolveAllCheckListsAndItems(task.checklists, 'true')
-                    await Time.startEntry(list.mainTask[0].id)
+                    await new Clickup(ctx.session.CU_Token).Tasks.setStatus(task.id, 'done')
+                    await new Clickup(ctx.session.CU_Token).TimeTracking.stopEntry(task.id)
+                    await resolveAllCheckListsAndItems(task.checklists, 'true', ctx.session.CU_Token)
+                    await new Clickup(ctx.session.CU_Token).TimeTracking.startEntry(list.mainTask[0].id)
 
                     await ctx.deleteMessage()
                     await ctx.reply(`Заканчиваем ${task.name}, следующий комплекс - ${arr[i + 1].name}`, Markup
@@ -128,10 +130,10 @@ module.exports = (arr, list) => {
             complex_scene.action('exit', async (ctx) => {
                 try {
 
-                    await Task.setStatus(task.id, 'done')
-                    await Time.stopEntry(task.id)
-                    await Time.startEntry(list.mainTask[0].id)
-                    await resolveAllCheckListsAndItems(task.checklists, 'true')
+                    await new Clickup(ctx.session.CU_Token).Tasks.setStatus(task.id, 'done')
+                    await new Clickup(ctx.session.CU_Token).TimeTracking.stopEntry(task.id)
+                    await new Clickup(ctx.session.CU_Token).TimeTracking.startEntry(list.mainTask[0].id)
+                    await resolveAllCheckListsAndItems(task.checklists, 'true', ctx.session.CU_Token)
 
                     await ctx.deleteMessage()
                     await sendMessageRouteEnterEx(ctx)
@@ -147,11 +149,11 @@ module.exports = (arr, list) => {
             complex_scene.action('leaveScene', async (ctx) => {
                 try {
 
-                    await Time.stopEntry(task.id)
-                    await Task.setStatus(task.id, 'to do')
-                    await Task.setStatus(list.mainTask[0].id, 'to do')
-                    await resolveAllCheckListsAndItems(task.checklists, 'false')
-                    await resolveAllCheckListsAndItems(list.mainTask[0].checklists, 'false')
+                    await new Clickup(ctx.session.CU_Token).TimeTracking.stopEntry(task.id)
+                    await new Clickup(ctx.session.CU_Token).Tasks.setStatus(task.id, 'to do')
+                    await new Clickup(ctx.session.CU_Token).Tasks.setStatus(list.mainTask[0].id, 'to do')
+                    await resolveAllCheckListsAndItems(task.checklists, 'false', ctx.session.CU_Token)
+                    await resolveAllCheckListsAndItems(list.mainTask[0].checklists, 'false', ctx.session.CU_Token)
 
                     await ctx.deleteMessage()
                     ctx.session.currentRouteNumber = null

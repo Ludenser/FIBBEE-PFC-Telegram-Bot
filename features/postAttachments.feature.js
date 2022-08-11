@@ -2,6 +2,7 @@ const { Task } = require('../api/clickUpApi.service');
 const axios = require('axios');
 const { sendProses, sendError } = require('../utils/sendLoadings');
 const sendMessagePhotoCheckRouteMenu = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
+const Clickup = require('../api');
 
 
 /**
@@ -10,7 +11,7 @@ const sendMessagePhotoCheckRouteMenu = require('../keyboards/scenes/sendMessageP
   * @param {String} task_id - ClickUp-Id of current task
   */
 
-const postAttachments = async (ctx, task_id) => {
+const postAttachments = async (ctx, task_id, CU_Token) => {
   const files = ctx.update.message.photo
   const fileId = files[2].file_id
   let url = await ctx.telegram.getFileLink(fileId)
@@ -18,7 +19,7 @@ const postAttachments = async (ctx, task_id) => {
 
   const response = await axios({ url, responseType: 'stream' })
 
-  await Task.createAttachment(ctx.update.message.message_id, task_id, response.data)
+  await new Clickup(CU_Token).Tasks.createAttachment(ctx.update.message.message_id, task_id, response.data)
 }
 
 /**
@@ -28,9 +29,9 @@ const postAttachments = async (ctx, task_id) => {
   * @param {String} scene - 'main' для сцены с контролем авто, 'complex' для сцены комплекса
   */
 
-const postAttachmentsWithMessage = async (ctx, task_id, scene) => {
+const postAttachmentsWithMessage = async (ctx, task_id, scene, CU_Token) => {
 
-  await postAttachments(ctx, task_id)
+  await postAttachments(ctx, task_id, CU_Token)
   ctx.session.photoCounter++
   if (ctx.session.photoCounter === ctx.update.message.photo.length) {
     await sendProses(ctx, `Все ${ctx.session.photoCounter} фото успешно загружены.`)

@@ -7,6 +7,8 @@ const deleteMessagePrev = require('../utils/deleteMessagePrev');
 const postAttachment = require('../features/postAttachments.feature');
 const { sendError } = require('../utils/sendLoadings');
 const postAttachmentsWithMessage = require('../features/postAttachments.feature');
+const Clickup = require('../api');
+const TimeTracking = require('../api/components/TimeTracking.api');
 
 /**
   * Сцена инициализации назначенного роута.
@@ -21,8 +23,10 @@ module.exports = (ctx) => {
     const init = _(ctx.session.all_lists)
         .map((el, i) => {
 
+            const client = new Clickup(ctx.session.CU_Token)
+
             initStepScene.on('photo', async (ctx) => {
-                await postAttachmentsWithMessage(ctx, ctx.session.all_lists[i].mainTask[0].id, 'main')
+                await postAttachmentsWithMessage(ctx, ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id, 'main', ctx.session.CU_Token)
             })
 
             initStepScene.hears('Подтвердить загрузку фото✅', async (ctx) => {
@@ -46,8 +50,8 @@ module.exports = (ctx) => {
             initStepScene.action('leaveScene', async (ctx) => {
                 try {
 
-                    await Time.stopEntry(ctx.session.all_lists[i].mainTask[0].id)
-                    await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'to do')
+                    await client.TimeTracking.stopEntry(ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id)
+                    await client.Tasks.setStatus(ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id, 'to do')
 
                     ctx.session.currentRouteNumber = null
                     await ctx.deleteMessage()

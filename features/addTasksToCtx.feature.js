@@ -6,7 +6,8 @@ const setting = JSON.parse(fs.readFileSync('./lib/setting.json'));
 const { team_id } = setting;
 const chalk = require('chalk')
 const simulation = require('../lib/simulation');
-const list_ids = require('../lib/list_idsFromClickUp')
+const list_ids = require('../lib/list_idsFromClickUp');
+const supplyTeam_ids = require('../lib/supplyTeam_ids');
 
 /**
   * Добавление в контекст объекта тасков из ClickUp.
@@ -38,6 +39,10 @@ module.exports = async (ctx) => {
         return Object.assign({}, result[index], resultMain[index], resultWithoutMain[index])
     })
 
+    const userIdMatch = _(supplyTeam_ids)
+        .find(['username', ctx.session.userName])
+
+    ctx.session.CU_Token = userIdMatch.CU_Token
     ctx.session.all_lists = all_result
     ctx.session.team_id = team_id
     ctx.session.isAlreadyFilled = true

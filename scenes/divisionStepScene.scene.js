@@ -7,6 +7,7 @@ const sendMessageCarPhoto = require('../keyboards/scenes/sendMessageCarPhoto.rou
 const setAssigneeFeature = require('../features/setAssignee.feature');
 const { sendError } = require('../utils/sendLoadings');
 const { resolveAllCheckListsAndItems } = require('../features/resolveCheckList.feature');
+const Clickup = require('../api');
 
 
 /**
@@ -28,15 +29,15 @@ module.exports = (ctx) => {
 
                     await ctx.deleteMessage()
 
-                    await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'in progress')
-                    await setAssigneeFeature(ctx.session.userName, ctx.session.all_lists[i].mainTask[0].id)
-                    await Time.startEntry(ctx.session.all_lists[i].mainTask[0].id)
+                    await new Clickup(ctx.session.CU_Token).Tasks.setStatus(el.mainTask[0].id, 'in progress')
+                    await setAssigneeFeature(ctx.session.userName, el.mainTask[0].id, ctx.session.CU_Token)
+                    await new Clickup(ctx.session.CU_Token).TimeTracking.startEntry(el.mainTask[0].id)
 
                     // const response = await Time.startEntry(ctx.session.all_lists[i].mainTask[0].id)
                     // ctx.main_timer_id = response.data.data.id
 
                     await sendMessageCarPhoto(ctx)
-                    return await ctx.wizard.selectStep(i + ctx.session.all_lists.length);
+                    return await ctx.wizard.selectStep(ctx.session.currentRouteNumber + ctx.session.all_lists.length);
 
                 } catch (e) {
                     console.log(e)
@@ -50,9 +51,9 @@ module.exports = (ctx) => {
                     await ctx.deleteMessage()
                     await sendMessageDriverMenu(ctx)
 
-                    await Task.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'done')
-                    await resolveAllCheckListsAndItems(ctx.session.all_lists[i].mainTask[0].checklists, 'true')
-                    await Time.stopEntry(ctx.session.all_lists[i].mainTask[0].id)
+                    await new Clickup(ctx.session.CU_Token).Tasks.setStatus(el.mainTask[0].id, 'done')
+                    await resolveAllCheckListsAndItems(el.mainTask[0].checklists, 'true', ctx.session.CU_Token)
+                    await new Clickup(ctx.session.CU_Token).TimeTracking.stopEntry(el.mainTask[0].id)
 
                     await ctx.scene.leave();
                 } catch (e) {

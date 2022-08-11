@@ -12,7 +12,7 @@ const complexScene = (ctx) => {
       // ctx.session.all_lists[i].tasksWithoutMain.forEach((el, i) => {
       //   console.log(el.name)
       // })
-      return new Scenes.WizardScene(`ROUTE_${i}_WIZARD_ID`, ...complex_scene(ctx.session.all_lists[i].tasksWithoutMain, list))
+      return new Scenes.WizardScene(`ROUTE_${i}_WIZARD_ID`, ...complex_scene(ctx.session.all_lists[i].tasksWithoutMain, list, ctx.session))
     })
 
   return wizardScene
