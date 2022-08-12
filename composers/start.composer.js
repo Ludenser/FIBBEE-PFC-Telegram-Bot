@@ -4,6 +4,8 @@ const { sendError } = require('../utils/sendLoadings');
 const addTasksToCtx = require('../features/addTasksToCtx.feature');
 const convertTranslit = require('cyrillic-to-translit-js')
 const chalk = require('chalk');
+const supplyTeam_ids = require('../lib/supplyTeam_ids');
+const _ = require('lodash');
 
 /**
   * Обработчик стартовых команд.
@@ -18,6 +20,14 @@ composer.start(async (ctx) => {
   ctx.session = null
   const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name}`
   ctx.session.userName = cyrillicToTranslit.transform(userName)
+  ctx.session.isAuthUser = false
+  const userIdMatch = _(supplyTeam_ids)
+    .find(['username', ctx.session.userName])
+  ctx.session.user = userIdMatch
+  if (ctx.session.user) {
+    ctx.session.isAuthUser = true
+  }
+
   try {
     await sendMessageStart(ctx)
   } catch (e) {
@@ -26,7 +36,8 @@ composer.start(async (ctx) => {
 
   composer.use(async (ctx, next) => {
 
-    if (!ctx.session.isAlreadyFilled) {
+    if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
+
       console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
       await addTasksToCtx(ctx)
       console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
@@ -46,6 +57,7 @@ composer.command('/start', async (ctx) => {
 })
 
 composer.action('start', async (ctx) => {
+  ctx.session = null
   try {
     await sendMessageStart(ctx)
   } catch (e) {

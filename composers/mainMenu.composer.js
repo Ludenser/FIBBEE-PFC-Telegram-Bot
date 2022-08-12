@@ -2,7 +2,8 @@ const { Composer } = require('telegraf');
 const sendMessageInfo = require('../keyboards/mainMenu/sendMessageInfo');
 const sendMessageDocs = require('../keyboards/mainMenu/sendMessageDocs');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
-const { sendError } = require('../utils/sendLoadings');
+const { sendError, sendProses } = require('../utils/sendLoadings');
+const sendMessageStart = require('../keyboards/mainMenu/sendMessageStart');
 
 /**
   * Обработчик главного меню
@@ -32,7 +33,14 @@ composer.action('docs', async (ctx) => {
 composer.action('driverMenu', async (ctx) => {
   try {
     await ctx.deleteMessage()
-    await sendMessageDriverMenu(ctx)
+    if (ctx.session.isAuthUser === false) {
+      await sendProses(ctx, 'Уважаемый, вы не уполномочены, покиньте чатик.')
+      await sendMessageStart(ctx)
+    } else {
+      await sendMessageDriverMenu(ctx)
+    }
+
+
   } catch (e) {
     await sendError(ctx, e)
   }
