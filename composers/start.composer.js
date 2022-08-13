@@ -43,7 +43,7 @@ composer.start(async (ctx) => {
       await addTasksToCtx(ctx)
       console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
       composer.use(totalSceneInitComposer(ctx))
-      composer.use(... (ctx))
+      composer.use(...selectRouteComposer(ctx))
     }
     await next()
   })
