@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const Clickup = require('../api');
+const { sendError } = require('../utils/sendLoadings');
 
 /**
    * Функция для отметки элемента чек-листа и вложенных в него элементов решенными.
@@ -9,7 +10,9 @@ const Clickup = require('../api');
 
 const resolveCurrentChecklistAndItems = async (checklist_id, resolved, CU_Token) => {
 
-  const response = await new Clickup(CU_Token).Tasks.getCheckList(checklist_id)
+  const client = new Clickup(CU_Token)
+
+  const response = await client.Tasks.getCheckList(checklist_id)
   const checklistsArr = response.data.checklist
 
   _(checklistsArr.items)
@@ -17,10 +20,10 @@ const resolveCurrentChecklistAndItems = async (checklist_id, resolved, CU_Token)
       if (element.children.length) {
         _(element.children)
           .forEach(async (element) => {
-            await api.Tasks.resolveCheckListItem(element.id, resolved)
+            await client.Tasks.resolveCheckListItem(element.id, resolved)
           })
       }
-      await api.Tasks.resolveCheckListItem(element.id, resolved)
+      await client.Tasks.resolveCheckListItem(element.id, resolved)
     });
 }
 
@@ -33,7 +36,12 @@ const resolveCurrentChecklistAndItems = async (checklist_id, resolved, CU_Token)
 const resolveAllCheckListsAndItems = async (checklists, resolved, CU_Token) => {
   _(checklists)
     .forEach(async element => {
-      await resolveCurrentChecklistAndItems(element.id, resolved, CU_Token)
+      try {
+        await resolveCurrentChecklistAndItems(element.id, resolved, CU_Token)
+      } catch (error) {
+        console.log(error)
+      }
+
     })
 }
 

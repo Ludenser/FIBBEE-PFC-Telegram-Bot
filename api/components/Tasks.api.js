@@ -1,4 +1,4 @@
-require('dotenv').config();
+
 const axios = require('axios');
 const fs = require('fs');
 const FormData = require('form-data');
@@ -180,7 +180,8 @@ class Tasks {
       },
     })
 
-      .then(() => console.log('Загружено в кликап!'))
+      .then((r) => console.log(r.data, message_id, 'Загружено в кликап!'))
+      .catch((e) => console.log(e.config, message_id, 'Не загружено'))
 
   };
 

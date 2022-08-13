@@ -15,7 +15,6 @@ const { sendError } = require('../utils/sendLoadings');
   */
 
 module.exports = async (ctx) => {
-    console.log(ctx.session.user.CU_Token);
 
     try {
         const all_tasks_any_status = await new Clickup(ctx.session.user.CU_Token).Tasks.getTodayTasksWithAnyStatus(list_ids)

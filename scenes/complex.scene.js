@@ -10,7 +10,7 @@ const sendMessageRouteEnter = require('../keyboards/scenes/sendMessageRouteEnter
 const sendMessageRouteEnterEx = require('../keyboards/scenes/sendMessageRouteEnterEx');
 const { sendError, sendProses } = require('../utils/sendLoadings');
 const { resolveAllCheckListsAndItems, } = require('../features/resolveCheckList.feature');
-const postAttachmentsWithMessage = require('../features/postAttachments.feature');
+const { postAttachments, postAttachmentsWithMessage } = require('../features/postAttachments.feature');
 const Clickup = require('../api/index');
 const sendMessageComment = require('../keyboards/scenes/sendMessageComment.scene');
 const sendMessageNextStep = require('../keyboards/scenes/sendMessageNextStep.scene');
@@ -66,12 +66,15 @@ module.exports = (arr, list) => {
     complex_scene.action('upl_photo', async (ctx) => {
       try {
         await ctx.deleteMessage();
-        await ctx.reply(
-          'Отправь фотки и дождись сообщение об успешной загрузке.'
+        await ctx.reply(`Фото к ${task.name} `)
+        await ctx.reply('Отправь фотки и нажми кнопку под этим сообщением.',
+          Markup.inlineKeyboard([
+            Markup.button.callback(`Загрузил.`, 'reenter'),
+          ])
         );
 
         complex_scene.on('photo', async (ctx) => {
-          await postAttachmentsWithMessage(ctx, task.id, 'complex', ctx.session.user.CU_Token);
+          await postAttachmentsWithMessage(ctx, task.id);
         });
       } catch (e) {
         await sendError(ctx, e);

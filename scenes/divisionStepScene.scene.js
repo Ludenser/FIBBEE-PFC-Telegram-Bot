@@ -24,15 +24,15 @@ module.exports = (ctx) => {
       try {
         await ctx.deleteMessage();
 
-        await ClickAPI.Tasks.setStatus(el.mainTask[0].id, 'in progress');
-        await setAssigneeFeature(ctx.session.userName, el.mainTask[0].id, ctx.session.user.CU_Token);
-        await ClickAPI.TimeTracking.startEntry(el.mainTask[0].id);
+        // await ClickAPI.Tasks.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'in progress');
+        // await setAssigneeFeature(ctx.session.userName, ctx.session.all_lists[i].mainTask[0].id, ctx.session.user.CU_Token);
+        // await ClickAPI.TimeTracking.startEntry(ctx.session.all_lists[i].mainTask[0].id);
 
         // const response = await Time.startEntry(ctx.session.all_lists[i].mainTask[0].id)
         // ctx.main_timer_id = response.data.data.id
 
         await sendMessageCarPhoto(ctx);
-        return await ctx.wizard.selectStep(ctx.session.currentRouteNumber + ctx.session.all_lists.length);
+        return await ctx.wizard.selectStep(i + ctx.session.all_lists.length);
       } catch (e) {
         console.log(e);
         await sendError(ctx, e);
@@ -45,9 +45,9 @@ module.exports = (ctx) => {
         await ctx.deleteMessage();
         await sendMessageDriverMenu(ctx);
 
-        await ClickAPI.Tasks.setStatus(el.mainTask[0].id, 'done');
-        await resolveAllCheckListsAndItems(el.mainTask[0].checklists, 'true', ctx.session.user.CU_Token);
-        await ClickAPI.TimeTracking.stopEntry(el.mainTask[0].id);
+        await ClickAPI.Tasks.setStatus(ctx.session.all_lists[i].mainTask[0].id, 'done');
+        await resolveAllCheckListsAndItems(ctx.session.all_lists[i].mainTask[0].checklists, 'true', ctx.session.user.CU_Token);
+        await ClickAPI.TimeTracking.stopEntry(ctx.session.all_lists[i].mainTask[0].id);
 
         await ctx.scene.leave();
       } catch (e) {

@@ -23,7 +23,12 @@ composer.action('info', async (ctx) => {
 composer.action('docs', async (ctx) => {
   try {
     await ctx.deleteMessage()
-    await sendMessageDocs(ctx)
+    if (ctx.session.isAuthUser === false) {
+      await sendProses(ctx, 'Уважаемый, вы не уполномочены, покиньте чатик.')
+      await sendMessageStart(ctx)
+    } else {
+      await sendMessageDocs(ctx)
+    }
   } catch (e) {
     await sendError(ctx, e)
   }
@@ -39,8 +44,6 @@ composer.action('driverMenu', async (ctx) => {
     } else {
       await sendMessageDriverMenu(ctx)
     }
-
-
   } catch (e) {
     await sendError(ctx, e)
   }

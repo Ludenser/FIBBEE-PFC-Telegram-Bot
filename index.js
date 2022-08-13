@@ -40,14 +40,14 @@ bot.use(i18n.middleware())
 bot.use(startComposer)
 bot.use(mainMenuComposer)
 bot.use(routesInfoComposer)
-bot.use(async (ctx, next) => {
-    bot.use(totalSceneInitComposer(ctx))
-    await next()
-})
-bot.use(async (ctx, next) => {
-    bot.use(...selectRouteComposer(ctx))
-    await next()
-})
+// bot.use(async (ctx, next) => {
+//     bot.use(totalSceneInitComposer(ctx))
+//     await next()
+// })
+// bot.use(async (ctx, next) => {
+//     bot.use(...selectRouteComposer(ctx))
+//     await next()
+// })
 
 bot.launch()
 
