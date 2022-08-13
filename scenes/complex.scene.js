@@ -1,6 +1,5 @@
 const { Composer, Markup } = require('telegraf');
 const _ = require('lodash');
-const { Task, Time } = require('../api/clickUpApi.service');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
 const deleteMessagePrev = require('../utils/deleteMessagePrev');
