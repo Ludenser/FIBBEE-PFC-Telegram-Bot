@@ -9,7 +9,7 @@ const sendMessageRouteEnter = require('../keyboards/scenes/sendMessageRouteEnter
 const sendMessageRouteEnterEx = require('../keyboards/scenes/sendMessageRouteEnterEx');
 const { sendError, sendProses } = require('../utils/sendLoadings');
 const { resolveAllCheckListsAndItems, } = require('../features/resolveCheckList.feature');
-const { postAttachments, postAttachmentsWithMessage } = require('../features/postAttachments.feature');
+const { postAttachments, postAttachments } = require('../features/postAttachments.feature');
 const Clickup = require('../api/index');
 const sendMessageComment = require('../keyboards/scenes/sendMessageComment.scene');
 const sendMessageNextStep = require('../keyboards/scenes/sendMessageNextStep.scene');
@@ -51,17 +51,6 @@ module.exports = (arr, list) => {
       }
     });
 
-    complex_scene.hears('Подтвердить загрузку фото✅', async (ctx) => {
-      try {
-        await ctx.deleteMessage();
-        await deleteMessagePrev(ctx, 1);
-        await sendMessagePhotoCheck('complex', ctx);
-      } catch (e) {
-        await sendError(ctx, e);
-        await sendMessageRouteEnter(ctx, task.name, task.id);
-      }
-    });
-
     complex_scene.action('upl_photo', async (ctx) => {
       try {
         await ctx.deleteMessage();
@@ -73,7 +62,7 @@ module.exports = (arr, list) => {
         );
 
         complex_scene.on('photo', async (ctx) => {
-          await postAttachmentsWithMessage(ctx, task.id);
+          await postAttachments(ctx, task.id);
         });
       } catch (e) {
         await sendError(ctx, e);

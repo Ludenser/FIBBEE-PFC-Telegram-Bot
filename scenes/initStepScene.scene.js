@@ -2,7 +2,7 @@ const { Composer, Markup } = require('telegraf');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
 const { sendError } = require('../utils/sendLoadings');
-const { postAttachments, postAttachmentsWithMessage } = require('../features/postAttachments.feature');
+const { postAttachments, postAttachments } = require('../features/postAttachments.feature');
 const Clickup = require('../api');
 
 /**
@@ -18,7 +18,7 @@ module.exports = (ctx) => {
         .map(el => {
             initStepScene.on('photo', async (ctx) => {
                 try {
-                    await postAttachmentsWithMessage(ctx, ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id);
+                    await postAttachments(ctx, ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id);
                 } catch (error) {
                     await sendError(ctx, error)
                 }

@@ -180,7 +180,7 @@ class Tasks {
       },
     })
 
-      .then((r) => console.log(r.data, message_id, 'Загружено в кликап!'))
+      .then((r) => console.log(`В таск${task_id} загружено фото из ${message_id}`))
       .catch((e) => console.log(e.config, message_id, 'Не загружено'))
 
   };

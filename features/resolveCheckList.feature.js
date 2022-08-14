@@ -10,9 +10,9 @@ const { sendError } = require('../utils/sendLoadings');
 
 const resolveCurrentChecklistAndItems = async (checklist_id, resolved, CU_Token) => {
 
-  const client = new Clickup(CU_Token)
+  const ClickAPI = new Clickup(CU_Token)
 
-  const response = await client.Tasks.getCheckList(checklist_id)
+  const response = await ClickAPI.Tasks.getCheckList(checklist_id)
   const checklistsArr = response.data.checklist
 
   _(checklistsArr.items)
@@ -20,10 +20,10 @@ const resolveCurrentChecklistAndItems = async (checklist_id, resolved, CU_Token)
       if (element.children.length) {
         _(element.children)
           .forEach(async (element) => {
-            await client.Tasks.resolveCheckListItem(element.id, resolved)
+            await ClickAPI.Tasks.resolveCheckListItem(element.id, resolved)
           })
       }
-      await client.Tasks.resolveCheckListItem(element.id, resolved)
+      await ClickAPI.Tasks.resolveCheckListItem(element.id, resolved)
     });
 }
 

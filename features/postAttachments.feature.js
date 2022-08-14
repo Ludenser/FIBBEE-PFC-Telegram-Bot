@@ -18,9 +18,8 @@ const postAttachments = async (ctx, task_id) => {
   url = url.href
 
   const response = await axios({ url, responseType: 'stream' })
-  const client = new Clickup(ctx.session.user.CU_Token)
-  console.log(response.data)
-  await client.Tasks.createAttachment(ctx.update.message.message_id, task_id, response.data)
+  const ClickAPI = new Clickup(ctx.session.user.CU_Token)
+  await ClickAPI.Tasks.createAttachment(ctx.update.message.message_id, task_id, response.data)
 }
 
 /**
