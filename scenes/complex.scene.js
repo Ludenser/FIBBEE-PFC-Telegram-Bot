@@ -9,10 +9,11 @@ const sendMessageRouteEnter = require('../keyboards/scenes/sendMessageRouteEnter
 const sendMessageRouteEnterEx = require('../keyboards/scenes/sendMessageRouteEnterEx');
 const { sendError, sendProses } = require('../utils/sendLoadings');
 const { resolveAllCheckListsAndItems, } = require('../features/resolveCheckList.feature');
-const { postAttachments, postAttachments } = require('../features/postAttachments.feature');
+const { postAttachments, postAttachmentsWithMessage } = require('../features/postAttachments.feature');
 const Clickup = require('../api/index');
 const sendMessageComment = require('../keyboards/scenes/sendMessageComment.scene');
 const sendMessageNextStep = require('../keyboards/scenes/sendMessageNextStep.scene');
+const getAttentionFeature = require('../features/getAttention.feature');
 /**
  * Сцена обслуживания комплекса.
  * Динамически создается на основании массива тасков из API
@@ -29,12 +30,11 @@ module.exports = (arr, list) => {
 
       try {
         await ctx.deleteMessage();
-
         await ClickAPI.Tasks.setStatus(task.id, 'in progress');
         await ClickAPI.TimeTracking.startEntry(task.id);
         await setAssigneeFeature(ctx.session.userName, task.id, ctx.session.user.CU_Token);
-
         await sendMessageRouteEnter(ctx, task.name, task.id);
+        await getAttentionFeature(ctx, task.custom_fields);
       } catch (e) {
         await sendError(ctx, e);
         await sendMessageRouteEnter(ctx, task.name, task.id);
@@ -144,6 +144,11 @@ module.exports = (arr, list) => {
         await ctx.scene.leave();
       }
     });
+
+    complex_scene.on('text', async (ctx) => {
+      await ctx.deleteMessage()
+      await sendProses(ctx, 'Тут такое не приветствуется.')
+    })
 
     return complex_scene;
   });

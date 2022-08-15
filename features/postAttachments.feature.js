@@ -12,9 +12,11 @@ const Clickup = require('../api');
   */
 
 const postAttachments = async (ctx, task_id) => {
-  const files = ctx.update.message.photo
-  const fileId = files[2].file_id
-  let url = await ctx.telegram.getFileLink(fileId)
+  const photos_arr = ctx.update.message.photo
+  console.log(photos_arr);
+  let photoId = ''
+  photos_arr.length > 3 ? photoId = photos_arr[3].file_id : photoId = photos_arr[2].file_id
+  let url = await ctx.telegram.getFileLink(photoId)
   url = url.href
 
   const response = await axios({ url, responseType: 'stream' })
