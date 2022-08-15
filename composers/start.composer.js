@@ -4,7 +4,6 @@ const { sendError, sendProses } = require('../utils/sendLoadings');
 const addTasksToCtx = require('../features/addTasksToCtx.feature');
 const convertTranslit = require('cyrillic-to-translit-js')
 const chalk = require('chalk');
-const supplyTeam_ids = require('../lib/supplyTeam_ids');
 const _ = require('lodash');
 const authUserFeature = require('../features/authUser.feature');
 const totalSceneInitComposer = require('./totalSceneInit.composer');
@@ -12,7 +11,8 @@ const selectRouteComposer = require('./selectRoute.composer');
 
 /**
   * Обработчик стартовых команд.
-  * Добавление в контекст инфы о тасках из ClickUp
+  * Простая аутентификация пользователя. 
+  * Если пройдена - добавление в контекст инфы о тасках из ClickUp. И добавление композера регистрации сцен.
   */
 
 const composer = new Composer();

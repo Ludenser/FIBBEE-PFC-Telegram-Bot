@@ -2,7 +2,7 @@ const { Composer, Markup } = require('telegraf');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
 const { sendError } = require('../utils/sendLoadings');
-const { postAttachments, postAttachmentsWithMessage } = require('../features/postAttachments.feature');
+const { postAttachments } = require('../features/postAttachments.feature');
 const Clickup = require('../api');
 
 /**

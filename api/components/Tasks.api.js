@@ -6,7 +6,9 @@ const settings = JSON.parse(fs.readFileSync('./lib/setting.json'));
 const qs = require('qs');
 const dueTime = require('../../utils/timePeriodDate')
 const { team_id } = settings;
-
+/**
+    * Взаимодействия с тасками.
+    */
 class Tasks {
   constructor(token) {
     this.token = token

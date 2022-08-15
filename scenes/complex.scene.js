@@ -1,15 +1,13 @@
 const { Composer, Markup } = require('telegraf');
 const _ = require('lodash');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
-const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
-const deleteMessagePrev = require('../utils/deleteMessagePrev');
 const postCommentFeature = require('../features/postComment.feature');
 const setAssigneeFeature = require('../features/setAssignee.feature');
 const sendMessageRouteEnter = require('../keyboards/scenes/sendMessageRouteEnter');
 const sendMessageRouteEnterEx = require('../keyboards/scenes/sendMessageRouteEnterEx');
 const { sendError, sendProses } = require('../utils/sendLoadings');
 const { resolveAllCheckListsAndItems, } = require('../features/resolveCheckList.feature');
-const { postAttachments, postAttachmentsWithMessage } = require('../features/postAttachments.feature');
+const { postAttachments } = require('../features/postAttachments.feature');
 const Clickup = require('../api/index');
 const sendMessageComment = require('../keyboards/scenes/sendMessageComment.scene');
 const sendMessageNextStep = require('../keyboards/scenes/sendMessageNextStep.scene');

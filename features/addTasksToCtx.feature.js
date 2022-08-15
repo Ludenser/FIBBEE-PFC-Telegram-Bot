@@ -6,7 +6,6 @@ const { team_id } = setting;
 const chalk = require('chalk')
 const simulation = require('../lib/simulation');
 const list_ids = require('../lib/list_idsFromClickUp');
-const supplyTeam_ids = require('../lib/supplyTeam_ids');
 const Clickup = require('../api');
 const { sendError } = require('../utils/sendLoadings');
 

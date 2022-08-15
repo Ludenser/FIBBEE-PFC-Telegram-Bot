@@ -1,7 +1,6 @@
 
 const axios = require('axios');
 const { sendProses, sendError } = require('../utils/sendLoadings');
-const sendMessagePhotoCheckRouteMenu = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
 const Clickup = require('../api');
 
 
@@ -28,7 +27,6 @@ const postAttachments = async (ctx, task_id) => {
   * Функция для обработки отправляемых файлов в телеграме и отправке их в ClickUp, с последующей отправкой сообщения после успешной загрузки.
   * @param {Ctx} ctx - объект контекста telegraf
   * @param {String} task_id - ClickUp-Id of current task
-  * @param {String} scene - 'main' для сцены с контролем авто, 'complex' для сцены комплекса
   */
 
 const postAttachmentsWithMessage = async (ctx, task_id) => {

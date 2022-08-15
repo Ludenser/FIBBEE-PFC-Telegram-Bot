@@ -1,5 +1,7 @@
 const axios = require('axios');
-
+/**
+    * Взаимодействия с пользователями.
+    */
 class Users {
 
   constructor(token) {
