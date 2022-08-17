@@ -12,7 +12,6 @@ const Clickup = require('../api');
 
 const postAttachments = async (ctx, task_id) => {
   const photos_arr = ctx.update.message.photo
-  console.log(photos_arr);
   let photoId = ''
   photos_arr.length > 3 ? photoId = photos_arr[3].file_id : photoId = photos_arr[2].file_id
   let url = await ctx.telegram.getFileLink(photoId)
