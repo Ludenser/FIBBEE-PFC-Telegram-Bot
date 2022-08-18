@@ -7,9 +7,9 @@ module.exports = async (ctx) => {
     let buttonsArray = []
     if (ctx.session.all_lists.length) {
       ctx.session.all_lists.forEach((el, i) => {
-        buttonsArray.push(Markup.button.callback(i + 1, `route${i}`))
+        !el.isOpened ? buttonsArray.push(Markup.button.callback(`${i + 1} Маршрут`, `route${i}`)) : buttonsArray.push(Markup.button.callback(`${i + 1} Маршрут. Сейчас в работе.⚠️`, `route${i}`))
       })
-      buttonsArray.push(Markup.button.callback('ℹ Обзор всех тасков ℹ️', 'routesInfo'))
+      buttonsArray.push(Markup.button.callback('ℹ Обзор всех маршрутов ℹ️', 'routesInfo'))
       buttonsArray.push(Markup.button.callback('Назад!↩️', 'start'))
     } else {
       buttonsArray.push(Markup.button.callback('Назад!↩️', 'start'))

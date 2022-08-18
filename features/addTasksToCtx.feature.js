@@ -36,8 +36,14 @@ module.exports = async (ctx) => {
             .map((value, key) => ({ list_id: key, tasksWithoutMain: value, }))
             .value();
 
+        let openedLists = _(all_tasks_any_status.data.tasks)
+            .filter(item => item.status.status.includes('in progress'))
+            .groupBy(item => item.list.id)
+            .map((value, key) => ({ list_id: key, isOpened: true, }))
+            .value();
+
         let all_result = result.map((element, index) => {
-            return Object.assign({}, result[index], resultMain[index], resultWithoutMain[index])
+            return Object.assign({}, result[index], resultMain[index], resultWithoutMain[index], openedLists[index])
         })
 
         ctx.session.all_lists = all_result

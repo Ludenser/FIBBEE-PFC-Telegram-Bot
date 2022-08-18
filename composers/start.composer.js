@@ -86,7 +86,7 @@ composer.action('start', async (ctx) => {
 
 composer.command('update', async (ctx) => {
 
-  ctx.session.all_lists = null
+  ctx.session.all_lists = []
   ctx.session.isAlreadyFilled = false
   if (ctx.session.isAuthUser) {
 
