@@ -8,6 +8,7 @@ const _ = require('lodash');
 const authUserFeature = require('../features/authUser.feature');
 const totalSceneInitComposer = require('./totalSceneInit.composer');
 const selectRouteComposer = require('./selectRoute.composer');
+const emptyStepScene = require('../scenes/emptyStep.scene');
 
 /**
   * Обработчик стартовых команд.
@@ -21,7 +22,6 @@ const cyrillicToTranslit = new convertTranslit();
 
 composer.start(async (ctx) => {
 
-  ctx.session = null
   await ctx.deleteMessage()
   const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name}`
   ctx.session.userName = cyrillicToTranslit.transform(userName)
@@ -35,6 +35,30 @@ composer.start(async (ctx) => {
     await sendError(ctx, e)
   }
 
+
+
+  if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
+
+    console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
+    await addTasksToCtx(ctx)
+    console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
+    if (ctx.session.all_lists.length) {
+      composer.use(totalSceneInitComposer(ctx))
+      composer.use(...selectRouteComposer(ctx))
+    }
+  }
+
+})
+
+
+
+composer.action('start', async (ctx) => {
+
+  await ctx.deleteMessage()
+
+  await sendMessageStart(ctx)
+
+
   composer.use(async (ctx, next) => {
 
     if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
@@ -42,42 +66,40 @@ composer.start(async (ctx) => {
       console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
       await addTasksToCtx(ctx)
       console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
-      composer.use(totalSceneInitComposer(ctx))
-      composer.use(...selectRouteComposer(ctx))
+      if (ctx.session.all_lists.length) {
+        composer.use(totalSceneInitComposer(ctx))
+        composer.use(...selectRouteComposer(ctx))
+      }
     }
     await next()
   })
 
 })
 
-composer.action('start', async (ctx) => {
-  ctx.session = null
-  await ctx.deleteMessage()
-  const userName = `${ctx.update.callback_query.from.first_name} ${ctx.update.callback_query.from.last_name}`
-  ctx.session.userName = cyrillicToTranslit.transform(userName)
+// composer.use(async (ctx, next) => {
+//   if (ctx.session.all_lists) {
+//     composer.use(totalSceneInitComposer(ctx))
+//     composer.use(...selectRouteComposer(ctx))
+//   }
+//   await next()
+// })
 
-  ctx.session.isAuthUser = false
-  await authUserFeature(ctx.session)
+composer.command('update', async (ctx) => {
 
-  try {
-    await sendMessageStart(ctx)
-  } catch (e) {
-    await sendError(ctx, e)
-  }
+  ctx.session.all_lists = null
+  ctx.session.isAlreadyFilled = false
+  if (ctx.session.isAuthUser) {
 
-  composer.use(async (ctx, next) => {
-
-    if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
-
-      console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
-      await addTasksToCtx(ctx)
-      console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
+    console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
+    await addTasksToCtx(ctx)
+    console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
+    if (ctx.session.all_lists.length) {
       composer.use(totalSceneInitComposer(ctx))
       composer.use(...selectRouteComposer(ctx))
     }
-    await next()
-  })
-
+    await ctx.deleteMessage()
+  }
+  await sendProses(ctx, 'Нет доступа')
 })
 
 composer.on('text', async (ctx) => {
