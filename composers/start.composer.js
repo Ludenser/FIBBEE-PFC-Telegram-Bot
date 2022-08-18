@@ -98,8 +98,9 @@ composer.command('update', async (ctx) => {
       composer.use(...selectRouteComposer(ctx))
     }
     await ctx.deleteMessage()
+  } else {
+    await sendProses(ctx, 'Нет доступа')
   }
-  await sendProses(ctx, 'Нет доступа')
 })
 
 composer.on('text', async (ctx) => {
