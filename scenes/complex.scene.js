@@ -12,6 +12,7 @@ const Clickup = require('../api/index');
 const sendMessageComment = require('../keyboards/scenes/sendMessageComment.scene');
 const sendMessageNextStep = require('../keyboards/scenes/sendMessageNextStep.scene');
 const getAttentionFeature = require('../features/getAttention.feature');
+
 /**
  * Сцена обслуживания комплекса.
  * Динамически создается на основании массива тасков из API
@@ -24,6 +25,7 @@ module.exports = (arr, list) => {
     const complex_scene = new Composer();
 
     complex_scene.action('enter', async (ctx) => {
+
       const ClickAPI = new Clickup(ctx.session.user.CU_Token);
 
       try {
@@ -40,6 +42,8 @@ module.exports = (arr, list) => {
     });
 
     complex_scene.action('reenter', async (ctx) => {
+      ctx.session.state.photo = false
+      ctx.session.state.comment = false
       try {
         await ctx.deleteMessage();
         await sendMessageRouteEnter(ctx, task.name, task.id);
@@ -51,6 +55,7 @@ module.exports = (arr, list) => {
 
     complex_scene.action('upl_photo', async (ctx) => {
       try {
+
         await ctx.deleteMessage();
         await ctx.reply(`Фото к ${task.name} `)
         await ctx.reply('Отправь фотки и нажми кнопку под этим сообщением.',
@@ -69,22 +74,15 @@ module.exports = (arr, list) => {
     });
 
     complex_scene.action('upl_comment', async (ctx) => {
-      try {
-        await ctx.deleteMessage();
-        await sendMessageComment(ctx);
 
-        complex_scene.on('text', async (ctx) => {
-          if (ctx.update.message.text !== undefined) {
-            await ctx.deleteMessage();
-            await postCommentFeature(ctx, task.id);
-          } else {
-            console.log('Опять');
-          }
-        });
-      } catch (e) {
-        await sendError(ctx, e);
-        await sendMessageRouteEnter(ctx, task.name, task.id);
-      }
+      await ctx.deleteMessage();
+      await sendMessageComment(ctx);
+      complex_scene.on('text', async (ctx) => {
+
+        await ctx.deleteMessage();
+        await postCommentFeature(ctx, task.id);
+
+      })
     });
 
     complex_scene.action('next_step', async (ctx) => {
@@ -142,11 +140,6 @@ module.exports = (arr, list) => {
         await ctx.scene.leave();
       }
     });
-
-    complex_scene.on('text', async (ctx) => {
-      await ctx.deleteMessage()
-      await sendProses(ctx, 'Тут такое не приветствуется.')
-    })
 
     return complex_scene;
   });

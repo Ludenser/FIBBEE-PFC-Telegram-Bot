@@ -22,7 +22,7 @@ module.exports = async (ctx) => {
             .reverse()
             .filter(item => item.name.includes('водителя'))
             .groupBy(item => item.list.id)
-            .map((value, key) => ({ list_id: key, mainTask: value }))
+            .map((value, key) => (value[0].status.status.includes('in progress') ? { list_id: key, mainTask: value, isOpened: true, } : { list_id: key, mainTask: value }))
             .value();
 
         let result = _(all_tasks_any_status.data.tasks)
@@ -36,19 +36,14 @@ module.exports = async (ctx) => {
             .map((value, key) => ({ list_id: key, tasksWithoutMain: value, }))
             .value();
 
-        let openedLists = _(all_tasks_any_status.data.tasks)
-            .filter(item => item.status.status.includes('in progress'))
-            .groupBy(item => item.list.id)
-            .map((value, key) => ({ list_id: key, isOpened: true, }))
-            .value();
-
         let all_result = result.map((element, index) => {
-            return Object.assign({}, result[index], resultMain[index], resultWithoutMain[index], openedLists[index])
+            return Object.assign({}, result[index], resultMain[index], resultWithoutMain[index])
         })
 
         ctx.session.all_lists = all_result
         ctx.session.team_id = team_id
         ctx.session.isAlreadyFilled = true
+
     } catch (error) {
         await sendError(ctx, error)
     }

@@ -8,7 +8,6 @@ const _ = require('lodash');
 const authUserFeature = require('../features/authUser.feature');
 const totalSceneInitComposer = require('./totalSceneInit.composer');
 const selectRouteComposer = require('./selectRoute.composer');
-const emptyStepScene = require('../scenes/emptyStep.scene');
 
 /**
   * Обработчик стартовых команд.
@@ -35,8 +34,6 @@ composer.start(async (ctx) => {
     await sendError(ctx, e)
   }
 
-
-
   if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
 
     console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
@@ -50,14 +47,10 @@ composer.start(async (ctx) => {
 
 })
 
-
-
 composer.action('start', async (ctx) => {
 
   await ctx.deleteMessage()
-
   await sendMessageStart(ctx)
-
 
   composer.use(async (ctx, next) => {
 
@@ -76,20 +69,11 @@ composer.action('start', async (ctx) => {
 
 })
 
-// composer.use(async (ctx, next) => {
-//   if (ctx.session.all_lists) {
-//     composer.use(totalSceneInitComposer(ctx))
-//     composer.use(...selectRouteComposer(ctx))
-//   }
-//   await next()
-// })
-
 composer.command('update', async (ctx) => {
 
   ctx.session.all_lists = []
   ctx.session.isAlreadyFilled = false
   if (ctx.session.isAuthUser) {
-
     console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
     await addTasksToCtx(ctx)
     console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
@@ -103,9 +87,9 @@ composer.command('update', async (ctx) => {
   }
 })
 
-composer.on('text', async (ctx) => {
-  await ctx.deleteMessage()
-  await sendProses(ctx, 'Тут такое не приветствуется.')
-})
+// composer.on('text', async (ctx) => {
+//   await ctx.deleteMessage()
+//   await sendProses(ctx, 'Тут такое не приветствуется.')
+// })
 
 module.exports = composer
