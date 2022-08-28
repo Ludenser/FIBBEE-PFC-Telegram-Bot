@@ -42,8 +42,7 @@ module.exports = (arr, list) => {
     });
 
     complex_scene.action('reenter', async (ctx) => {
-      ctx.session.state.photo = false
-      ctx.session.state.comment = false
+      
       try {
         await ctx.deleteMessage();
         await sendMessageRouteEnter(ctx, task.name, task.id);
