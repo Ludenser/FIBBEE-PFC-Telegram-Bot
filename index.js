@@ -6,9 +6,8 @@ const path = require('path');
 const startComposer = require('./composers/start.composer');
 const mainMenuComposer = require('./composers/mainMenu.composer');
 const routesInfoComposer = require('./composers/routesInfo.composer');
-const selectRouteComposer = require('./composers/selectRoute.composer');
 const LocalSession = require('telegraf-session-local');
-const totalSceneInitComposer = require('./composers/totalSceneInit.composer');
+
 
 require('dotenv').config();
 
@@ -40,14 +39,6 @@ bot.use(i18n.middleware())
 bot.use(startComposer)
 bot.use(mainMenuComposer)
 bot.use(routesInfoComposer)
-bot.use(async (ctx, next) => {
-    bot.use(totalSceneInitComposer(ctx))
-    await next()
-})
-bot.use(async (ctx, next) => {
-    bot.use(...selectRouteComposer(ctx))
-    await next()
-})
 
 bot.launch()
 

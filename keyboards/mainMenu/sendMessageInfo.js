@@ -1,14 +1,14 @@
 module.exports = async (ctx) => {
   await ctx.replyWithPhoto('https://vse-vakansii.ru/web/uploads/company/410aaf4310b3f6fbee8df0d942109f17.png',
     {
-      caption: ctx.i18n.t('info'),
+      caption: ctx.i18n.t('info_keyBoard_header'),
       reply_markup: {
         inline_keyboard: [
           [
-            { text: 'FIBBEE🆘', url: 'https://fibbee.com/' },
+            { text: ctx.i18n.t('info_keyBoard_portalLinkText'), url: ctx.i18n.t('info_keyBoard_portalLinkURL') },
           ],
           [
-            { text: 'Назад!↩️', callback_data: 'start' }
+            { text: ctx.i18n.t('return_message'), callback_data: 'start' }
           ]
         ]
       },

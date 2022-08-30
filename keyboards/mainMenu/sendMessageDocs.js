@@ -8,20 +8,20 @@ const {
 } = setting
 
 module.exports = async (ctx) => {
-  await ctx.reply(ctx.i18n.t('docs'),
+  await ctx.reply(ctx.i18n.t('docs_keyBoard_header'),
     {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: 'Новая информация⚠️', url: urlNewInfo },
-            { text: 'Рабочий график📆', url: urlShedule }
+            { text: ctx.i18n.t('docs_keyBoard_newInfo'), url: urlNewInfo },
+            { text: ctx.i18n.t('docs_keyBoard_workShedule'), url: urlShedule }
           ],
           [
-            { text: 'Заказы комплексов🧾', url: urlSupplyDemand },
-            { text: 'Факт📊', url: urlFact }
+            { text: ctx.i18n.t('docs_keyBoard_complexOrders'), url: urlSupplyDemand },
+            { text: ctx.i18n.t('docs_keyBoard_fact'), url: urlFact }
           ],
           [
-            { text: 'Назад!↩️', callback_data: 'start' }
+            { text: ctx.i18n.t('return_message'), callback_data: 'start' }
           ]
         ]
       },

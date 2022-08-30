@@ -1,7 +1,8 @@
-const { Task } = require('../api/clickUpApi.service');
+
 const _ = require('lodash')
 const { Markup } = require('telegraf');
 const toLocalTime = require('../utils/toLocalTime');
+const Clickup = require('../api');
 
 function formattedTaskString(value, index) {
   const timeStamp = toLocalTime(value)
@@ -32,7 +33,7 @@ module.exports = {
 
     ctx.replyWithHTML(msg.toString(),
       Markup.inlineKeyboard([
-        Markup.button.callback('Назад!↩️', 'driverMenu')
+        Markup.button.callback(ctx.i18n.t('return_message'), 'driverMenu')
       ]))
   },
 
@@ -56,9 +57,9 @@ module.exports = {
     * Получение списка id тасков из ClickUp
     */
 
-  getTaskIdArrFromApi: async (list_id) => {
+  getTaskIdArrFromApi: async (token, list_id) => {
     try {
-      const response = await Task.getTodayTasksWithStatusTodo(list_id)
+      const response = await new Clickup(token).Tasks.getTodayTasksWithStatusTodo(list_id)
       const newArr = response.data.tasks.reverse().map(value => {
         return value.id
       })
