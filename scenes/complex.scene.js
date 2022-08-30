@@ -3,15 +3,16 @@ const _ = require('lodash');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 const postCommentFeature = require('../features/postComment.feature');
 const setAssigneeFeature = require('../features/setAssignee.feature');
-const sendMessageRouteEnter = require('../keyboards/scenes/sendMessageRouteEnter');
-const sendMessageRouteEnterEx = require('../keyboards/scenes/sendMessageRouteEnterEx');
+const sendMessageRouteEnter = require('../keyboards/scenes/complexSceneKeyboards/sendMessageRouteEnter.scene');
+const sendMessageRouteEnterEx = require('../keyboards/scenes/complexSceneKeyboards/sendMessageRouteEnterEx.scene');
 const { sendError, sendProses } = require('../utils/sendLoadings');
 const { resolveAllCheckListsAndItems, } = require('../features/resolveCheckList.feature');
 const { postAttachments } = require('../features/postAttachments.feature');
 const Clickup = require('../api/index');
-const sendMessageComment = require('../keyboards/scenes/sendMessageComment.scene');
-const sendMessageNextStep = require('../keyboards/scenes/sendMessageNextStep.scene');
+const sendMessageComment = require('../keyboards/scenes/complexSceneKeyboards/sendMessageComment.scene');
+const sendMessageNextStep = require('../keyboards/scenes/complexSceneKeyboards/sendMessageNextStep.scene');
 const getAttentionFeature = require('../features/getAttention.feature');
+const sendMessagePhoto = require('../keyboards/scenes/complexSceneKeyboards/sendMessagePhoto.scene');
 
 /**
  * Сцена обслуживания комплекса.
@@ -57,12 +58,7 @@ module.exports = (arr, list) => {
       try {
 
         await ctx.deleteMessage();
-        await ctx.reply(`Фото к ${task.name} `)
-        await ctx.reply('Отправь фотки и нажми кнопку под этим сообщением.',
-          Markup.inlineKeyboard([
-            Markup.button.callback(`Загрузил.`, 'reenter'),
-          ])
-        );
+        await sendMessagePhoto(ctx, task.name)
 
         complex_scene.on('photo', async (ctx) => {
           await postAttachments(ctx, task.id);

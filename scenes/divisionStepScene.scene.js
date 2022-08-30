@@ -1,7 +1,7 @@
 const { Composer } = require('telegraf');
 _ = require('lodash');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
-const sendMessageCarPhoto = require('../keyboards/scenes/sendMessageCarPhoto.routeMenu');
+const sendMessageCarPhoto = require('../keyboards/scenes/divisionStepSceneKeyboards/sendMessageCarPhoto.routeMenu');
 const setAssigneeFeature = require('../features/setAssignee.feature');
 const { sendError } = require('../utils/sendLoadings');
 const { resolveAllCheckListsAndItems } = require('../features/resolveCheckList.feature');

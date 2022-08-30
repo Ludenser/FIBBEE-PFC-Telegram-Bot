@@ -1,5 +1,5 @@
 const { Markup } = require('telegraf')
-const isTaskLast = require('../../utils/isTaskLast')
+const isTaskLast = require('../../../utils/isTaskLast')
 
 /**
     * Клавиатура сцены обслуживания комплекса
@@ -8,14 +8,14 @@ const isTaskLast = require('../../utils/isTaskLast')
     * @param {String} task_id - ClickUp id текущего таска
     */
 
-module.exports = async (ctx, msg = 'Меню', task_id) => {
+module.exports = async (ctx, msg, task_id) => {
 
     await ctx.reply(msg,
         Markup.inlineKeyboard(
             [
-                Markup.button.callback('Загрузить фото', 'upl_photo'),
-                Markup.button.callback('Оставить комментарий', 'upl_comment'),
-                Markup.button.callback('Закончить обслуживание', isTaskLast(ctx.session.all_lists, task_id) ? 'exit' : 'next_step'),
+                Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_uploadPhoto'), 'upl_photo'),
+                Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_comment'), 'upl_comment'),
+                Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_finish'), isTaskLast(ctx.session.all_lists, task_id) ? 'exit' : 'next_step'),
                 // Markup.button.callback('Выйти', 'leaveScene')
             ], {
             wrap: (btn, index, currentRow) => currentRow.length >= (index + 1) / 2

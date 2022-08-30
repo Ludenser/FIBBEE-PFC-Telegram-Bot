@@ -34,7 +34,7 @@ const postAttachmentsWithMessage = async (ctx, task_id) => {
 
   ctx.session.photoCounter++
   if (ctx.session.photoCounter === ctx.update.message.photo.length) {
-    await sendProses(ctx, `Все фото успешно загружены.`)
+    await sendProses(ctx, ctx.i18n.t('successPhotoUpload_message'))
     ctx.session.photoCounter = 0
   }
 }

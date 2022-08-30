@@ -4,18 +4,18 @@ const { ownerbot } = setting
 
 module.exports = async (ctx) => {
 
-  await ctx.reply(ctx.i18n.t('menu', { ctx, ownerbot }),
+  await ctx.reply(ctx.i18n.t('start_keyBoard_header', { ctx, ownerbot }),
     {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: '❔Информация❔', callback_data: 'info' },
+            { text: ctx.i18n.t('start_keyBoard_info'), callback_data: 'info' },
           ],
           [
-            { text: '📚Рабочие документы📚', callback_data: 'docs' }
+            { text: ctx.i18n.t('start_keyBoard_docs'), callback_data: 'docs' }
           ],
           [
-            { text: '🚀Меню водителя-оператора🚀', callback_data: 'driverMenu' }
+            { text: ctx.i18n.t('start_keyBoard_driverMenu'), callback_data: 'driverMenu' }
           ]
         ]
       },

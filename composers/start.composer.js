@@ -83,7 +83,7 @@ composer.command('update', async (ctx) => {
     }
     await ctx.deleteMessage()
   } else {
-    await sendProses(ctx, 'Нет доступа')
+    await sendProses(ctx, ctx.i18n.t('noAccessError_message'))
   }
 })
 

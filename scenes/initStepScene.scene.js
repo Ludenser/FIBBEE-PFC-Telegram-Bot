@@ -1,9 +1,9 @@
 const { Composer, Markup } = require('telegraf');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
-const sendMessagePhotoCheck = require('../keyboards/scenes/sendMessagePhotoCheck.routeMenu');
 const { sendError } = require('../utils/sendLoadings');
 const { postAttachments } = require('../features/postAttachments.feature');
 const Clickup = require('../api');
+const sendMessageInitKeyboardInitStep = require('../keyboards/scenes/initStepSceneKeyboards/sendMessageInitKeyboard.initStep');
 
 /**
  * Сцена инициализации назначенного роута.
@@ -25,23 +25,9 @@ module.exports = (ctx) => {
 
             });
 
-            initStepScene.hears('Подтвердить загрузку фото✅', async (ctx) => {
-                await ctx.deleteMessage();
-                await sendMessagePhotoCheck('main', ctx);
-            });
-
             initStepScene.action('get_start', async (ctx) => {
                 await ctx.deleteMessage();
-
-                await ctx.reply(
-                    'Приступить к обслуживанию первого комплекса? Это запустит таймер, и изменит статус таска ',
-                    Markup.inlineKeyboard([
-                        Markup.button.callback(
-                            '🔘 Нажми, чтобы начать 🔘', 'enter'
-                        ),
-                    ])
-                );
-
+                await sendMessageInitKeyboardInitStep(ctx)
                 await ctx.scene.enter(
                     `ROUTE_${ctx.session.currentRouteNumber}_WIZARD_ID`
                 );

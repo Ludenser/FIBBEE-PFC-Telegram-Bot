@@ -1,8 +1,8 @@
 const { Composer } = require('telegraf');
 const { sendError } = require('../utils/sendLoadings');
 const _ = require('lodash');
-const sendMessageInit = require('../keyboards/scenes/sendMessageInit.routeMenu');
 const { sendFormatMsgFromCurrentClickUpList } = require('../features/getRoute.feature');
+const sendMessageInitKeyboardInitStep = require('../keyboards/scenes/initStepSceneKeyboards/sendMessageInitKeyboard.initStep');
 
 
 /**
@@ -23,7 +23,7 @@ module.exports = (ctx) => {
                     await ctx.deleteMessage()
                     ctx.session.currentRouteNumber = i
                     await sendFormatMsgFromCurrentClickUpList(ctx, ctx.session.all_lists[i].tasksWithoutMain)
-                    await sendMessageInit(ctx)
+                    await sendMessageInitKeyboardInitStep(ctx)
                     await ctx.scene.enter('INITIAL_WIZARD_ID')
                 } catch (e) {
                     await sendError(ctx, e)
