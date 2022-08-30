@@ -7,13 +7,13 @@ module.exports = {
     */
 
   sendError: async function sendError(ctx, e) {
-    await ctx.reply(`Ошибка! Сообщите об этом в чате supply-team, ${e}`)
+    console.log(e)
+    await ctx.reply(ctx.i18n.t('error_message', { e }))
       .then((result) => {
         setTimeout(() => {
           ctx.deleteMessage(result.message_id)
         }, 10 * 500)
       })
-      .catch(e => console.log(e))
   },
 
   /**
