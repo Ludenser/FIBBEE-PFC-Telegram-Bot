@@ -2,6 +2,8 @@ const { Composer, Markup } = require('telegraf');
 const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 const { sendError } = require('../utils/sendLoadings');
 const { postAttachments } = require('../features/postAttachments.feature');
+const sendMessageInitKeyboardInitStep = require('../keyboards/scenes/initStepSceneKeyboards/sendMessageInitKeyboard.initStep');
+
 const Clickup = require('../api');
 
 const sendMessageCarPhotoRouteMenu = require('../keyboards/scenes/divisionStepSceneKeyboards/sendMessageCarPhoto.routeMenu');
@@ -28,7 +30,7 @@ module.exports = (ctx) => {
 
             initStepScene.action('get_start', async (ctx) => {
                 await ctx.deleteMessage();
-                await sendMessageCarPhotoRouteMenu(ctx);
+                await sendMessageInitKeyboardInitStep(ctx);
                 await ctx.scene.enter(
                     `ROUTE_${ctx.session.currentRouteNumber}_WIZARD_ID`
                 );

@@ -28,7 +28,7 @@ module.exports = (ctx) => {
         await ClickAPI.Tasks.setStatus(ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id, 'in progress');
         await setAssigneeFeature(ctx.session.userName, ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id, ctx.session.user.CU_Token);
         await ClickAPI.TimeTracking.startEntry(ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id);
-        await sendMessageInitKeyboardInitStep(ctx)
+        await sendMessageCarPhoto(ctx)
 
         return await ctx.wizard.selectStep(ctx.session.currentRouteNumber + ctx.session.all_lists.length);
       } catch (e) {
