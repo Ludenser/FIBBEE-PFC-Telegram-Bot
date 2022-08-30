@@ -3,7 +3,8 @@ const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMe
 const { sendError } = require('../utils/sendLoadings');
 const { postAttachments } = require('../features/postAttachments.feature');
 const Clickup = require('../api');
-const sendMessageInitKeyboardInitStep = require('../keyboards/scenes/initStepSceneKeyboards/sendMessageInitKeyboard.initStep');
+
+const sendMessageCarPhotoRouteMenu = require('../keyboards/scenes/divisionStepSceneKeyboards/sendMessageCarPhoto.routeMenu');
 
 /**
  * Сцена инициализации назначенного роута.
@@ -27,7 +28,7 @@ module.exports = (ctx) => {
 
             initStepScene.action('get_start', async (ctx) => {
                 await ctx.deleteMessage();
-                await sendMessageInitKeyboardInitStep(ctx)
+                await sendMessageCarPhotoRouteMenu(ctx);
                 await ctx.scene.enter(
                     `ROUTE_${ctx.session.currentRouteNumber}_WIZARD_ID`
                 );

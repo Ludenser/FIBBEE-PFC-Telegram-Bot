@@ -6,6 +6,7 @@ const setAssigneeFeature = require('../features/setAssignee.feature');
 const { sendError } = require('../utils/sendLoadings');
 const { resolveAllCheckListsAndItems } = require('../features/resolveCheckList.feature');
 const Clickup = require('../api');
+const sendMessageInitKeyboardInitStep = require('../keyboards/scenes/initStepSceneKeyboards/sendMessageInitKeyboard.initStep');
 
 /**
  * Сцена распределения роутов.
@@ -27,8 +28,8 @@ module.exports = (ctx) => {
         await ClickAPI.Tasks.setStatus(ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id, 'in progress');
         await setAssigneeFeature(ctx.session.userName, ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id, ctx.session.user.CU_Token);
         await ClickAPI.TimeTracking.startEntry(ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id);
+        await sendMessageInitKeyboardInitStep(ctx)
 
-        await sendMessageCarPhoto(ctx);
         return await ctx.wizard.selectStep(ctx.session.currentRouteNumber + ctx.session.all_lists.length);
       } catch (e) {
         console.log(e);
