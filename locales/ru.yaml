@@ -65,16 +65,6 @@ carPhotoCheck_scene_message: |
 carPhotoCheck_scene_doneUplButton: |
   Загрузил
 
-decoreRoute1Number: |
-  ________________      
-  🔸🔸🔸1 маршрут🔸🔸🔸
-  ________________ 
-
-decoreRoute2Number: |
-  ________________      
-  🔸🔸🔸2 маршрут🔸🔸🔸
-  ________________ 
-
 init_scene_header: |
   Приступить к обслуживанию первого комплекса? Это запустит таймер, и изменит статус таска
 
