@@ -50,7 +50,7 @@ driverMenu_keyBoard_header: |
 driverMenu_keyBoard_tasksOverview: |
   ℹ Обзор всех маршрутов ℹ️
 
-driverMenu_noActualTasks: |
+driverMenu_keyBoard_noActualTasks: |
   Актуальных тасков нет.
 
 helperInitRoute_scene_header: |
@@ -61,9 +61,6 @@ helperInitRoute_scene_initMessage: |
 
 carPhotoCheck_scene_message: |
   Жду, пока загрузишь машину. Перед выездом, отправь сюда фотки авто с 4-х сторон и нажми кнопку 'Загрузил'.
-
-carPhotoCheck_scene_doneUplButton: |
-  Загрузил
 
 init_scene_header: |
   Приступить к обслуживанию первого комплекса? Это запустит таймер, и изменит статус таска
@@ -88,6 +85,27 @@ mainComplex_scene_keyBoard_comment: |
 
 mainComplex_scene_keyBoard_commentMenu_header: |
   Напиши комментарий к таску, если нужно кого-то тегнуть, добавь в конце комментария "@имя фамилия" пользователя из клика.
+
+mainComplex_scene_keyBoard_customFieldEdit: |
+  Меню custom-field
+
+mainComplex_scene_keyBoard_customFieldEditMenu_header: |
+  Выбери действие:
+
+mainComplex_scene_keyBoard_customFieldEditMenu_editButton: |
+  Изменить custom_field
+
+mainComplex_scene_keyBoard_customFieldEditAction_header: |
+  Напиши информацию, которую хотел бы передать к следующей смене. Учти, что это сотрет всю старую информацию.
+
+mainComplex_scene_keyBoard_customFieldEditAction_editDone: |
+  Custom-field Изменен. Все ОК.
+
+mainComplex_scene_keyBoard_customFieldEditMenu_eraseButton: |
+  Сбросить custom_field
+
+mainComplex_scene_keyBoard_customFieldEditMenu_eraseDone: |
+  Custom-field Стерт. Все ОК.
 
 mainComplex_scene_keyBoard_finish: |
   Закончить обслуживание
@@ -116,6 +134,11 @@ authError_message: |
 noAccessError_message: |
   Нет доступа
 
-return_message: |
+doneUplButton: |
+  Загрузил
+
+return_button: |
   Назад!↩️
 
+isNotAllowedAction_message: |
+  Здесь такое не приветствуется.

@@ -15,6 +15,7 @@ module.exports = async (ctx, msg, task_id) => {
             [
                 Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_uploadPhoto'), 'upl_photo'),
                 Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_comment'), 'upl_comment'),
+                Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_customFieldEdit'), 'custom_field_edit_act'),
                 Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_finish'), isTaskLast(ctx.session.all_lists, task_id) ? 'exit' : 'next_step'),
                 // Markup.button.callback('Выйти', 'leaveScene')
             ], {
