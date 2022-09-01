@@ -13,6 +13,23 @@ class Tasks {
   constructor(token) {
     this.token = token
   }
+
+  /**
+      * Получение Object[ ] указанного таска
+      * @param {String} task_id - ClickUp-Ids of current task
+      */
+  async getTaskByTaskId(task_id) {
+
+    const response = await axios.get(`https://api.clickup.com/api/v2/task/${task_id}/`,
+      {
+        headers: {
+          'Authorization': this.token,
+          'Content-Type': 'application/json'
+        }
+      })
+    return response.data
+  }
+
   /**
       * Получение Object[ ] всех тасков в таск-листе со статусом 'to do' и 'in progress', в диапазоне времени от "3 часов до текущего времени" и "20 часов после текущего времени.
       * @param {String[]} list_ids - ClickUp-Ids of current task-list

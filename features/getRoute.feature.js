@@ -33,7 +33,7 @@ module.exports = {
 
     ctx.replyWithHTML(msg.toString(),
       Markup.inlineKeyboard([
-        Markup.button.callback(ctx.i18n.t('return_message'), 'driverMenu')
+        Markup.button.callback(ctx.i18n.t('return_button'), 'driverMenu')
       ]))
   },
 

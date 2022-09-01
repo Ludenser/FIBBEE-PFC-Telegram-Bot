@@ -6,12 +6,12 @@ const setAssigneeFeature = require('../features/setAssignee.feature');
 const { sendError } = require('../utils/sendLoadings');
 const { resolveAllCheckListsAndItems } = require('../features/resolveCheckList.feature');
 const Clickup = require('../api');
-const sendMessageInitKeyboardInitStep = require('../keyboards/scenes/initStepSceneKeyboards/sendMessageInitKeyboard.initStep');
 
 /**
  * Сцена распределения роутов.
  *
- * Запуск таймера главного чек/листа, получение его id
+ * Запуск таймера главного чек/листа, перевод главного чеклиста в in progress, выдача клавиатуры с просьбой загрузить фото автомобиля
+ *
  */
 
 module.exports = (ctx) => {
@@ -24,10 +24,10 @@ module.exports = (ctx) => {
       const ClickAPI = new Clickup(ctx.session.user.CU_Token);
       try {
         await ctx.deleteMessage();
-
-        await ClickAPI.Tasks.setStatus(ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id, 'in progress');
-        await setAssigneeFeature(ctx.session.userName, ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id, ctx.session.user.CU_Token);
-        await ClickAPI.TimeTracking.startEntry(ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id);
+        ctx.session.states.currentMenuState = 'init'
+        await ClickAPI.Tasks.setStatus(ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id, 'in progress');
+        await setAssigneeFeature(ctx.session.userName, ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id, ctx.session.user.CU_Token);
+        await ClickAPI.TimeTracking.startEntry(ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id);
         await sendMessageCarPhoto(ctx)
 
         return await ctx.wizard.selectStep(ctx.session.currentRouteNumber + ctx.session.all_lists.length);
@@ -43,9 +43,9 @@ module.exports = (ctx) => {
         await ctx.deleteMessage();
         await sendMessageDriverMenu(ctx);
 
-        await ClickAPI.Tasks.setStatus(ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id, 'done');
-        await resolveAllCheckListsAndItems(ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].checklists, 'true', ctx.session.user.CU_Token);
-        await ClickAPI.TimeTracking.stopEntry(ctx.session.all_lists[ctx.session.currentRouteNumber].mainTask[0].id);
+        await ClickAPI.Tasks.setStatus(ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id, 'done');
+        await resolveAllCheckListsAndItems(ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].checklists, 'true', ctx.session.user.CU_Token);
+        await ClickAPI.TimeTracking.stopEntry(ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id);
 
         await ctx.scene.leave();
       } catch (e) {

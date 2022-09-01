@@ -18,31 +18,37 @@ module.exports = async (ctx) => {
     try {
         const all_tasks_any_status = await new Clickup(ctx.session.user.CU_Token).Tasks.getTodayTasksWithAnyStatus(list_ids)
 
-        let resultMain = _(all_tasks_any_status.data.tasks)
+        let driverTask = _(all_tasks_any_status.data.tasks)
             .reverse()
             .filter(item => item.name.includes('водителя'))
             .groupBy(item => item.list.id)
-            .map((value, key) => (value[0].status.status.includes('in progress') ? { list_id: key, mainTask: value, isOpened: true, } : { list_id: key, mainTask: value }))
+            .map((value, key) => (value[0].status.status.includes('in progress') ? { list_id: key, driverTask: value, isOpened: true, } : { list_id: key, driverTask: value }))
             .value();
 
-        let result = _(all_tasks_any_status.data.tasks)
+        let allTasks = _(all_tasks_any_status.data.tasks)
             .groupBy(item => item.list.id)
             .map((value, key) => ({ list_id: key, allTasks: value, }))
             .value();
 
-        let resultWithoutMain = _(all_tasks_any_status.data.tasks)
+        let tasksWithoutDriverTask = _(all_tasks_any_status.data.tasks)
             .filter(item => !item.name.includes('водителя'))
             .groupBy(item => item.list.id)
-            .map((value, key) => ({ list_id: key, tasksWithoutMain: value, }))
+            .map((value, key) => ({ list_id: key, tasksWithoutDriverTask: value, }))
             .value();
 
-        let all_result = result.map((element, index) => {
-            return Object.assign({}, result[index], resultMain[index], resultWithoutMain[index])
+        let all_lists = allTasks.map((element, index) => {
+            return Object.assign({}, allTasks[index], driverTask[index], tasksWithoutDriverTask[index])
         })
 
-        ctx.session.all_lists = all_result
+        ctx.session.all_lists = all_lists
         ctx.session.team_id = team_id
         ctx.session.isAlreadyFilled = true
+        ctx.session.states = {}
+        ctx.session.states.attention_msg_id = []
+        ctx.session.states.currentMenuState = ''
+        ctx.session.states.isCommentMenu = false
+        ctx.session.states.isPhotoMenu = false
+        ctx.session.states.isCFMenu = false
 
     } catch (error) {
         await sendError(ctx, error)
