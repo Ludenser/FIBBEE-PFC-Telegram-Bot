@@ -22,7 +22,7 @@ module.exports = (ctx) => {
                 try {
                     await ctx.deleteMessage()
                     ctx.session.currentRouteNumber = i
-                    await sendFormatMsgFromCurrentClickUpList(ctx, ctx.session.all_lists[i].tasksWithoutMain)
+                    await sendFormatMsgFromCurrentClickUpList(ctx, ctx.session.all_lists[i].tasksWithoutDriverTask)
                     await sendMessageInitRouteMenu(ctx)
                     await ctx.scene.enter('INITIAL_WIZARD_ID')
                 } catch (e) {

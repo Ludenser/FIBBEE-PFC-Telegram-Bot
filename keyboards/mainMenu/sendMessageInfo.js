@@ -8,7 +8,7 @@ module.exports = async (ctx) => {
             { text: ctx.i18n.t('info_keyBoard_portalLinkText'), url: ctx.i18n.t('info_keyBoard_portalLinkURL') },
           ],
           [
-            { text: ctx.i18n.t('return_message'), callback_data: 'start' }
+            { text: ctx.i18n.t('return_button'), callback_data: 'start' }
           ]
         ]
       },

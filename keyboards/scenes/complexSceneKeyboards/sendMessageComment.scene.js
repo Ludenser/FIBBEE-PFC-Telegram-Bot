@@ -6,6 +6,6 @@ module.exports = async (ctx) => {
 
     Markup
       .inlineKeyboard([
-        Markup.button.callback(ctx.i18n.t('return_message'), 'reenter'),
+        Markup.button.callback(ctx.i18n.t('return_button'), 'reenter'),
       ]))
 }

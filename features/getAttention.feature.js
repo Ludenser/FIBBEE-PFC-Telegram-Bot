@@ -1,13 +1,27 @@
 const _ = require('lodash');
+const Clickup = require('../api');
 /**
    * Функция для выдачи сообщения с информацией об актуальных особенностях комплекса.
    * @param {Ctx} ctx - объект контекста telegraf
-   * @param {Array} fields_array - массив с элементами всех custom-fields в таске ClickUp
+   * @param {String} task_id - id текущего task в ClickUp
    */
-module.exports = async (ctx, fields_array) => {
-    const reqArr = _(fields_array)
-        .find(['name', 'Обратить внимание!'])
-
-    reqArr && reqArr.value ? await ctx.replyWithHTML(`<b>ОБРАТИ ВНИМАНИЕ:</b> \n${reqArr.value}`) : await ctx.reply('Тут все штатно')
+module.exports = async (ctx, task_id) => {
+    ctx.session.states.attention_msg_id = []
+    const ClickAPI = new Clickup(ctx.session.user.CU_Token)
+    const allCustomFields = await ClickAPI.Tasks.getTaskByTaskId(task_id)
+    const custom_field = _(allCustomFields.custom_fields)
+        .filter(item => _.includes(item.name, 'Обратить внимание'))
+        .value()
+    for (let element of custom_field) {
+        element.value
+            ? await ctx.replyWithHTML(`<b>${element.name}</b> \n${element.value}`)
+                .then((result) => {
+                    ctx.session.states.attention_msg_id = [...ctx.session.states.attention_msg_id, result.message_id]
+                })
+            : await ctx.replyWithHTML(`<b>${element.name}</b> \nВсе штатно`)
+                .then((result) => {
+                    ctx.session.states.attention_msg_id = [...ctx.session.states.attention_msg_id, result.message_id]
+                })
+    }
 
 }
