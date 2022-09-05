@@ -7,6 +7,7 @@ const Clickup = require('../api');
    */
 module.exports = async (ctx, task_id) => {
     ctx.session.states.attention_msg_id = []
+
     const ClickAPI = new Clickup(ctx.session.user.CU_Token)
     const allCustomFields = await ClickAPI.Tasks.getTaskByTaskId(task_id)
     const custom_field = _(allCustomFields.custom_fields)
@@ -18,10 +19,11 @@ module.exports = async (ctx, task_id) => {
                 .then((result) => {
                     ctx.session.states.attention_msg_id = [...ctx.session.states.attention_msg_id, result.message_id]
                 })
-            : await ctx.replyWithHTML(`<b>${element.name}</b> \nВсе штатно`)
+            : await ctx.replyWithHTML(ctx.i18n.t('mainComplex_scene_keyBoard_customFields_notExist', { name: element.name }))
                 .then((result) => {
                     ctx.session.states.attention_msg_id = [...ctx.session.states.attention_msg_id, result.message_id]
                 })
     }
+    ctx.session.states.attention_msg_isDeleted = false
 
 }

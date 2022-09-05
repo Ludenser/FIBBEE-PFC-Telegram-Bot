@@ -14,13 +14,14 @@ const complexSceneCustomFieldsActionsHandler = (task_id) => {
   })
 
   composer.action('editCF', async (ctx) => {
+    await ctx.deleteMessage()
     ctx.session.states.currentMenuState = 'custom_field'
-    ctx.session.states.isCFMenu = true
     await sendMessageEditCustomFieldHelperScene(ctx)
 
   })
 
   composer.action('eraseCF', async (ctx) => {
+    await ctx.deleteMessage()
     await removeCustom_field(ctx, task_id)
   })
   return composer

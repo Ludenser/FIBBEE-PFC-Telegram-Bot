@@ -199,7 +199,7 @@ class Tasks {
       },
     })
 
-      .then((r) => console.log(`В таск${task_id} загружено фото из ${message_id}`))
+      .then((r) => console.log(`В таск ${task_id} загружено фото из ${message_id}`))
       .catch((e) => console.log(e.config, message_id, 'Не загружено'))
 
   };

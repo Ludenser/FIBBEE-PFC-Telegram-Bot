@@ -4,13 +4,19 @@
  * @param {String} task_id - ClickUp-Id of current task
  */
 
-module.exports = (all_lists, task_id) => {
-  let isTaskLast = false
-  all_lists.forEach((el, i) => {
-    if (task_id.includes(all_lists[i].tasksWithoutDriverTask.at(-1).id)) {
-      isTaskLast = true
+
+module.exports = (session) => {
+
+  // const currentList = session.all_lists.find(o => o.list_id === session.states.currentList_id)
+
+  // if (session.currentTask_id === currentList.lastTask) {
+  //   ctx.session.states.isTaskLast = true
+  // }
+
+  session.all_lists.forEach((el, i) => {
+    if (session.states.currentTask_id.includes(session.all_lists[i].tasksWithoutDriverTaskAndSide.at(-1).id)) {
+      session.states.isTaskLast = true
     }
 
   });
-  return isTaskLast
 }

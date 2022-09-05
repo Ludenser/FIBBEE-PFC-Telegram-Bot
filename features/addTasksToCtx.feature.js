@@ -25,30 +25,59 @@ module.exports = async (ctx) => {
             .map((value, key) => (value[0].status.status.includes('in progress') ? { list_id: key, driverTask: value, isOpened: true, } : { list_id: key, driverTask: value }))
             .value();
 
-        let allTasks = _(all_tasks_any_status.data.tasks)
+        let allTasksWithoutSide = _(all_tasks_any_status.data.tasks)
+            .filter(item => item.name.includes('Обслуживание') || item.name.includes('водителя') || item.name.includes('Пополнение'))
             .groupBy(item => item.list.id)
-            .map((value, key) => ({ list_id: key, allTasks: value, }))
+            .map((value, key) => ({ list_id: key, allTasksWithoutSide: value, }))
             .value();
 
-        let tasksWithoutDriverTask = _(all_tasks_any_status.data.tasks)
+        let tasksWithoutDriverTaskAndSide = _(all_tasks_any_status.data.tasks)
+            .reject(item => {
+                for (let elem of item.tags) {
+                    return elem.name === 'test'
+                }
+            })
             .filter(item => !item.name.includes('водителя'))
             .groupBy(item => item.list.id)
-            .map((value, key) => ({ list_id: key, tasksWithoutDriverTask: value, }))
+            .map((value, key) => ({ list_id: key, tasksWithoutDriverTaskAndSide: value, lastTask: _.last(value).id }))
             .value();
 
-        let all_lists = allTasks.map((element, index) => {
-            return Object.assign({}, allTasks[index], driverTask[index], tasksWithoutDriverTask[index])
+        let sideTasks = _(all_tasks_any_status.data.tasks)
+            .filter(item => {
+                for (let elem of item.tags) {
+                    return elem.name === 'test'
+                }
+            })
+            .groupBy(item => item.list.id)
+            .map((value, key) => ({ list_id: key, sideTasks: value, }))
+            .value();
+
+
+        let all_lists = allTasksWithoutSide.map((element, index) => {
+            return Object.assign(
+                {},
+                sideTasks[index],
+                allTasksWithoutSide[index],
+                driverTask[index],
+                tasksWithoutDriverTaskAndSide[index],
+
+
+            )
         })
+        console.log(all_lists);
 
         ctx.session.all_lists = all_lists
         ctx.session.team_id = team_id
         ctx.session.isAlreadyFilled = true
         ctx.session.states = {}
+        ctx.session.states.isTaskLast = false
         ctx.session.states.attention_msg_id = []
+        ctx.session.states.attention_msg_isDeleted = false
+        ctx.session.states.currentLocationName = ''
         ctx.session.states.currentMenuState = ''
-        ctx.session.states.isCommentMenu = false
-        ctx.session.states.isPhotoMenu = false
-        ctx.session.states.isCFMenu = false
+        ctx.session.states.currentList_id = ''
+        ctx.session.states.currentTask_id = ''
+        ctx.session.states.currentSideTaskId = ''
 
     } catch (error) {
         await sendError(ctx, error)

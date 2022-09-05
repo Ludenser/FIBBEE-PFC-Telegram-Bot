@@ -1,12 +1,11 @@
 const { Composer } = require('telegraf');
-const { editCustom_field } = require('../../features/editCustomFields.feature');
-const postCommentFeature = require('../../features/postComment.feature');
+const { postAttachments } = require('../../features/postAttachments.feature');
 const { sendProses } = require('../../utils/sendLoadings');
 
-const complexSceneTextHandler = (task_id) => {
+const complexScenePhotoHandler = () => {
   const composer = new Composer()
 
-  composer.on('text', async (ctx) => {
+  composer.on('photo', async (ctx) => {
     switch (ctx.session.states.currentMenuState) {
       case 'main':
         await ctx.deleteMessage()
@@ -14,27 +13,30 @@ const complexSceneTextHandler = (task_id) => {
         break;
       case 'comment':
         await ctx.deleteMessage()
-        await postCommentFeature(ctx, task_id);
+        await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         break;
       case 'photo':
-        await ctx.deleteMessage()
-        await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        await postAttachments(ctx, ctx.session.states.currentTask_id);
         break;
       case 'custom_field':
         await ctx.deleteMessage()
-        await editCustom_field(ctx, task_id)
+        await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         break;
       case 'sideTask':
         await ctx.deleteMessage()
         await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
-      case 'sideTask_comment':
+        break;
+      case 'sideTaskComment':
         await ctx.deleteMessage()
-        await postCommentFeature(ctx, ctx.session.states.currentSideTaskId)
+        await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        break;
+      case 'sideTask_photo':
+        await postAttachments(ctx, ctx.session.states.currentSideTaskId)
+        break;
     }
 
   })
   return composer
 }
 
-
-module.exports = complexSceneTextHandler
+module.exports = complexScenePhotoHandler
