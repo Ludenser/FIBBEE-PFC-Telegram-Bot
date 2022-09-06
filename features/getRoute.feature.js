@@ -46,7 +46,7 @@ module.exports = {
 
       .map((value, index) => { return formattedTaskString(value, index) })
 
-    const reply = nameValues.join("\n\n")
+    const reply = nameValues.join("\n")
 
     const msg = `🔸  <b>Маршрут:</b>\n${reply}`
 

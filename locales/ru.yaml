@@ -122,7 +122,7 @@ mainComplex_scene_keyBoard_customFields_notExist: |
   <b>${name}</b> \nВсе штатно
 
 mainComplex_scene_keyBoard_header_ifSideTaskMenu: |
-  \n <b>Есть доп. задание!</b>
+  <b>Есть доп. задание!</b>
 
 mainComplex_scene_keyBoard_sideTaskMenu: |
   Меню доп. задачи

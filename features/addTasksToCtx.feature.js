@@ -16,7 +16,10 @@ const { sendError } = require('../utils/sendLoadings');
 module.exports = async (ctx) => {
 
     try {
-        const all_tasks_any_status = await new Clickup(ctx.session.user.CU_Token).Tasks.getTodayTasksWithAnyStatus(list_ids)
+        const ClickAPI = new Clickup(ctx.session.user.CU_Token)
+        const all_tasks_any_status = await ClickAPI.Tasks.getTodayTasksWithAnyStatus(list_ids)
+        const all_labels = await ClickAPI.Custom_fields.getAllCustomFields(list_ids[0])
+        const all_existLabels = all_labels.fields.find(o => o.type === 'labels').type_config.options
 
         let driverTask = _(all_tasks_any_status.data.tasks)
             .reverse()
@@ -65,7 +68,7 @@ module.exports = async (ctx) => {
             )
         })
         console.log(all_lists);
-
+        ctx.session.all_existLabels = all_existLabels
         ctx.session.all_lists = all_lists
         ctx.session.team_id = team_id
         ctx.session.isAlreadyFilled = true
@@ -74,6 +77,7 @@ module.exports = async (ctx) => {
         ctx.session.states.attention_msg_id = []
         ctx.session.states.attention_msg_isDeleted = false
         ctx.session.states.currentLocationName = ''
+        ctx.session.states.currentLocationLabel = ''
         ctx.session.states.currentMenuState = ''
         ctx.session.states.currentList_id = ''
         ctx.session.states.currentTask_id = ''
