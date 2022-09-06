@@ -20,7 +20,7 @@ module.exports = async (ctx, current_list) => {
     return buttonsArray
   }
 
-  await ctx.reply('Выбери нужную задачу',
+  await ctx.reply(ctx.i18n('mainComplex_scene_keyBoard_sideTaskMenu_header'),
     Markup.inlineKeyboard(
       [
         ...sideTasksSelectKeyboard()

@@ -12,7 +12,7 @@ module.exports = async (ctx) => {
     Markup.button.callback(ctx.i18n.t('return_button'), 'sideTask_menu'),
   ]
 
-  await ctx.replyWithHTML('Выбери нужное действие',
+  await ctx.replyWithHTML(ctx.i18n.t('mainComplex_scene_keyBoard_sideTaskMenu_actions_header'),
     Markup.inlineKeyboard(
       buttons
       , {
