@@ -40,7 +40,7 @@ module.exports = (ctx) => {
                     await sendMessageInitKeyboardInitStep(ctx);
                     ctx.scene.reset()
                     await ctx.scene.enter(
-                        `${i}`
+                        `${ctx.session.currentRouteNumber}`
                     );
                 } catch (e) {
                     await sendError(ctx, e)

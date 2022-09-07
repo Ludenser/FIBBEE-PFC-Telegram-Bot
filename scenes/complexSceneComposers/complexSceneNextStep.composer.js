@@ -16,10 +16,10 @@ const complexSceneNextStepHandler = (tasks, task, driverTask_id) => {
       if (!ctx.session.states.attention_msg_isDeleted) {
         ctx.session.states.attention_msg_id = await deleteMessagesById(ctx, ctx.session.states.attention_msg_id)
       }
-      // await ClickAPI.Tasks.setStatus(task.id, 'done');
-      // await ClickAPI.TimeTracking.stopEntry(task.id);
-      // await resolveAllCheckListsAndItems(task.checklists, 'true', ctx.session.user.CU_Token);
-      // await ClickAPI.TimeTracking.startEntry(driverTask_id);
+      await ClickAPI.Tasks.setStatus(task.id, 'done');
+      await ClickAPI.TimeTracking.stopEntry(task.id);
+      await resolveAllCheckListsAndItems(task.checklists, 'true', ctx.session.user.CU_Token);
+      await ClickAPI.TimeTracking.startEntry(driverTask_id);
 
       await ctx.deleteMessage();
       await sendMessageNextStepScene(ctx, task.name, tasks[tasks.indexOf(task) + 1].name);
