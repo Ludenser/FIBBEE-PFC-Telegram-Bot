@@ -12,7 +12,7 @@ const complexScene = (ctx) => {
     .map((list, i) => {
 
 
-      return new Scenes.WizardScene(`ROUTE_${i}_WIZARD_ID`, ...complex_scene(ctx.session.all_lists[i].tasksWithoutDriverTaskAndSide, list.driverTask[0], ctx.session))
+      return new Scenes.WizardScene(`${ctx.session.all_lists[i].scene_id}`, ...complex_scene(ctx.session.all_lists[i].tasksWithoutDriverTaskAndSide, list.driverTask[0], ctx.session))
 
     })
 

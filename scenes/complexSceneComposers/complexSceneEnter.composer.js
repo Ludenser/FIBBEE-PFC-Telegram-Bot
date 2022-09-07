@@ -12,6 +12,7 @@ const complexSceneEnterHandler = (task_id, task_name, task) => {
 
     try {
       const ClickAPI = new Clickup(ctx.session.user.CU_Token);
+      ctx.session.states.currentTask_discordWebHook = task.custom_fields.find(o => o.name === 'Discord_WebHook').value
       ctx.session.states.currentMenuState = 'main'
       ctx.session.states.currentLocationName = task_name
       ctx.session.states.currentTask_id = task_id

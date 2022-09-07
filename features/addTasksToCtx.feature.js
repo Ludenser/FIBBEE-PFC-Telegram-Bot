@@ -8,6 +8,7 @@ const simulation = require('../lib/simulation');
 const list_ids = require('../lib/list_idsFromClickUp');
 const Clickup = require('../api');
 const { sendError } = require('../utils/sendLoadings');
+const generateSN = require('../utils/generateSN');
 
 /**
   * Добавление в контекст объекта тасков из ClickUp.
@@ -31,7 +32,7 @@ module.exports = async (ctx) => {
         let allTasksWithoutSide = _(all_tasks_any_status.data.tasks)
             .filter(item => item.name.includes('Обслуживание') || item.name.includes('водителя') || item.name.includes('Пополнение'))
             .groupBy(item => item.list.id)
-            .map((value, key) => ({ list_id: key, allTasksWithoutSide: value, }))
+            .map((value, key) => ({ list_id: key, allTasksWithoutSide: value, scene_id: generateSN() }))
             .value();
 
         let tasksWithoutDriverTaskAndSide = _(all_tasks_any_status.data.tasks)
@@ -42,7 +43,7 @@ module.exports = async (ctx) => {
             })
             .filter(item => !item.name.includes('водителя'))
             .groupBy(item => item.list.id)
-            .map((value, key) => ({ list_id: key, tasksWithoutDriverTaskAndSide: value, lastTask: _.last(value).id }))
+            .map((value, key) => ({ list_id: key, tasksWithoutDriverTaskAndSide: value }))
             .value();
 
         let sideTasks = _(all_tasks_any_status.data.tasks)
@@ -81,6 +82,7 @@ module.exports = async (ctx) => {
         ctx.session.states.currentMenuState = ''
         ctx.session.states.currentList_id = ''
         ctx.session.states.currentTask_id = ''
+        ctx.session.states.currentTask_discordWebHook = ''
         ctx.session.states.currentSideTaskId = ''
 
     } catch (error) {

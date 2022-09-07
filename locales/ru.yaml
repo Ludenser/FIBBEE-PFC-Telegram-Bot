@@ -86,7 +86,7 @@ mainComplex_scene_keyBoard_comment: |
 mainComplex_scene_keyBoard_commentMenu_header: |
   Напиши комментарий к таску.
   Для тега в клике, добавь в конце комментария "@имя фамилия" пользователя из клика. 
-  Для тега отдела и отправки сообщения в дискорд укажи после @ название отдела (monitoring team/daily team/service team)
+  Для тега отдела и отправки сообщения в дискорд укажи после @ название отдела (monitoring/daily/service/supply)
 
 mainComplex_scene_commentActions_clickUpMention: |
   Комментарий отправлен в таск. Тегнут ${username}
@@ -96,6 +96,9 @@ mainComplex_scene_commentActions_discordMention: |
 
 mainComplex_scene_commentActions_clickUpPlainTextComment: |
   Комментарий отправлен в таск. Но ты никого не тегнул.
+
+mainComplex_scene_commentActions_incorrectTag: |
+ Неверный тег
   
 mainComplex_scene_keyBoard_customFieldEdit: |
   Меню custom-field
