@@ -3,12 +3,10 @@ const _ = require('lodash')
 const fs = require('fs');
 const setting = JSON.parse(fs.readFileSync('./lib/setting.json'));
 const { team_id } = setting;
-const chalk = require('chalk')
-const simulation = require('../lib/simulation');
 const list_ids = require('../lib/list_idsFromClickUp');
 const Clickup = require('../api');
 const { sendError } = require('../utils/sendLoadings');
-const generateSN = require('../utils/generateSN');
+
 
 /**
   * Добавление в контекст объекта тасков из ClickUp.
@@ -32,13 +30,13 @@ module.exports = async (ctx) => {
         let allTasksWithoutSide = _(all_tasks_any_status.data.tasks)
             .filter(item => item.name.includes('Обслуживание') || item.name.includes('водителя') || item.name.includes('Пополнение'))
             .groupBy(item => item.list.id)
-            .map((value, key) => ({ list_id: key, allTasksWithoutSide: value, scene_id: generateSN() }))
+            .map((value, key) => ({ list_id: key, allTasksWithoutSide: value, }))
             .value();
 
         let tasksWithoutDriverTaskAndSide = _(all_tasks_any_status.data.tasks)
             .reject(item => {
                 for (let elem of item.tags) {
-                    return elem.name === 'test'
+                    return elem.name === 'side'
                 }
             })
             .filter(item => !item.name.includes('водителя'))
@@ -49,7 +47,7 @@ module.exports = async (ctx) => {
         let sideTasks = _(all_tasks_any_status.data.tasks)
             .filter(item => {
                 for (let elem of item.tags) {
-                    return elem.name === 'test'
+                    return elem.name === 'side'
                 }
             })
             .groupBy(item => item.list.id)

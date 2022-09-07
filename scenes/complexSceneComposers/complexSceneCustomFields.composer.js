@@ -21,7 +21,6 @@ const complexSceneCustomFieldsActionsHandler = (task_id) => {
   })
 
   composer.action('eraseCF', async (ctx) => {
-    await ctx.deleteMessage()
     await removeCustom_field(ctx, task_id)
   })
   return composer

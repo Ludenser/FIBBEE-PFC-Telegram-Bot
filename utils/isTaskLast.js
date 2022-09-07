@@ -7,16 +7,13 @@
 
 module.exports = (session) => {
 
-  // const currentList = session.all_lists.find(o => o.list_id === session.states.currentList_id)
+  session.states.isTaskFirst = false
 
-  // if (session.currentTask_id === currentList.lastTask) {
-  //   ctx.session.states.isTaskLast = true
-  // }
+  if (session.states.currentTask_id.includes(session.all_lists[session.currentRouteNumber].tasksWithoutDriverTaskAndSide.at(-1).id)) {
+    session.states.isTaskLast = true
+  }
+  if (session.states.currentTask_id.includes(session.all_lists[session.currentRouteNumber].tasksWithoutDriverTaskAndSide.at(0).id)) {
+    session.states.isTaskFirst = true
+  }
 
-  session.all_lists.forEach((el, i) => {
-    if (session.states.currentTask_id.includes(session.all_lists[i].tasksWithoutDriverTaskAndSide.at(-1).id)) {
-      session.states.isTaskLast = true
-    }
-
-  });
 }

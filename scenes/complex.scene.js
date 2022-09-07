@@ -46,25 +46,25 @@ module.exports = (tasks, driverTask) => {
       await next()
     })
 
-    complex_scene.action('leaveScene', async (ctx) => {
-      const ClickAPI = new Clickup(ctx.session.user.CU_Token);
-      try {
-        await ClickAPI.TimeTracking.stopEntry(task.id);
-        await ClickAPI.Tasks.setStatus(task.id, 'to do');
-        await ClickAPI.Tasks.setStatus(driverTask.id, 'to do');
-        await resolveAllCheckListsAndItems(task.checklists, 'false', ctx.session.user.CU_Token);
-        await resolveAllCheckListsAndItems(driverTask.checklists, 'false', ctx.session.user.CU_Token);
+    // complex_scene.action('leaveScene', async (ctx) => {
+    //   const ClickAPI = new Clickup(ctx.session.user.CU_Token);
+    //   try {
+    //     // await ClickAPI.TimeTracking.stopEntry(task.id);
+    //     // await ClickAPI.Tasks.setStatus(task.id, 'to do');
+    //     // await ClickAPI.Tasks.setStatus(driverTask.id, 'to do');
+    //     // await resolveAllCheckListsAndItems(task.checklists, 'false', ctx.session.user.CU_Token);
+    //     // await resolveAllCheckListsAndItems(driverTask.checklists, 'false', ctx.session.user.CU_Token);
 
-        await ctx.deleteMessage();
-        ctx.session.currentRouteNumber = null;
-        await sendMessageDriverMenu(ctx);
-        await ctx.scene.leave();
-      } catch (e) {
-        await sendError(ctx, e);
-        await sendMessageDriverMenu(ctx);
-        await ctx.scene.leave();
-      }
-    });
+    //     await ctx.deleteMessage();
+    //     ctx.session.currentRouteNumber = null;
+
+    //     await ctx.wizard.back();
+    //   } catch (e) {
+    //     await sendError(ctx, e);
+    //     await sendMessageDriverMenu(ctx);
+    //     await ctx.scene.leave();
+    //   }
+    // });
 
     return complex_scene;
   });

@@ -15,8 +15,8 @@ module.exports = async (ctx, task, msg) => {
         Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_comment'), 'upl_comment'),
         Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_customFieldEdit'), 'custom_field_edit_act'),
         Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_finish'), ctx.session.states.isTaskLast ? 'exit' : 'next_step'),
-        // Markup.button.callback('Выйти', 'leaveScene')
     ]
+    // !ctx.session.states.isTaskFirst && buttons.push(Markup.button.callback('Вернуться к предыдущему', 'back'))
     if (task) {
         const currentTaskLabel = task.custom_fields.find(o => o.type === 'labels')
 

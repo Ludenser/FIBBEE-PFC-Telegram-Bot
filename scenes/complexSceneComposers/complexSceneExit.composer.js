@@ -15,10 +15,10 @@ const complexSceneExitHandler = (task_id, task_checklists, driverTask_id) => {
       if (!ctx.session.states.attention_msg_isDeleted) {
         ctx.session.states.attention_msg_id = await deleteMessagesById(ctx, ctx.session.states.attention_msg_id)
       }
-      await ClickAPI.Tasks.setStatus(task_id, 'done');
-      await ClickAPI.TimeTracking.stopEntry(task_id);
-      await ClickAPI.TimeTracking.startEntry(driverTask_id);
-      await resolveAllCheckListsAndItems(task_checklists, 'true', ctx.session.user.CU_Token);
+      // await ClickAPI.Tasks.setStatus(task_id, 'done');
+      // await ClickAPI.TimeTracking.stopEntry(task_id);
+      // await ClickAPI.TimeTracking.startEntry(driverTask_id);
+      // await resolveAllCheckListsAndItems(task_checklists, 'true', ctx.session.user.CU_Token);
 
       await ctx.deleteMessage();
       await sendMessageRouteEnterExScene(ctx);

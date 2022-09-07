@@ -2,6 +2,7 @@ const { Composer } = require('telegraf');
 const Clickup = require('../../api');
 const getAttentionFeature = require('../../features/getAttention.feature');
 const setAssigneeFeature = require('../../features/setAssignee.feature');
+const sendMessagePrevComplexScene = require('../../keyboards/scenes/complexSceneKeyboards/sendMessagePrevComplex.scene');
 const sendMessageRouteEnterScene = require('../../keyboards/scenes/complexSceneKeyboards/sendMessageRouteEnter.scene');
 const { sendError } = require('../../utils/sendLoadings');
 
@@ -42,6 +43,18 @@ const complexSceneEnterHandler = (task_id, task_name, task) => {
       await sendMessageRouteEnterScene(ctx, task, task_name);
     }
   });
+
+  composer.action('back', async (ctx) => {
+
+    try {
+      await ctx.wizard.back();
+      await sendMessagePrevComplexScene(ctx)
+    } catch (e) {
+      await sendError(ctx, e);
+      await sendMessageRouteEnterScene(ctx, task, task_name);
+    }
+  });
+
 
 
   return composer

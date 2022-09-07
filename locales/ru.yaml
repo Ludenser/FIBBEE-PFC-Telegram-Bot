@@ -130,10 +130,10 @@ mainComplex_scene_keyBoard_header_ifSideTaskMenu: |
 mainComplex_scene_keyBoard_sideTaskMenu: |
   Меню доп. задачи
 
-mainComplex_scene_sideTaskMenu_header: |
+mainComplex_scene_keyBoard_sideTaskMenu_header: |
   Выбери нужную задачу:
 
-mainComplex_scene_sideTaskMenu_actions_header: |
+mainComplex_scene_keyBoard_sideTaskMenu_actions_header: |
   Выбери нужное действие:
 
 mainComplex_scene_keyBoard_finish: |

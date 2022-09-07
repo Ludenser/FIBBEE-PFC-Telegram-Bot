@@ -35,11 +35,18 @@ module.exports = (ctx) => {
             })
 
             initStepScene.action('get_start', async (ctx) => {
-                await ctx.deleteMessage();
-                await sendMessageInitKeyboardInitStep(ctx);
-                await ctx.scene.enter(
-                    `${ctx.session.all_lists[i].scene_id}`
-                );
+                try {
+                    await ctx.deleteMessage();
+                    await sendMessageInitKeyboardInitStep(ctx);
+                    ctx.scene.reset()
+                    await ctx.scene.enter(
+                        `${i}`
+                    );
+                } catch (e) {
+                    await sendError(ctx, e)
+                    await sendMessageInitKeyboardInitStep(ctx);
+                }
+
             });
 
             initStepScene.action('leaveScene', async (ctx) => {
