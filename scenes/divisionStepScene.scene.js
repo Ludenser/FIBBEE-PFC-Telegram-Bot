@@ -34,6 +34,10 @@ module.exports = (ctx) => {
       } catch (e) {
         console.log(e);
         await sendError(ctx, e);
+        await sendMessageDriverMenu(ctx);
+        ctx.session.currentRouteNumber = null;
+        await ctx.scene.leave();
+
       }
     });
 

@@ -16,7 +16,7 @@ module.exports = (ctx) => {
     const initStepScene = new Composer();
 
     const init = _(ctx.session.all_lists)
-        .map(el => {
+        .map((el, i) => {
 
             const filter = (ctx, next) => ctx.session.states.currentMenuState = 'init' && next()
 
@@ -35,11 +35,18 @@ module.exports = (ctx) => {
             })
 
             initStepScene.action('get_start', async (ctx) => {
-                await ctx.deleteMessage();
-                await sendMessageInitKeyboardInitStep(ctx);
-                await ctx.scene.enter(
-                    `ROUTE_${ctx.session.currentRouteNumber}_WIZARD_ID`
-                );
+                try {
+                    await ctx.deleteMessage();
+                    await sendMessageInitKeyboardInitStep(ctx);
+                    ctx.scene.reset()
+                    await ctx.scene.enter(
+                        `${i}`
+                    );
+                } catch (e) {
+                    await sendError(ctx, e)
+                    await sendMessageInitKeyboardInitStep(ctx);
+                }
+
             });
 
             initStepScene.action('leaveScene', async (ctx) => {

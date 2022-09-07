@@ -3,7 +3,7 @@
  * @param {RegExp} re - regExp.
  * @param {String} str - string.
   */
-module.exports = (re, str) => {
+const findMatch = (re, str) => {
     const regex = new RegExp(re, 'i')
     let s
     let m = regex.exec(str)
@@ -18,4 +18,15 @@ module.exports = (re, str) => {
     }
 
     return s.toString()
+}
+
+const replaceMatch = (stringFrom, stringTo) => {
+    let re = /(?<=)@().+/gm
+    const newString = stringFrom.replace(re, stringTo)
+    return newString
+}
+
+module.exports = {
+    findMatch,
+    replaceMatch
 }

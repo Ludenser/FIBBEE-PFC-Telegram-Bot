@@ -8,7 +8,7 @@ module.exports = async (ctx, message_ids) => {
   message_ids.forEach(async el => {
     await ctx.deleteMessage(el);
   })
-
+  ctx.session.states.attention_msg_isDeleted = true
   let reset = []
 
   return reset

@@ -6,7 +6,7 @@ const Clickup = require('../api');
 
 function formattedTaskString(value, index) {
   const timeStamp = toLocalTime(value)
-  return `\n\n\n${index + 1}. ${value.name} c ${timeStamp.timeStart} до ${timeStamp.timeDue}`
+  return `\n\n${index + 1}. ${value.name} c ${timeStamp.timeStart} до ${timeStamp.timeDue}`
 }
 
 function formattedTitleString(value, index) {
@@ -23,7 +23,7 @@ module.exports = {
 
     const resArray = _(ctx.session.all_lists)
       .map((list) => {
-        const nameValues = _(list.allTasks)
+        const nameValues = _(list.allTasksWithoutSide)
           .map((value, index) => { return formattedTaskString(value, index) })
         return nameValues
       })
@@ -46,7 +46,7 @@ module.exports = {
 
       .map((value, index) => { return formattedTaskString(value, index) })
 
-    const reply = nameValues.join("\n\n")
+    const reply = nameValues.join("\n")
 
     const msg = `🔸  <b>Маршрут:</b>\n${reply}`
 
