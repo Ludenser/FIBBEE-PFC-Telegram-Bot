@@ -20,6 +20,7 @@ const postAttachments = async (ctx, task_id) => {
   const response = await axios({ url, responseType: 'stream' })
   const ClickAPI = new Clickup(ctx.session.user.CU_Token)
   await ClickAPI.Tasks.createAttachment(ctx.update.message.message_id, task_id, response.data)
+ await sendProses(ctx, `В таск ${task_id} успешно загружено фото.`)
 }
 
 /**
