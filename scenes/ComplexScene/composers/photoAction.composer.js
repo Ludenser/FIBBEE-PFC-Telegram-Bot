@@ -15,7 +15,7 @@ const complexScenePhotoAction = (task_id, task_name) => {
       ctx.session.states.currentMenuState = 'photo'
       ctx.session.states.currentTask_id = task_id
       await ctx.deleteMessage();
-      ctx.session.states.attention_msg_id = await deleteMessagesById(ctx, ctx.session.states.attention_msg_id)
+      ctx.session.states.attention_msg.id = await deleteMessagesById(ctx, ctx.session.states.attention_msg.id)
       await sendMessagePhotoScene(ctx, task_name)
 
     } catch (e) {

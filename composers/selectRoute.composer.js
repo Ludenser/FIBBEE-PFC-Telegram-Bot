@@ -3,6 +3,7 @@ const { sendError } = require('../utils/sendLoadings');
 const _ = require('lodash');
 const { sendFormatMsgFromCurrentClickUpList } = require('../features/getRoute.feature');
 const sendMessageInitRouteMenu = require('../keyboards/mainMenu/sendMessageInit.routeMenu');
+const deleteMessagesById = require('../utils/deleteMessagesById');
 
 const ROUTE = 'route'
 
@@ -24,6 +25,9 @@ module.exports = (ctx) => {
                     await ctx.deleteMessage()
                     ctx.session.currentRouteNumber = i
                     ctx.session.states.currentMenuState = 'division_scene'
+                    if (!ctx.session.states.route_msg.isDeleted) {
+                        ctx.session.states.route_msg.id = await deleteMessagesById(ctx, ctx.session.states.route_msg.id, ctx.session.states.route_msg.isDeleted)
+                    }
                     await sendFormatMsgFromCurrentClickUpList(ctx, ctx.session.all_lists[i].tasksWithoutDriverTaskAndSide)
                     await sendMessageInitRouteMenu(ctx)
                     await ctx.scene.enter('INITIAL_WIZARD_ID')

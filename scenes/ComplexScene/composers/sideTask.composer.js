@@ -25,8 +25,8 @@ module.exports = (ctx, task_id, task_name, task) => {
       composer.action(SIDETASK_MENU, async (ctx) => {
         try {
           ctx.session.states.currentMenuState = 'sideTask'
-          if (!ctx.session.states.attention_msg_isDeleted) {
-            ctx.session.states.attention_msg_id = await deleteMessagesById(ctx, ctx.session.states.attention_msg_id)
+          if (!ctx.session.states.attention_msg.isDeleted) {
+            ctx.session.states.attention_msg.id = await deleteMessagesById(ctx, ctx.session.states.attention_msg.id)
           }
           await ctx.deleteMessage();
           await sendMessageSideTaskSelectScene(ctx, current_list)
