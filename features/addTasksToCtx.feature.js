@@ -66,7 +66,7 @@ module.exports = async (ctx) => {
 
             )
         })
-        console.log(all_lists);
+        // console.log(all_lists);
         ctx.session.all_existLabels = all_existLabels
         ctx.session.all_lists = all_lists
         ctx.session.team_id = team_id
@@ -85,7 +85,10 @@ module.exports = async (ctx) => {
         ctx.session.states.currentList_id = ''
         ctx.session.states.currentTask_id = ''
         ctx.session.states.currentTask_discordWebHook = ''
-        ctx.session.states.currentSideTaskId = ''
+        ctx.session.states.currentSideTask = {}
+        ctx.session.states.currentSideTask.id = ''
+        ctx.session.states.currentSideTask.ids = []
+        ctx.session.states.currentSideTask.name = ''
 
     } catch (error) {
         await sendError(ctx, error)

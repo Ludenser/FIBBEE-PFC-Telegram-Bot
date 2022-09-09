@@ -19,13 +19,11 @@ module.exports = async (ctx, task, msg) => {
     // !ctx.session.states.isTaskFirst && buttons.push(Markup.button.callback('Вернуться к предыдущему', 'back'))
     if (task) {
         const currentTaskLabel = task.custom_fields.find(o => o.type === 'labels')
-
         if (currentTaskLabel && currentTaskLabel.hasOwnProperty('value')) {
             ctx.session.states.currentLocationLabel = currentTaskLabel.value[0]
             if (ctx.session.all_lists[ctx.session.currentRouteNumber].hasOwnProperty('sideTasks')) {
-
+                let labels_id = []
                 for (let sideTask of ctx.session.all_lists[ctx.session.currentRouteNumber].sideTasks) {
-                    let labels_id = []
                     for (let custom_field of sideTask.custom_fields) {
                         if (custom_field.type === 'labels') {
                             for (let labels_ids of custom_field.value) {
@@ -34,11 +32,13 @@ module.exports = async (ctx, task, msg) => {
                             }
                         }
                     }
-
-                    if (labels_id.includes(currentTaskLabel.value.join())) {
-                        msg += '\n' + ctx.i18n.t('mainComplex_scene_keyBoard_header_ifSideTaskMenu')
-                        buttons.push(Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_sideTaskMenu'), 'sideTask_menu'))
-                    }
+                }
+                if (labels_id.includes(currentTaskLabel.value.join())) {
+                    ctx.session.states.currentSideTask.ids = labels_id.filter((item, index) => {
+                        return labels_id.indexOf(item) === index
+                    })
+                    msg += '\n' + ctx.i18n.t('mainComplex_scene_keyBoard_header_ifSideTaskMenu')
+                    buttons.push(Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_sideTaskMenu'), 'sideTask_menu'))
                 }
             }
 

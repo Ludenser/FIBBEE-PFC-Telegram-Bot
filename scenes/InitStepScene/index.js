@@ -13,9 +13,13 @@ const initSceneTextHandler = require('./handlers/text.handler');
 
 const initStepScene = new Composer();
 
-initStepScene.use(initScenePhotoHandler(), initSceneTextHandler())
-initStepScene.use(getStart)
-initStepScene.use(leaveAction)
+initStepScene.use(
+  initScenePhotoHandler(),
+  initSceneTextHandler(),
+  getStart,
+  leaveAction
+)
+
 
 module.exports = initStepScene
 

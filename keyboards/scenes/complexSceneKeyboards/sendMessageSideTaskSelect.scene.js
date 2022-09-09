@@ -4,17 +4,15 @@ const { Markup } = require('telegraf')
     * @param {Сtx} ctx - объект контекста telegraf
     * @param {Object} current_list - объект текущего таск листа
     */
-module.exports = async (ctx, current_list) => {
+module.exports = async (ctx, sideTasks, task) => {
 
   function sideTasksSelectKeyboard() {
 
     let buttonsArray = []
 
-    for (const [i, sideTask] of current_list.sideTasks.entries()) {
+    for (const sideTask of sideTasks) {
       buttonsArray.push(Markup.button.callback(`${sideTask.name}`, `${sideTask.id}`))
-
     }
-
 
     buttonsArray.push(Markup.button.callback(ctx.i18n.t('return_button'), 'reenter'))
     return buttonsArray

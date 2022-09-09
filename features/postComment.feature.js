@@ -10,11 +10,11 @@ const sendMsgToDiscord = require('./sendWebHookToDiscord.feature')
   * @param {Ctx} ctx - Объект контекста telegraf
   * @param {String} task_id - id задачи ClickUp 
   */
-module.exports = async (ctx, task_id) => {
-  const ClickAPI = new ClickUp(ctx.session.user.CU_Token)
+const postCommentFromMsg = async (ctx, task_id) => {
+
 
   try {
-
+    const ClickAPI = new ClickUp(ctx.session.user.CU_Token)
     const usernameQuery = findMatch('(?<=@).+', ctx.update.message.text)
     if (usernameQuery == ctx.update.message.text) {
       await ClickAPI.Tasks.createComment(ctx.update.message.text, task_id)
@@ -72,6 +72,23 @@ module.exports = async (ctx, task_id) => {
 
   } catch (e) {
     await sendError(ctx, e)
+    console.log(e);
   }
 
+}
+
+const postCommentFromPhoto = async (ctx, task_id, location_name) => {
+  try {
+    const ClickAPI = new ClickUp(ctx.session.user.CU_Token)
+    await ClickAPI.Tasks.createComment(`⬆ Фото из ${location_name} ⬆`, task_id)
+  } catch (error) {
+    await sendError(ctx, e)
+    console.log(e);
+  }
+
+}
+
+module.exports = {
+  postCommentFromMsg,
+  postCommentFromPhoto
 }

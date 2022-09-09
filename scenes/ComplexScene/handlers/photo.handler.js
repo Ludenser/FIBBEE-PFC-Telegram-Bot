@@ -39,7 +39,11 @@ const complexScenePhotoHandler = () => {
         await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         break;
       case SIDETASK_PHOTO:
-        await postAttachments(ctx, ctx.session.states.currentSideTaskId)
+        await postAttachments(ctx, ctx.session.states.currentSideTask.id)
+        break;
+      default:
+        await ctx.deleteMessage()
+        await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         break;
     }
 

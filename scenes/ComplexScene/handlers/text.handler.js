@@ -1,7 +1,7 @@
 const { Composer } = require('telegraf');
 const { editCustom_field } = require('../../../features/editCustomFields.feature');
 const { sendProses } = require('../../../utils/sendLoadings');
-const postCommentFeature = require('../../../features/postComment.feature')
+const { postCommentFromMsg } = require('../../../features/postComment.feature')
 
 
 const MAIN = 'main'
@@ -23,7 +23,7 @@ const complexSceneTextHandler = (task_id) => {
         break;
       case COMMENT:
         await ctx.deleteMessage()
-        await postCommentFeature(ctx, task_id);
+        await postCommentFromMsg(ctx, task_id);
         break;
       case PHOTO:
         await ctx.deleteMessage()
@@ -39,9 +39,13 @@ const complexSceneTextHandler = (task_id) => {
         break;
       case SIDETASK_COMMENT:
         await ctx.deleteMessage()
-        await postCommentFeature(ctx, ctx.session.states.currentSideTaskId)
+        await postCommentFromMsg(ctx, ctx.session.states.currentSideTask.id)
         break;
       case SIDETASK_PHOTO:
+        await ctx.deleteMessage()
+        await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        break;
+      default:
         await ctx.deleteMessage()
         await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         break;

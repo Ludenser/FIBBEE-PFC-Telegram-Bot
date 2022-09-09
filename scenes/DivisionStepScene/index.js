@@ -15,14 +15,18 @@ const divisionScenePhotoHandler = require('./handlers/photo.handler');
 
 const divisionStep_scene = new Composer();
 
-divisionStep_scene.use(divisionSceneTextHandler())
-divisionStep_scene.use(divisionScenePhotoHandler())
 divisionStep_scene.use(async (ctx, next) => {
-  divisionStep_scene.use(...openRouteComposer(ctx))
+  divisionStep_scene.use(
+    ...openRouteComposer(ctx),
+    divisionSceneTextHandler(),
+    divisionScenePhotoHandler(),
+    closeRoute,
+    leaveAction
+  )
   await next()
 })
-divisionStep_scene.use(closeRoute)
-divisionStep_scene.use(leaveAction)
+// divisionStep_scene.use(closeRoute)
+// divisionStep_scene.use(leaveAction)
 
 module.exports = divisionStep_scene;
 
