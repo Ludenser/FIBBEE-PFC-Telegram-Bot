@@ -73,8 +73,12 @@ module.exports = async (ctx) => {
         ctx.session.isAlreadyFilled = true
         ctx.session.states = {}
         ctx.session.states.isTaskLast = false
-        ctx.session.states.attention_msg_id = []
-        ctx.session.states.attention_msg_isDeleted = false
+        ctx.session.states.route_msg = {}
+        ctx.session.states.route_msg.id = []
+        ctx.session.states.route_msg.isDeleted = false
+        ctx.session.states.attention_msg = {}
+        ctx.session.states.attention_msg.id = []
+        ctx.session.states.attention_msg.isDeleted = false
         ctx.session.states.currentLocationName = ''
         ctx.session.states.currentLocationLabel = ''
         ctx.session.states.currentMenuState = 'main_menu'

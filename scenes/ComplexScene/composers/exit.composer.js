@@ -14,8 +14,8 @@ const complexSceneExitHandler = (task_id, task_checklists, driverTask_id) => {
 
     try {
       const ClickAPI = new Clickup(ctx.session.user.CU_Token);
-      if (!ctx.session.states.attention_msg_isDeleted) {
-        ctx.session.states.attention_msg_id = await deleteMessagesById(ctx, ctx.session.states.attention_msg_id)
+      if (!ctx.session.states.attention_msg.isDeleted) {
+        ctx.session.states.attention_msg.id = await deleteMessagesById(ctx, ctx.session.states.attention_msg.id)
       }
       await ClickAPI.Tasks.setStatus(task_id, 'done');
       await ClickAPI.TimeTracking.stopEntry(task_id);

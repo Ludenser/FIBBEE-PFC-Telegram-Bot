@@ -16,7 +16,7 @@ const complexSceneCustomFieldsActionsHandler = (task_id) => {
   composer.action(CUSTOM_FIELD_EDIT_ACT, async (ctx) => {
     try {
       await ctx.deleteMessage()
-      ctx.session.states.attention_msg_id = await deleteMessagesById(ctx, ctx.session.states.attention_msg_id)
+      ctx.session.states.attention_msg.id = await deleteMessagesById(ctx, ctx.session.states.attention_msg.id)
       await sendMessageCustomFieldEditScene(ctx)
     } catch (e) {
       await sendProses(ctx, e)

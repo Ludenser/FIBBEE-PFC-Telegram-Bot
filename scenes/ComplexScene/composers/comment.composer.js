@@ -13,7 +13,7 @@ const complexSceneCommentHandler = (task_id, task_name) => {
 
     try {
       ctx.session.states.currentMenuState = 'comment'
-      ctx.session.states.attention_msg_id = await deleteMessagesById(ctx, ctx.session.states.attention_msg_id)
+      ctx.session.states.attention_msg.id = await deleteMessagesById(ctx, ctx.session.states.attention_msg.id)
       await ctx.deleteMessage();
       await sendMessageCommentScene(ctx);
     } catch (e) {

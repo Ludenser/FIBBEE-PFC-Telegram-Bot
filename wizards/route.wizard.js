@@ -6,7 +6,7 @@ const initStepScene = require('../scenes/InitStepScene/index');
   * Конструктор распределительной сцены
   */
 
-const initialScene = (ctx) => {
+const initialScene = () => {
 
   return new Scenes.WizardScene('INITIAL_WIZARD_ID', divisionStep, initStepScene)
 

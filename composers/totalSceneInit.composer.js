@@ -10,7 +10,7 @@ const initialScene = require('../wizards/route.wizard');
 module.exports = (ctx) => {
 
   const totalSceneInitComposer = new Composer();
-  const stage = new Scenes.Stage([initialScene(ctx), ...complexScene(ctx)])
+  const stage = new Scenes.Stage([initialScene(), ...complexScene(ctx)])
 
   totalSceneInitComposer.use(stage.middleware())
   return totalSceneInitComposer

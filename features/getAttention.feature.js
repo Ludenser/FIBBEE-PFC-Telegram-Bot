@@ -8,7 +8,7 @@ const { sendProses } = require('../utils/sendLoadings')
    */
 module.exports = async (ctx, task_id) => {
     try {
-        ctx.session.states.attention_msg_id = []
+        ctx.session.states.attention_msg.id = []
 
         const ClickAPI = new Clickup(ctx.session.user.CU_Token)
         const allCustomFields = await ClickAPI.Tasks.getTaskByTaskId(task_id)
@@ -19,14 +19,14 @@ module.exports = async (ctx, task_id) => {
             element.value
                 && await ctx.replyWithHTML(`<b>${element.name}</b> \n${element.value}`)
                     .then((result) => {
-                        ctx.session.states.attention_msg_id = [...ctx.session.states.attention_msg_id, result.message_id]
+                        ctx.session.states.attention_msg.id = [...ctx.session.states.attention_msg.id, result.message_id]
                     })
             // : await ctx.replyWithHTML(ctx.i18n.t('mainComplex_scene_keyBoard_customFields_notExist', { name: element.name }))
             //     .then((result) => {
-            //         ctx.session.states.attention_msg_id = [...ctx.session.states.attention_msg_id, result.message_id]
+            //         ctx.session.states.attention_msg.id = [...ctx.session.states.attention_msg.id, result.message_id]
             //     })
         }
-        ctx.session.states.attention_msg_isDeleted = false
+        ctx.session.states.attention_msg.isDeleted = false
     } catch (e) {
         await sendProses(ctx, e)
     }
