@@ -8,6 +8,11 @@ const _ = require('lodash');
 const authUserFeature = require('../features/authUser.feature');
 const totalSceneInitComposer = require('./totalSceneInit.composer');
 const selectRouteComposer = require('./selectRoute.composer');
+const globalPhotoHandler = require('./handlers/photo.handler');
+const globalTextHandler = require('./handlers/text.handler');
+
+const START = 'start'
+const UPDATE = 'update'
 
 /**
   * Обработчик стартовых команд.
@@ -24,9 +29,10 @@ composer.start(async (ctx) => {
   await ctx.deleteMessage()
   const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name}`
   ctx.session.userName = cyrillicToTranslit.transform(userName)
-
   ctx.session.isAuthUser = false
   await authUserFeature(ctx.session)
+  composer.use(globalPhotoHandler())
+  composer.use(globalTextHandler())
 
   try {
     await sendMessageStart(ctx)
@@ -47,8 +53,8 @@ composer.start(async (ctx) => {
 
 })
 
-composer.action('start', async (ctx) => {
-
+composer.action(START, async (ctx) => {
+  ctx.session.states.currentMenuState = 'main_menu'
   await ctx.deleteMessage()
   await sendMessageStart(ctx)
 
@@ -69,7 +75,7 @@ composer.action('start', async (ctx) => {
 
 })
 
-composer.command('update', async (ctx) => {
+composer.command(UPDATE, async (ctx) => {
 
   ctx.session.all_lists = []
   ctx.session.isAlreadyFilled = false
