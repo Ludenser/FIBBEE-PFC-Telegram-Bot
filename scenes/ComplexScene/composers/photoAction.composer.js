@@ -1,13 +1,15 @@
 const { Composer } = require('telegraf');
-const sendMessagePhotoScene = require('../../keyboards/scenes/complexSceneKeyboards/sendMessagePhoto.scene');
-const sendMessageRouteEnterScene = require('../../keyboards/scenes/complexSceneKeyboards/sendMessageRouteEnter.scene');
-const deleteMessagesById = require('../../utils/deleteMessagesById');
-const { sendError } = require('../../utils/sendLoadings');
+const sendMessagePhotoScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessagePhoto.scene');
+const sendMessageRouteEnterScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessageRouteEnter.scene');
+const deleteMessagesById = require('../../../utils/deleteMessagesById');
+const { sendError } = require('../../../utils/sendLoadings');
+
+const UPL_PHOTO = 'upl_photo'
 
 const complexScenePhotoAction = (task_id, task_name) => {
   const composer = new Composer()
 
-  composer.action('upl_photo', async (ctx) => {
+  composer.action(UPL_PHOTO, async (ctx) => {
 
     try {
       ctx.session.states.currentMenuState = 'photo'

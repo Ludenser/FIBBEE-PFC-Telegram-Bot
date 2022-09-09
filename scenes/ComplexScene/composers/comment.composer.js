@@ -1,14 +1,15 @@
 const { Composer } = require('telegraf');
-const sendMessageCommentScene = require('../../keyboards/scenes/complexSceneKeyboards/sendMessageComment.scene');
-const sendMessageRouteEnterScene = require('../../keyboards/scenes/complexSceneKeyboards/sendMessageRouteEnter.scene');
-const deleteMessagesById = require('../../utils/deleteMessagesById');
+const sendMessageCommentScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessageComment.scene');
+const sendMessageRouteEnterScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessageRouteEnter.scene');
+const deleteMessagesById = require('../../../utils/deleteMessagesById');
+const { sendError } = require('../../../utils/sendLoadings');
 
-const { sendError } = require('../../utils/sendLoadings');
+const UPL_COMMENT = 'upl_comment'
 
 const complexSceneCommentHandler = (task_id, task_name) => {
   const composer = new Composer()
 
-  composer.action('upl_comment', async (ctx) => {
+  composer.action(UPL_COMMENT, async (ctx) => {
 
     try {
       ctx.session.states.currentMenuState = 'comment'

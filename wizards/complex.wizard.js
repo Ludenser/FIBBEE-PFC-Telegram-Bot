@@ -1,7 +1,7 @@
 const { Scenes } = require('telegraf');
-const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMenu');
 _ = require('lodash');
-const complex_scene = require('../scenes/complex.scene');
+const complex_scene = require('../scenes/ComplexScene/index')
+
 
 /**
   * Сцена инициализации роутов.

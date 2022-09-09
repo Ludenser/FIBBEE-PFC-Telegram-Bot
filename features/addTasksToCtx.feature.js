@@ -77,7 +77,7 @@ module.exports = async (ctx) => {
         ctx.session.states.attention_msg_isDeleted = false
         ctx.session.states.currentLocationName = ''
         ctx.session.states.currentLocationLabel = ''
-        ctx.session.states.currentMenuState = ''
+        ctx.session.states.currentMenuState = 'main_menu'
         ctx.session.states.currentList_id = ''
         ctx.session.states.currentTask_id = ''
         ctx.session.states.currentTask_discordWebHook = ''
