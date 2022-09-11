@@ -37,7 +37,7 @@ module.exports = (ctx, task_id, task_name, task) => {
         ctx.session.states.attention_msg.id = await deleteMessagesById(ctx, ctx.session.states.attention_msg.id)
       }
       await ctx.deleteMessage();
-      await sendMessageSideTaskSelectScene(ctx, existSideTasks, task)
+      await sendMessageSideTaskSelectScene(ctx, existSideTasks)
     } catch (e) {
       await sendError(ctx, e);
       await sendMessageRouteEnterScene(ctx, task_name, task_id);

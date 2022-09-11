@@ -12,7 +12,11 @@ const getCustomFieldIdFromCurrentTask = async (list_id, ClickAPI) => {
 
   return custom_field[0].id
 }
-
+/**
+   * Изменение поля custom_field "Обратить внимание!"
+   * @param {Ctx} ctx - объект контекста telegraf
+   * @param {String} task_id - id текущего task в ClickUp
+   */
 
 const editCustom_field = async (ctx, task_id) => {
   const ClickAPI = new Clickup(ctx.session.user.CU_Token)
@@ -21,7 +25,11 @@ const editCustom_field = async (ctx, task_id) => {
   await sendProses(ctx, ctx.i18n.t('mainComplex_scene_keyBoard_customFieldEditAction_editDone'))
 
 }
-
+/**
+   * Очистка поля custom_field "Обратить внимание!"
+   * @param {Ctx} ctx - объект контекста telegraf
+   * @param {String} task_id - id текущего task в ClickUp
+   */
 const removeCustom_field = async (ctx, task_id) => {
   const ClickAPI = new Clickup(ctx.session.user.CU_Token)
   const customField_id = await getCustomFieldIdFromCurrentTask(ctx.session.all_lists[ctx.session.currentRouteNumber].list_id, ClickAPI)

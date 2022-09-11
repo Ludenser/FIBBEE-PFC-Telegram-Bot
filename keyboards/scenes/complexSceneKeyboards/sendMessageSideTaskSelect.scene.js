@@ -2,9 +2,9 @@ const { Markup } = require('telegraf')
 /**
     * Клавиатура меню выбора доп.задачи
     * @param {Сtx} ctx - объект контекста telegraf
-    * @param {Object} current_list - объект текущего таск листа
+    * @param {Object} sideTasks - объект текущей доп.задачи
     */
-module.exports = async (ctx, sideTasks, task) => {
+module.exports = async (ctx, sideTasks) => {
 
   function sideTasksSelectKeyboard() {
 
