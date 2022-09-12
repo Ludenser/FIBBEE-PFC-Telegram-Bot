@@ -10,7 +10,7 @@ module.exports = async (ctx) => {
     ctx.session.user = userIdMatch
 
     if (ctx.session.user) {
-        if (ctx.hasOwnProperty('startPayload')) {
+        if (ctx.startPayload) {
             ctx.session.user.CU_Token = ctx.startPayload
             ctx.session.isAuthUser = true
         }
