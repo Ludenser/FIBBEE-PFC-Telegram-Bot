@@ -9,7 +9,7 @@ module.exports = async (ctx) => {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: 'Авторизация', url: 'https://telegrambottest.herokuapp.com//auth/' },
+            { text: 'Авторизация', url: 'https://telegrambottest.herokuapp.com/auth/' },
           ],
           [
             { text: ctx.i18n.t('start_keyBoard_info'), callback_data: 'info' },

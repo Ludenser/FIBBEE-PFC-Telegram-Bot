@@ -18,7 +18,7 @@ let clickupAuth = new ClientOAuth2({
     clientSecret: 'H55Q9B18O1S97NKUKL65MO0B77ULPBOZP18KYFXVXR04596XS5X5YJJSO7B33VO7',
     accessTokenUri: 'https://app.clickup.com/api/v2/oauth/token',
     authorizationUri: 'https://app.clickup.com/api',
-    redirectUri: 'http://localhost:3000/auth/callback'
+    redirectUri: 'https://telegrambottest.herokuapp.com/auth/callback'
 })
 
 
