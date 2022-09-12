@@ -26,6 +26,7 @@ const cyrillicToTranslit = new convertTranslit();
 composer.start(async (ctx) => {
 
   await ctx.deleteMessage()
+  console.log(ctx);
   const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name}`
   ctx.session.userName = cyrillicToTranslit.transform(userName)
   ctx.session.isAuthUser = false
