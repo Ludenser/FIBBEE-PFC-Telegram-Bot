@@ -19,13 +19,13 @@ app.listen(PORT, () => {
   console.log(`Server is starting by ${PORT} port `);
 })
 
-app.use('/auth', function (req, res) {
+app.get('/auth', function (req, res) {
   let uri = clickupAuth.code.getUri()
   res.redirect(uri)
 })
 
-app.use('/auth/callback', function (req, res) {
-
+app.get('/auth/callback', function (req, res) {
+  console.log(req.originalUrl);
   let reg = /(?<==).+/gm
   const tokenString = req.originalUrl.match(reg)
   console.log(tokenString[0]);
