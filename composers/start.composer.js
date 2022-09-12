@@ -32,11 +32,8 @@ composer.start(async (ctx) => {
   const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name}`
   ctx.session.userName = cyrillicToTranslit.transform(userName)
   ctx.session.isAuthUser = false
-  if (ctx.hasOwnProperty('startPayload')) {
-    ctx.session.user.CU_Token = ctx.startPayload
-    ctx.session.isAuthUser = true
-  }
-  // await authUserFeature(ctx.session)
+
+  await authUserFeature(ctx.session)
 
 
   try {

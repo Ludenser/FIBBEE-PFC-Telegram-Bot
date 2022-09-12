@@ -8,7 +8,11 @@ module.exports = async (session) => {
     const userIdMatch = _(supplyTeam_ids)
         .find(['username', session.userName])
     session.user = userIdMatch
+
     if (session.user) {
-        session.isAuthUser = true
+        if (ctx.hasOwnProperty('startPayload')) {
+            session.user.CU_Token = ctx.startPayload
+            session.isAuthUser = true
+        }
     }
 }
