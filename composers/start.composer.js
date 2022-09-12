@@ -3,7 +3,6 @@ const sendMessageStart = require('../keyboards/mainMenu/sendMessageStart');
 const { sendError, sendProses } = require('../utils/sendLoadings');
 const addTasksToCtx = require('../features/addTasksToCtx.feature');
 const convertTranslit = require('cyrillic-to-translit-js')
-const chalk = require('chalk');
 const _ = require('lodash');
 const authUserFeature = require('../features/authUser.feature');
 const totalSceneInitComposer = require('./totalSceneInit.composer');
@@ -42,13 +41,16 @@ composer.start(async (ctx) => {
 
   if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
 
-    console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
     await addTasksToCtx(ctx)
-    console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
-    if (ctx.session.all_lists.length) {
-      composer.use(totalSceneInitComposer(ctx))
-      composer.use(...selectRouteComposer(ctx))
-    }
+    ctx.session.all_lists.forEach(el => {
+      if (Object.hasOwn(el, 'driverTask') && Object.hasOwn(el, 'tasksWithoutDriverTaskAndSide')) {
+        composer.use(totalSceneInitComposer(ctx))
+        composer.use(...selectRouteComposer(ctx))
+      }
+    })
+
+
+
   }
 
 })
@@ -61,14 +63,13 @@ composer.action(START, async (ctx) => {
   composer.use(async (ctx, next) => {
 
     if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
-
-      console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
       await addTasksToCtx(ctx)
-      console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
-      if (ctx.session.all_lists.length) {
-        composer.use(totalSceneInitComposer(ctx))
-        composer.use(...selectRouteComposer(ctx))
-      }
+      ctx.session.all_lists.forEach(el => {
+        if (Object.hasOwn(el, 'driverTask') && Object.hasOwn(el, 'tasksWithoutDriverTaskAndSide')) {
+          composer.use(totalSceneInitComposer(ctx))
+          composer.use(...selectRouteComposer(ctx))
+        }
+      })
     }
     await next()
   })
@@ -80,13 +81,13 @@ composer.command(UPDATE, async (ctx) => {
   ctx.session.all_lists = []
   ctx.session.isAlreadyFilled = false
   if (ctx.session.isAuthUser) {
-    console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
     await addTasksToCtx(ctx)
-    console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
-    if (ctx.session.all_lists.length) {
-      composer.use(totalSceneInitComposer(ctx))
-      composer.use(...selectRouteComposer(ctx))
-    }
+    ctx.session.all_lists.forEach(el => {
+      if (Object.hasOwn(el, 'driverTask') && Object.hasOwn(el, 'tasksWithoutDriverTaskAndSide')) {
+        composer.use(totalSceneInitComposer(ctx))
+        composer.use(...selectRouteComposer(ctx))
+      }
+    })
     await ctx.deleteMessage()
   } else {
     await sendProses(ctx, ctx.i18n.t('noAccessError_message'))

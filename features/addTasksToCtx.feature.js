@@ -6,6 +6,7 @@ const { team_id } = setting;
 const list_ids = require('../lib/list_idsFromClickUp');
 const Clickup = require('../api');
 const { sendError } = require('../utils/sendLoadings');
+const chalk = require('chalk');
 
 
 /**
@@ -15,22 +16,24 @@ const { sendError } = require('../utils/sendLoadings');
 module.exports = async (ctx) => {
 
     try {
+        console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
         const ClickAPI = new Clickup(ctx.session.user.CU_Token)
         const all_tasks_any_status = await ClickAPI.Tasks.getTodayTasksWithAnyStatus(list_ids)
         const all_labels = await ClickAPI.Custom_fields.getAllCustomFields(list_ids[0])
         const all_existLabels = all_labels.fields.find(o => o.type === 'labels').type_config.options
+
+
+        let allTasksWithoutSide = _(all_tasks_any_status.data.tasks)
+            .filter(item => item.name.includes('Обслуживание') || item.name.includes('водителя') || item.name.includes('Пополнение'))
+            .groupBy(item => item.list.id)
+            .map((value, key) => ({ list_id: key, allTasksWithoutSide: value, }))
+            .value();
 
         let driverTask = _(all_tasks_any_status.data.tasks)
             .reverse()
             .filter(item => item.name.includes('водителя'))
             .groupBy(item => item.list.id)
             .map((value, key) => (value[0].status.status.includes('in progress') ? { list_id: key, driverTask: value, isOpened: true, } : { list_id: key, driverTask: value }))
-            .value();
-
-        let allTasksWithoutSide = _(all_tasks_any_status.data.tasks)
-            .filter(item => item.name.includes('Обслуживание') || item.name.includes('водителя') || item.name.includes('Пополнение'))
-            .groupBy(item => item.list.id)
-            .map((value, key) => ({ list_id: key, allTasksWithoutSide: value, }))
             .value();
 
         let tasksWithoutDriverTaskAndSide = _(all_tasks_any_status.data.tasks)
@@ -53,20 +56,19 @@ module.exports = async (ctx) => {
             .groupBy(item => item.list.id)
             .map((value, key) => ({ list_id: key, sideTasks: value, }))
             .value();
-
+        if (!driverTask || !tasksWithoutDriverTaskAndSide) {
+            console.log(chalk.whiteBright.bgRed('ctx.session fill is incomplete!'))
+        }
 
         let all_lists = allTasksWithoutSide.map((element, index) => {
             return Object.assign(
                 {},
                 sideTasks[index],
-                allTasksWithoutSide[index],
                 driverTask[index],
                 tasksWithoutDriverTaskAndSide[index],
-
-
             )
         })
-        // console.log(all_lists);
+        console.log(all_lists);
         ctx.session.all_existLabels = all_existLabels
         ctx.session.all_lists = all_lists
         ctx.session.team_id = team_id
@@ -89,9 +91,11 @@ module.exports = async (ctx) => {
         ctx.session.states.currentSideTask.id = ''
         ctx.session.states.currentSideTask.ids = []
         ctx.session.states.currentSideTask.name = ''
+        console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
 
     } catch (error) {
         await sendError(ctx, error)
+        console.log(chalk.whiteBright.bgRed('ctx.session fill is incomplete!'))
     }
 
 }

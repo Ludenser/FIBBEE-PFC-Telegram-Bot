@@ -23,7 +23,7 @@ module.exports = {
 
     const resArray = _(ctx.session.all_lists)
       .map((list) => {
-        const nameValues = _(list.allTasksWithoutSide)
+        const nameValues = _(list.tasksWithoutDriverTaskAndSide)
           .map((value, index) => { return formattedTaskString(value, index) })
         return nameValues
       })
