@@ -33,7 +33,7 @@ composer.start(async (ctx) => {
   ctx.session.userName = cyrillicToTranslit.transform(userName)
   ctx.session.isAuthUser = false
 
-  await authUserFeature(ctx.session)
+  await authUserFeature(ctx)
 
 
   try {
