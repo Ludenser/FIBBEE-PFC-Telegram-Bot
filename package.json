@@ -29,6 +29,7 @@
     "@grammyjs/i18n": "^0.5.1",
     "axios": "^0.21.1",
     "clickup-wrapper": "^1.0.1",
+    "client-oauth2": "^4.3.3",
     "cyrillic-to-translit-js": "^3.2.1",
     "discord-webhook-api": "^1.0.1",
     "discord-webhook-node": "^1.1.8",
