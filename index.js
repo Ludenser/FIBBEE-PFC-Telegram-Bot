@@ -8,10 +8,10 @@ const mainMenuComposer = require('./composers/mainMenu.composer');
 const routesInfoComposer = require('./composers/routesInfo.composer');
 const LocalSession = require('telegraf-session-local');
 const express = require('express')
+const ClientOAuth2 = require('client-oauth2')
 
 
 require('dotenv').config();
-let ClientOAuth2 = require('client-oauth2')
 
 let clickupAuth = new ClientOAuth2({
     clientId: 'PJERCGBWE7XIVE0XS8N1R6R0MQCV6TK2',
