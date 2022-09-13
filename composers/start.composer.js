@@ -10,6 +10,8 @@ const totalSceneInitComposer = require('./totalSceneInit.composer');
 const selectRouteComposer = require('./selectRoute.composer');
 const globalPhotoHandler = require('./handlers/photo.handler');
 const globalTextHandler = require('./handlers/text.handler');
+const userModel = require('../db/models');
+const { where } = require('../db/index');
 
 const START = 'start'
 const UPDATE = 'update'
@@ -35,8 +37,19 @@ composer.start(async (ctx) => {
     const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name}`
     ctx.session.userName = cyrillicToTranslit.transform(userName)
     ctx.session.isAuthUser = false
+    const userId = await userModel.findOne({ where: { tg_username: userName } })
+    console.log(userId);
+    if (!userId) {
+      await authUserFeature(ctx)
+    } else {
+      ctx.session.user = {
+        id: userId.clickup_user_id,
+        username: userId.tg_username,
+        CU_Token: userId.clickup_token
+      }
+      ctx.session.isAuthUser = true
+    }
 
-    await authUserFeature(ctx)
     await sendMessageStart(ctx)
 
     if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {

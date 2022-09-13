@@ -1,28 +1,24 @@
 const fs = require('fs');
+const { Markup } = require('telegraf');
 const setting = JSON.parse(fs.readFileSync(`./lib/setting.json`))
 const { ownerbot } = setting
 
 module.exports = async (ctx) => {
+  let buttons = [
+    Markup.button.callback(ctx.i18n.t('start_keyBoard_info'), 'info'),
+  ]
+
+  !ctx.session.isAuthUser
+    ? buttons.push(Markup.button.url('Авторизоваться', 'https://telegrambottest.herokuapp.com/auth/'))
+    : buttons.push(
+      Markup.button.callback(ctx.i18n.t('start_keyBoard_docs'), 'docs'),
+      Markup.button.callback(ctx.i18n.t('start_keyBoard_driverMenu'), 'driverMenu'),
+    )
+
 
   await ctx.reply(ctx.i18n.t('start_keyBoard_header', { ctx, ownerbot }),
-    {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            { text: 'Авторизация', url: 'https://telegrambottest.herokuapp.com/auth/' },
-          ],
-          [
-            { text: ctx.i18n.t('start_keyBoard_info'), callback_data: 'info' },
-          ],
-          [
-            { text: ctx.i18n.t('start_keyBoard_docs'), callback_data: 'docs' }
-          ],
-          [
-            { text: ctx.i18n.t('start_keyBoard_driverMenu'), callback_data: 'driverMenu' }
-          ]
-        ]
-      },
-      parse_mode: "Markdown",
-      disable_web_page_preview: "true"
-    })
+    Markup.inlineKeyboard(buttons, {
+      wrap: (btn, index, currentRow) => currentRow.length >= (index + 2) / 2
+    }),
+  )
 }
