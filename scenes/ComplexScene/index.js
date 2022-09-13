@@ -22,16 +22,17 @@ module.exports = (tasks, driverTask) => {
     .map((task, i) => {
       const complex_scene = new Composer();
       complex_scene.use(complexSceneEnterActions(task.id, task.name, task))
+      complex_scene.use(
+        textActionHandlerComposer(task.id),
+        complexScenePhotoHandler(),
+        complexSceneNextStepActions(tasks, task, driverTask.id),
+        complexSceneExitActions(task.id, task.checklists, driverTask.id),
+        complexScenePhotoAction(task.id, task.name),
+        complexSceneCommentActions(task.id, task.name),
+        complexSceneCustomFieldsActions(task.id),
+      )
       complex_scene.use(async (ctx, next) => {
-        complex_scene.use(
-          textActionHandlerComposer(task.id),
-          complexScenePhotoHandler(),
-          complexSceneNextStepActions(tasks, task, driverTask.id),
-          complexSceneExitActions(task.id, task.checklists, driverTask.id),
-          complexScenePhotoAction(task.id, task.name),
-          complexSceneCommentActions(task.id, task.name),
-          complexSceneCustomFieldsActions(task.id),
-        )
+
         if (ctx.session.all_lists[ctx.session.currentRouteNumber].hasOwnProperty('sideTasks')) {
           complex_scene.use(complexSceneSideTaskActions(ctx, task.id, task.name, task),)
         }

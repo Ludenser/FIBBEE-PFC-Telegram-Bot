@@ -7,6 +7,7 @@ const startComposer = require('./composers/start.composer');
 const mainMenuComposer = require('./composers/mainMenu.composer');
 const routesInfoComposer = require('./composers/routesInfo.composer');
 const LocalSession = require('telegraf-session-local');
+require('dotenv').config();
 
 const i18n = new I18n({
     defaultLanguage: 'ru',
@@ -19,8 +20,6 @@ const token = process.env.TOKEN;
 const bot = new Telegraf(token)
 
 bot.use((new LocalSession({ database: 'session_db.json' })).middleware())
-
-bot.context.main_timer_id = undefined
 
 bot.use(
     updateLogger({

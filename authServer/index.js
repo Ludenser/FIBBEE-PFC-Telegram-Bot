@@ -4,10 +4,12 @@ require('dotenv').config();
 
 const PORT = process.env.PORT || 3000
 const APP_NAME = process.env.HEROKU_APP_NAME || 'telegrambottest'
+const CLIENT_ID = process.env.CLIENT_ID
+const CLIENT_SECRET = process.env.CLIENT_SECRET
 
 let clickupAuth = new ClientOAuth2({
-  clientId: 'PJERCGBWE7XIVE0XS8N1R6R0MQCV6TK2',
-  clientSecret: 'H55Q9B18O1S97NKUKL65MO0B77ULPBOZP18KYFXVXR04596XS5X5YJJSO7B33VO7',
+  clientId: CLIENT_ID,
+  clientSecret: CLIENT_SECRET,
   accessTokenUri: 'https://app.clickup.com/api/v2/oauth/token',
   authorizationUri: 'https://app.clickup.com/api',
   redirectUri: `https://${APP_NAME}.herokuapp.com/auth/callback`

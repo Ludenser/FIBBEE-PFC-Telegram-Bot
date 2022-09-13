@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const Clickup = require('../api');
 const supplyTeam_ids = require('../lib/supplyTeam_ids');
 /**
   * Функция для поиска telegram username текущего пользователя в списке зарегистрированных пользователей из файла lib/supplyTeam_ids
@@ -11,7 +12,11 @@ module.exports = async (ctx) => {
 
     if (ctx.session.user) {
         if (ctx.startPayload) {
-            ctx.session.user.CU_Token = ctx.startPayload
+            const code = ctx.startPayload
+            const token = new Clickup().Users.getToken(code)
+            ctx.session.user.CU_Token = token
+            const clickUpUser = new Clickup(ctx.session.user.CU_Token).Users.getUser_ByToken()
+            ctx.session.user = { ...ctx.session.user, clickUpUser }
             ctx.session.isAuthUser = true
         }
     }
