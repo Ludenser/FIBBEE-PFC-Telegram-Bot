@@ -1,5 +1,4 @@
 const axios = require('axios');
-require('dotenv').config();
 /**
     * Взаимодействия с пользователями.
     */
@@ -7,21 +6,6 @@ class Users {
 
   constructor(token) {
     this.token = token
-  }
-
-
-  async getToken(code) {
-    const response = await axios.post('https://api.clickup.com/api/v2/oauth/token',
-      {
-        params: {
-          client_id: process.env.CLIENT_ID,
-          client_secret: process.env.CLIENT_SECRET,
-          code: code
-        }
-      }
-
-    )
-    return response.data
   }
 
   /**

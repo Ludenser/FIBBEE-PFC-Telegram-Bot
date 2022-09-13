@@ -13,7 +13,7 @@ module.exports = async (ctx) => {
     if (ctx.session.user) {
         if (ctx.startPayload) {
             const code = ctx.startPayload
-            const token = new Clickup().Users.getToken(code)
+            const token = new Clickup().Token.getToken(code)
             ctx.session.user.CU_Token = token
             const clickUpUser = new Clickup(ctx.session.user.CU_Token).Users.getUser_ByToken()
             ctx.session.user = { ...ctx.session.user, clickUpUser }

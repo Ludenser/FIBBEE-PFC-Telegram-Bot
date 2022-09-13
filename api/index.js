@@ -2,12 +2,13 @@
 const Tasks = require('./components/Tasks.api');
 const TimeTracking = require("./components/TimeTracking.api");
 const Users = require("./components/Users.api");
-const Custom_fields = require("./components/Custom_fields.api")
+const Custom_fields = require("./components/Custom_fields.api");
+const Token = require('./components/Token.api');
 
 class Clickup {
   constructor(token) {
     this.token = token;
-
+    this.Token = new Token;
     this.Tasks = new Tasks(this.token);
     this.TimeTracking = new TimeTracking(this.token);
     this.Users = new Users(this.token);
