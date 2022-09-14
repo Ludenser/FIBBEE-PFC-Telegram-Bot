@@ -84,8 +84,22 @@ mainComplex_scene_keyBoard_comment: |
   Оставить комментарий
 
 mainComplex_scene_keyBoard_commentMenu_header: |
-  Напиши комментарий к таску, если нужно кого-то тегнуть, добавь в конце комментария "@имя фамилия" пользователя из клика.
+  Напиши комментарий к таску.
+  Для тега в клике, добавь в конце комментария "@имя фамилия" пользователя из клика. 
+  Для тега отдела и отправки сообщения в дискорд укажи после @ название отдела (monitoring/daily/service/supply)
 
+mainComplex_scene_commentActions_clickUpMention: |
+  Комментарий отправлен в таск. Тегнут ${username}
+
+mainComplex_scene_commentActions_discordMention: |
+  Комментарий отправлен в дискорд. Тегнут отдел.
+
+mainComplex_scene_commentActions_clickUpPlainTextComment: |
+  Комментарий отправлен в таск. Но ты никого не тегнул.
+
+mainComplex_scene_commentActions_incorrectTag: |
+ Неверный тег
+  
 mainComplex_scene_keyBoard_customFieldEdit: |
   Меню custom-field
 
@@ -106,6 +120,21 @@ mainComplex_scene_keyBoard_customFieldEditMenu_eraseButton: |
 
 mainComplex_scene_keyBoard_customFieldEditMenu_eraseDone: |
   Custom-field Стерт. Все ОК.
+
+mainComplex_scene_keyBoard_customFields_notExist: |
+  <b>${name}</b> \nВсе штатно
+
+mainComplex_scene_keyBoard_header_ifSideTaskMenu: |
+  <b>Есть доп. задание!</b>
+
+mainComplex_scene_keyBoard_sideTaskMenu: |
+  Меню доп. задачи
+
+mainComplex_scene_keyBoard_sideTaskMenu_header: |
+  Выбери нужную задачу:
+
+mainComplex_scene_keyBoard_sideTaskMenu_actions_header: |
+  Выбери нужное действие:
 
 mainComplex_scene_keyBoard_finish: |
   Закончить обслуживание

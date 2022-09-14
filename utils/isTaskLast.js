@@ -4,13 +4,16 @@
  * @param {String} task_id - ClickUp-Id of current task
  */
 
-module.exports = (all_lists, task_id) => {
-  let isTaskLast = false
-  all_lists.forEach((el, i) => {
-    if (task_id.includes(all_lists[i].tasksWithoutDriverTask.at(-1).id)) {
-      isTaskLast = true
-    }
 
-  });
-  return isTaskLast
+module.exports = (session) => {
+
+  session.states.isTaskFirst = false
+
+  if (session.states.currentTask_id.includes(session.all_lists[session.currentRouteNumber].tasksWithoutDriverTaskAndSide.at(-1).id)) {
+    session.states.isTaskLast = true
+  }
+  if (session.states.currentTask_id.includes(session.all_lists[session.currentRouteNumber].tasksWithoutDriverTaskAndSide.at(0).id)) {
+    session.states.isTaskFirst = true
+  }
+
 }
