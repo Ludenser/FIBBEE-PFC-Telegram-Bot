@@ -1,7 +1,10 @@
 const fs = require('fs');
 const { Markup } = require('telegraf');
+const APP_NAME = require('../../authServer');
 const setting = JSON.parse(fs.readFileSync(`./lib/setting.json`))
 const { ownerbot } = setting
+require('dotenv').config();
+
 
 module.exports = async (ctx) => {
   let buttons = [
@@ -9,7 +12,7 @@ module.exports = async (ctx) => {
   ]
 
   !ctx.session.isAuthUser
-    ? buttons.push(Markup.button.url('Авторизоваться', 'https://telegrambottest.herokuapp.com/auth/'))
+    ? buttons.push(Markup.button.url('Авторизоваться', `https://${APP_NAME}.herokuapp.com/auth/`))
     : buttons.push(
       Markup.button.callback(ctx.i18n.t('start_keyBoard_docs'), 'docs'),
       Markup.button.callback(ctx.i18n.t('start_keyBoard_driverMenu'), 'driverMenu'),
