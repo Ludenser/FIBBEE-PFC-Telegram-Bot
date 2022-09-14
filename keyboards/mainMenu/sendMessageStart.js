@@ -1,12 +1,12 @@
 const fs = require('fs');
 const { Markup } = require('telegraf');
-const APP_NAME = require('../../authServer');
 const setting = JSON.parse(fs.readFileSync(`./lib/setting.json`))
 const { ownerbot } = setting
 require('dotenv').config();
 
 
 module.exports = async (ctx) => {
+  const APP_NAME = process.env.HEROKU_APP_NAME || 'telegrambottest'
   let buttons = [
     Markup.button.callback(ctx.i18n.t('start_keyBoard_info'), 'info'),
   ]

@@ -33,5 +33,3 @@ app.get('/auth/callback', function (req, res) {
   console.log(tokenString[0]);
   res.redirect(`https://t.me/pfctest_bot?start=${tokenString[0]}`)
 })
-
-module.exports = APP_NAME
