@@ -23,7 +23,7 @@ module.exports = {
 
     const resArray = _(ctx.session.all_lists)
       .map((list) => {
-        const nameValues = _(list.allTasksWithoutSide)
+        const nameValues = _(list.tasksWithoutDriverTaskAndSide)
           .map((value, index) => { return formattedTaskString(value, index) })
         return nameValues
       })
@@ -50,7 +50,7 @@ module.exports = {
 
     const msg = `🔸  <b>Маршрут:</b>\n${reply}`
 
-    await ctx.replyWithHTML(msg)
+    await ctx.replyWithHTML(msg).then(result => ctx.session.states.route_msg.id = [result.message_id])
   },
 
   /**

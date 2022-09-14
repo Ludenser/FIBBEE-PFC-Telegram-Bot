@@ -5,12 +5,17 @@ const sendMessageDriverMenu = require('../keyboards/mainMenu/sendMessageDriverMe
 const { sendError, sendProses } = require('../utils/sendLoadings');
 const sendMessageStart = require('../keyboards/mainMenu/sendMessageStart');
 
+const INFO = 'info'
+const DOCS = 'docs'
+const DRIVERMENU = 'driverMenu'
+
+
 /**
   * Обработчик главного меню
   */
 const composer = new Composer();
 
-composer.action('info', async (ctx) => {
+composer.action(INFO, async (ctx) => {
   try {
     await ctx.deleteMessage()
     await sendMessageInfo(ctx)
@@ -20,7 +25,7 @@ composer.action('info', async (ctx) => {
 
 })
 
-composer.action('docs', async (ctx) => {
+composer.action(DOCS, async (ctx) => {
   try {
     await ctx.deleteMessage()
     if (ctx.session.isAuthUser === false) {
@@ -35,7 +40,7 @@ composer.action('docs', async (ctx) => {
 
 })
 
-composer.action('driverMenu', async (ctx) => {
+composer.action(DRIVERMENU, async (ctx) => {
   try {
     await ctx.deleteMessage()
     if (ctx.session.isAuthUser === false) {

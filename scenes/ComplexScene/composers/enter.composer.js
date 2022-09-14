@@ -1,15 +1,19 @@
 const { Composer } = require('telegraf');
-const Clickup = require('../../api');
-const getAttentionFeature = require('../../features/getAttention.feature');
-const setAssigneeFeature = require('../../features/setAssignee.feature');
-const sendMessagePrevComplexScene = require('../../keyboards/scenes/complexSceneKeyboards/sendMessagePrevComplex.scene');
-const sendMessageRouteEnterScene = require('../../keyboards/scenes/complexSceneKeyboards/sendMessageRouteEnter.scene');
-const { sendError } = require('../../utils/sendLoadings');
+const Clickup = require('../../../api');
+const getAttentionFeature = require('../../../features/getAttention.feature');
+const setAssigneeFeature = require('../../../features/setAssignee.feature');
+const sendMessagePrevComplexScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessagePrevComplex.scene');
+const sendMessageRouteEnterScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessageRouteEnter.scene');
+const { sendError } = require('../../../utils/sendLoadings');
+
+const ENTER = 'enter'
+const REENTER = 'reenter'
+const BACK = 'back'
 
 const complexSceneEnterHandler = (task_id, task_name, task) => {
   const composer = new Composer()
 
-  composer.action('enter', async (ctx) => {
+  composer.action(ENTER, async (ctx) => {
 
     try {
       const ClickAPI = new Clickup(ctx.session.user.CU_Token);
@@ -31,7 +35,7 @@ const complexSceneEnterHandler = (task_id, task_name, task) => {
     }
   });
 
-  composer.action('reenter', async (ctx) => {
+  composer.action(REENTER, async (ctx) => {
 
     try {
       ctx.session.states.currentMenuState = 'main'
@@ -44,7 +48,7 @@ const complexSceneEnterHandler = (task_id, task_name, task) => {
     }
   });
 
-  composer.action('back', async (ctx) => {
+  composer.action(BACK, async (ctx) => {
 
     try {
       await ctx.wizard.back();

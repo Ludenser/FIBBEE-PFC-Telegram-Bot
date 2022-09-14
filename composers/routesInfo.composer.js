@@ -2,12 +2,14 @@ const { Composer } = require('telegraf');
 const { sendFormatMsgFromAllClickUpLists } = require('../features/getRoute.feature');
 const { sendError } = require('../utils/sendLoadings');
 
+const ROUTESINFO = 'routesInfo'
+
 /**
   * Обработчик меню с информацией о маршрутах
   */
 const composer = new Composer();
 
-composer.action('routesInfo', async (ctx) => {
+composer.action(ROUTESINFO, async (ctx) => {
   try {
     await ctx.deleteMessage()
     await sendFormatMsgFromAllClickUpLists(ctx)

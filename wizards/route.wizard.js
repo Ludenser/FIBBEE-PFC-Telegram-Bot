@@ -1,14 +1,14 @@
 const { Scenes } = require('telegraf');
-const divisionStep = require('../scenes/divisionStepScene.scene');
-const initStepScene = require('../scenes/initStepScene.scene');
+const divisionStep = require('../scenes/DivisionStepScene/index');
+const initStepScene = require('../scenes/InitStepScene/index');
 
 /**
   * Конструктор распределительной сцены
   */
 
-const initialScene = (ctx) => {
+const initialScene = () => {
 
-  return new Scenes.WizardScene('INITIAL_WIZARD_ID', ...divisionStep(ctx), ...initStepScene(ctx))
+  return new Scenes.WizardScene('INITIAL_WIZARD_ID', divisionStep, initStepScene)
 
 }
 
