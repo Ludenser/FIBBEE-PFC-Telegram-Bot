@@ -9,8 +9,13 @@ const divisionSceneTextHandler = () => {
   composer.on('text', async (ctx) => {
     switch (ctx.session.states.currentMenuState) {
       case DIVISION_SCENE:
-        await ctx.deleteMessage()
-        await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        try {
+          await ctx.deleteMessage()
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        } catch (e) {
+          sendError(ctx, e)
+          console.log(e)
+        }
         break;
     }
 

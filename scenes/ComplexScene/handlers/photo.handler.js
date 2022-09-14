@@ -1,6 +1,6 @@
 const { Composer } = require('telegraf');
 const { postAttachments } = require('../../../features/postAttachments.feature');
-const { sendProses } = require('../../../utils/sendLoadings');
+const { sendProses, sendError } = require('../../../utils/sendLoadings');
 
 const MAIN = 'main'
 const COMMENT = 'comment'
@@ -16,34 +16,81 @@ const complexScenePhotoHandler = () => {
   composer.on('photo', async (ctx) => {
     switch (ctx.session.states.currentMenuState) {
       case MAIN:
-        await ctx.deleteMessage()
-        await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        try {
+          await ctx.deleteMessage()
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        } catch (e) {
+          await sendError(ctx, e)
+          console.log(e)
+        }
         break;
+
       case COMMENT:
-        await ctx.deleteMessage()
-        await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        try {
+          await ctx.deleteMessage()
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        } catch (e) {
+          await sendError(ctx, e)
+          console.log(e)
+        }
         break;
+
       case PHOTO:
-        await postAttachments(ctx, ctx.session.states.currentTask_id);
+        try {
+          await postAttachments(ctx, ctx.session.states.currentTask_id);
+        } catch (e) {
+          await sendError(ctx, e)
+          console.log(e)
+        }
         break;
+
       case CUSTOM_FIELD:
-        await ctx.deleteMessage()
-        await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        try {
+          await ctx.deleteMessage()
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        } catch (e) {
+          await sendError(ctx, e)
+          console.log(e)
+        }
         break;
+
       case SIDETASK:
-        await ctx.deleteMessage()
-        await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        try {
+          await ctx.deleteMessage()
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        } catch (e) {
+          await sendError(ctx, e)
+          console.log(e)
+        }
         break;
+
       case SIDETASK_COMMENT:
-        await ctx.deleteMessage()
-        await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        try {
+          await ctx.deleteMessage()
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        } catch (e) {
+          await sendError(ctx, e)
+          console.log(e)
+        }
         break;
+
       case SIDETASK_PHOTO:
-        await postAttachments(ctx, ctx.session.states.currentSideTask.id)
+        try {
+          await postAttachments(ctx, ctx.session.states.currentSideTask.id)
+        } catch (e) {
+          await sendError(ctx, e)
+          console.log(e)
+        }
         break;
+
       default:
-        await ctx.deleteMessage()
-        await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        try {
+          await ctx.deleteMessage()
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        } catch (e) {
+          await sendError(ctx, e)
+          console.log(e)
+        }
         break;
     }
 

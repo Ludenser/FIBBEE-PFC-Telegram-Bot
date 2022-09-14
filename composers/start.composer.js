@@ -12,6 +12,7 @@ const globalPhotoHandler = require('./handlers/photo.handler');
 const globalTextHandler = require('./handlers/text.handler');
 const userModel = require('../db/models');
 const { where } = require('../db/index');
+const deleteMessagesById = require('../utils/deleteMessagesById');
 
 const START = 'start'
 const UPDATE = 'update'
@@ -28,24 +29,30 @@ const cyrillicToTranslit = new convertTranslit();
 
 composer.start(async (ctx) => {
   try {
+    ctx.session.authMsg = {
+      id: [],
+      isDeleted: false
+    }
     await ctx.deleteMessage()
     await sequelize.authenticate()
     await sequelize.sync()
     composer.use(globalPhotoHandler())
     composer.use(globalTextHandler())
 
+
     const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name}`
     ctx.session.userName = cyrillicToTranslit.transform(userName)
     ctx.session.isAuthUser = false
-    const userId = await userModel.findOne({ where: { tg_username: userName } })
-    console.log(userId);
-    if (!userId) {
+    const userDb = await userModel.findOne({ where: { tg_username: userName } })
+    console.log(userDb);
+    if (!userDb) {
       await authUserFeature(ctx)
     } else {
+      const { clickup_user_id, tg_username, clickup_token } = userDb
       ctx.session.user = {
-        id: userId.clickup_user_id,
-        username: userId.tg_username,
-        CU_Token: userId.clickup_token
+        id: clickup_user_id,
+        username: tg_username,
+        CU_Token: clickup_token
       }
       ctx.session.isAuthUser = true
     }
@@ -61,6 +68,9 @@ composer.start(async (ctx) => {
           composer.use(...selectRouteComposer(ctx))
         }
       })
+      if (!ctx.session.authMsg.isDeleted) {
+        ctx.session.authMsg.id = await deleteMessagesById(ctx, ctx.session.authMsg.id, ctx.session.authMsg.isDeleted)
+      }
     }
   } catch (e) {
     await sendError(ctx, e)
