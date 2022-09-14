@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 3000
 const APP_NAME = process.env.HEROKU_APP_NAME || 'telegrambotfibbee'
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET
+const BOT_NAME = 'FibbiePfcBot'
 
 let clickupAuth = new ClientOAuth2({
   clientId: CLIENT_ID,
@@ -32,5 +33,5 @@ app.get('/auth/callback', function (req, res) {
   let reg = /(?<==).+/gm
   const tokenString = req.originalUrl.match(reg)
   console.log(tokenString[0]);
-  res.redirect(`https://t.me/pfctest_bot?start=${tokenString[0]}`)
+  res.redirect(`https://t.me/${BOT_NAME}?start=${tokenString[0]}`)
 })
