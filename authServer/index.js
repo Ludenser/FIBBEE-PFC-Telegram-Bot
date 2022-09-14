@@ -18,7 +18,7 @@ let clickupAuth = new ClientOAuth2({
 const app = express()
 
 app.listen(PORT, () => {
-  console.log(`Server is starting by ${PORT} port `);
+  console.log(`Server is starting by ${PORT} port, with redirect to ${APP_NAME}`);
 })
 
 app.get('/auth', function (req, res) {
