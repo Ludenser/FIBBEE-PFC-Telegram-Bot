@@ -19,22 +19,11 @@ module.exports = async (ctx) => {
       Markup.button.callback(ctx.i18n.t('start_keyBoard_driverMenu'), 'driverMenu'),
     )
 
-  if (ctx.session.isAuthUser) {
-    await ctx.reply(ctx.i18n.t('start_keyBoard_header', { ctx, ownerbot }),
-      Markup.inlineKeyboard(buttons, {
-        wrap: (btn, index, currentRow) => currentRow.length >= (index + 2) / 2
-      }
-      ),
-    )
-  } else {
-    await ctx.reply(ctx.i18n.t('start_keyBoard_header', { ctx, ownerbot }),
-      Markup.inlineKeyboard(buttons, {
-        wrap: (btn, index, currentRow) => currentRow.length >= (index + 2) / 2
-      }
-      ),
-    ).then((result) => {
-      ctx.session.authMsg.id = [result.message_id]
-    })
-  }
 
+  await ctx.reply(ctx.i18n.t('start_keyBoard_header', { ctx, ownerbot }),
+    Markup.inlineKeyboard(buttons, {
+      wrap: (btn, index, currentRow) => currentRow.length >= (index + 2) / 2
+    }
+    ),
+  )
 }
