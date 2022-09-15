@@ -4,9 +4,10 @@ const setting = JSON.parse(fs.readFileSync(`./lib/setting.json`))
 const { ownerbot } = setting
 require('dotenv').config();
 
+const APP_NAME = process.env.HEROKU_APP_NAME || 'telegrambotfibbee'
 
 module.exports = async (ctx) => {
-  const APP_NAME = process.env.HEROKU_APP_NAME || 'telegrambotfibbee'
+
   let buttons = [
     Markup.button.callback(ctx.i18n.t('start_keyBoard_info'), 'info'),
   ]
