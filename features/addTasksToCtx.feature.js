@@ -68,9 +68,9 @@ module.exports = async (ctx) => {
                 tasksWithoutDriverTaskAndSide[index],
             )
         })
-        console.log(all_lists);
+
+        ctx.session.all_lists = all_lists.filter(el => el.hasOwnProperty('driverTask'))
         ctx.session.all_existLabels = all_existLabels
-        ctx.session.all_lists = all_lists
         ctx.session.team_id = team_id
         ctx.session.isAlreadyFilled = true
         ctx.session.states = {}

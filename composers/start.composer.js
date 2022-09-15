@@ -11,8 +11,6 @@ const selectRouteComposer = require('./selectRoute.composer');
 const globalPhotoHandler = require('./handlers/photo.handler');
 const globalTextHandler = require('./handlers/text.handler');
 const userModel = require('../db/models');
-const { where } = require('../db/index');
-const deleteMessagesById = require('../utils/deleteMessagesById');
 
 const START = 'start'
 const UPDATE = 'update'
@@ -29,10 +27,7 @@ const cyrillicToTranslit = new convertTranslit();
 
 composer.start(async (ctx) => {
   try {
-    ctx.session.authMsg = {
-      id: [],
-      isDeleted: false
-    }
+
     await ctx.deleteMessage()
     await sequelize.authenticate()
     await sequelize.sync()
@@ -63,14 +58,11 @@ composer.start(async (ctx) => {
 
       await addTasksToCtx(ctx)
       ctx.session.all_lists.forEach(el => {
-        if (Object.hasOwn(el, 'driverTask') && Object.hasOwn(el, 'tasksWithoutDriverTaskAndSide')) {
+        if (el.hasOwnProperty('driverTask') && el.hasOwnProperty('tasksWithoutDriverTaskAndSide')) {
           composer.use(totalSceneInitComposer(ctx))
           composer.use(...selectRouteComposer(ctx))
         }
       })
-      if (!ctx.session.authMsg.isDeleted) {
-        ctx.session.authMsg.id = await deleteMessagesById(ctx, ctx.session.authMsg.id, ctx.session.authMsg.isDeleted)
-      }
     }
   } catch (e) {
     await sendError(ctx, e)
