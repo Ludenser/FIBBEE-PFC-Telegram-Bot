@@ -5,8 +5,8 @@ module.exports = async (ctx) => {
   function routesKeyboard() {
     let buttonsArray = []
     if (ctx.session.all_lists.length) {
-      ctx.session.all_lists.forEach((el, i) => {
-        buttonsArray.push(Markup.button.callback(`${i + 1} Маршрут`, `altRoute${i}`))
+      ctx.session.all_lists.forEach((list, i) => {
+        buttonsArray.push(Markup.button.callback(`${i + 1} Маршрут`, `${list.list_id}`))
       })
       buttonsArray.push(Markup.button.callback(ctx.i18n.t('driverMenu_keyBoard_tasksOverview'), 'routesInfo'))
       buttonsArray.push(Markup.button.callback(ctx.i18n.t('return_button'), 'start'))

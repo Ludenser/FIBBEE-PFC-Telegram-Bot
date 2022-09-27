@@ -4,7 +4,7 @@ const _ = require('lodash');
 const { sendFormatMsgFromCurrentClickUpList } = require('../../../features/getRoute.feature');
 const sendMessageInitRouteMenu = require('../keyboards/sendMessageInit.keyboard');
 const deleteMessagesById = require('../../../utils/deleteMessagesById');
-const { menu_states } = require('../../../lib/otherSettings');
+const { menu_states } = require('../../../config/otherSettings');
 const { selectRouteComposerActions: Actions } = require('../actions');
 
 /**

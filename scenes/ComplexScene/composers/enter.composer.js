@@ -4,7 +4,7 @@ const getAttentionFeature = require('../../../features/getAttention.feature');
 const setAssigneeFeature = require('../../../features/setAssignee.feature');
 const sendMessagePrevComplexScene = require('../keyboards/sendMessagePrevComplex.keyboard');
 const sendMessageRouteEnterScene = require('../keyboards/sendMessageRouteEnter.keyboard');
-const { menu_states } = require('../../../lib/otherSettings');
+const { menu_states } = require('../../../config/otherSettings');
 const { sendError } = require('../../../utils/sendLoadings');
 const { enterComposerActions: Actions } = require('../actions');
 const complexSceneEnterHandler = (task_id, task_name, task) => {
@@ -13,16 +13,17 @@ const complexSceneEnterHandler = (task_id, task_name, task) => {
   composer.action(Actions.ENTER, async (ctx) => {
 
     try {
+      const { states, user, userName, } = ctx.session
       const ClickAPI = new Clickup(ctx.session.user.CU_Token);
-      ctx.session.states.currentTask_discordWebHook = task.custom_fields.find(o => o.name === 'Discord_WebHook').value
-      ctx.session.states.currentMenuState = menu_states.MAIN
-      ctx.session.states.currentLocationName = task_name
-      ctx.session.states.currentTask_id = task_id
-      ctx.session.states.currentList_id = task.list.id
+      states.currentTask_discordWebHook = task.custom_fields.find(o => o.name === 'Discord_WebHook').value
+      states.currentMenuState = menu_states.MAIN
+      states.currentLocationName = task_name
+      states.currentTask_id = task_id
+      states.currentList_id = task.list.id
       await ctx.deleteMessage();
       await ClickAPI.Tasks.setStatus(task_id, 'in progress');
       await ClickAPI.TimeTracking.startEntry(task_id);
-      await setAssigneeFeature(ctx.session.userName, task_id, ctx.session.user.CU_Token);
+      await setAssigneeFeature(userName, task_id, user.CU_Token);
       await sendMessageRouteEnterScene(ctx, task, task_name);
       await getAttentionFeature(ctx, task_id);
 

@@ -1,6 +1,6 @@
 const { Composer } = require('telegraf');
 const { postAttachments } = require('../../../features/postAttachments.feature');
-const { menu_states } = require('../../../lib/otherSettings');
+const { menu_states } = require('../../../config/otherSettings');
 const { sendProses, sendError } = require('../../../utils/sendLoadings');
 const { allComposersActions: Actions } = require('../actions');
 

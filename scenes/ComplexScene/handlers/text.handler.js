@@ -2,7 +2,7 @@ const { Composer } = require('telegraf');
 const { editCustom_field } = require('../../../features/editCustomFields.feature');
 const { sendProses } = require('../../../utils/sendLoadings');
 const { postCommentFromMsg } = require('../../../features/postComment.feature');
-const { menu_states } = require('../../../lib/otherSettings');
+const { menu_states } = require('../../../config/otherSettings');
 const { allComposersActions: Actions } = require('../actions');
 
 const complexSceneTextHandler = (task_id) => {

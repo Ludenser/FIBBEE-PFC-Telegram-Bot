@@ -1,13 +1,13 @@
 
 const _ = require('lodash')
 const fs = require('fs');
-const setting = JSON.parse(fs.readFileSync('./lib/setting.json'));
+const setting = JSON.parse(fs.readFileSync('./config/setting.json'));
 const { team_id } = setting;
-const list_ids = require('../lib/list_idsFromClickUp');
+const list_ids = require('../config/list_idsFromClickUp');
 const Clickup = require('../api');
 const { sendError } = require('../utils/sendLoadings');
 const chalk = require('chalk');
-const { menu_states } = require('../lib/otherSettings');
+const { menu_states } = require('../config/otherSettings');
 
 
 /**

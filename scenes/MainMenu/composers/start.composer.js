@@ -12,7 +12,7 @@ const selectRouteComposer = require('./selectRoute.composer');
 const globalPhotoHandler = require('../handlers/photo.handler');
 const globalTextHandler = require('../handlers/text.handler');
 const altModeComposer = require('./altMode.composer')
-const { menu_states } = require('../../../lib/otherSettings');
+const { menu_states } = require('../../../config/otherSettings');
 const { startComposerActions: Actions } = require('../actions');
 
 /**

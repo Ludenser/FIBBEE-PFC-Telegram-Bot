@@ -1,5 +1,5 @@
 const ClickUp = require('../api/index')
-const { discord_role_ids } = require('../lib/otherSettings')
+const { discord_role_ids } = require('../config/otherSettings')
 const { findMatch, replaceMatch } = require('../utils/regExp')
 const { sendProses, sendError } = require('../utils/sendLoadings')
 const sendMsgToDiscord = require('./sendWebHookToDiscord.feature')
@@ -14,31 +14,32 @@ const postCommentFromMsg = async (ctx, task_id) => {
 
 
   try {
+    const { text } = ctx.update.message
     const ClickAPI = new ClickUp(ctx.session.user.CU_Token)
-    const usernameQuery = findMatch('(?<=@).+', ctx.update.message.text)
-    if (usernameQuery == ctx.update.message.text) {
-      await ClickAPI.Tasks.createComment(ctx.update.message.text, task_id)
+    const usernameQuery = findMatch('(?<=@).+', text)
+    if (usernameQuery == text) {
+      await ClickAPI.Tasks.createComment(text, task_id)
       await sendProses(ctx, ctx.i18n.t('mainComplex_scene_commentActions_clickUpPlainTextComment'))
 
     } else if (usernameQuery.includes('monitoring') || usernameQuery.includes('service') || usernameQuery.includes('daily') || usernameQuery.includes('supply')) {
       let reg = /(?<=)@().+/gm
-      const mentionString = ctx.update.message.text.match(reg)
+      const mentionString = text.match(reg)
       let stringWithMention = ''
       switch (true) {
         case (mentionString[0] === '@monitoring' || mentionString[0] === '@monitoring team'):
-          stringWithMention = replaceMatch(ctx.update.message.text, `<@&${discord_role_ids.monitoring}>`)
+          stringWithMention = replaceMatch(text, `<@&${discord_role_ids.monitoring}>`)
           break;
 
         case (mentionString[0] === '@service' || mentionString[0] === '@service team'):
-          stringWithMention = replaceMatch(ctx.update.message.text, `<@&${discord_role_ids.service}>`)
+          stringWithMention = replaceMatch(text, `<@&${discord_role_ids.service}>`)
           break;
 
         case (mentionString[0] === '@daily' || mentionString[0] === '@daily team'):
-          stringWithMention = replaceMatch(ctx.update.message.text, `<@&${discord_role_ids.daily}>`)
+          stringWithMention = replaceMatch(text, `<@&${discord_role_ids.daily}>`)
           break;
 
         case (mentionString[0] === '@supply' || mentionString[0] === '@supply team'):
-          stringWithMention = replaceMatch(ctx.update.message.text, `<@&${discord_role_ids.supply}>`)
+          stringWithMention = replaceMatch(text, `<@&${discord_role_ids.supply}>`)
           break;
 
         default:
@@ -61,7 +62,7 @@ const postCommentFromMsg = async (ctx, task_id) => {
       const username = response.data.members.find(hasUserFrom(usernameQuery))
       if (username) {
 
-        await ClickAPI.Tasks.createCommentWithAssignee(ctx.update.message.text, task_id, username.id)
+        await ClickAPI.Tasks.createCommentWithAssignee(text, task_id, username.id)
         await sendProses(ctx, ctx.i18n.t('mainComplex_scene_commentActions_clickUpMention', { username: username.username }))
 
       } else {

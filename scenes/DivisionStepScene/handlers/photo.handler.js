@@ -1,5 +1,5 @@
 const { Composer } = require('telegraf');
-const { menu_states } = require('../../../lib/otherSettings');
+const { menu_states } = require('../../../config/otherSettings');
 const { sendProses, sendError } = require('../../../utils/sendLoadings');
 const { preventHandlersComposersActions: Actions } = require('../actions');
 

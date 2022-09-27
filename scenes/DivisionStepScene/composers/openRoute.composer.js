@@ -3,7 +3,7 @@ const Clickup = require("../../../api");
 const setAssigneeFeature = require("../../../features/setAssignee.feature");
 const sendMessageDriverMenu = require("../../MainMenu/keyboards/sendMessageDriverMenu.keyboard");
 const sendMessageCarPhotoRouteMenu = require("../keyboards/sendMessageCarPhoto.keyboard");
-const { menu_states } = require("../../../lib/otherSettings");
+const { menu_states } = require("../../../config/otherSettings");
 const { sendError } = require("../../../utils/sendLoadings");
 const { openRouteComposerActions: Actions } = require("../actions");
 

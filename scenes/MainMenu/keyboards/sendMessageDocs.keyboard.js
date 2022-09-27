@@ -1,5 +1,5 @@
 const fs = require('fs');
-const setting = JSON.parse(fs.readFileSync('./lib/setting.json'));
+const setting = JSON.parse(fs.readFileSync('./config/setting.json'));
 const {
   urlFact,
   urlNewInfo,

@@ -19,7 +19,7 @@ module.exports = (ctx) => {
 
   })
   ctx.session.all_lists.forEach((list, i) => {
-    composer.action(`${Actions.ACTION_SNIP}${i}`, (ctx) => {
+    composer.action(`${list.list_id}`, (ctx) => {
       ctx.reply(`Hi this is ${i}`)
     })
   })
