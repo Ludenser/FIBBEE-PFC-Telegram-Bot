@@ -1,14 +1,13 @@
 const { Composer } = require("telegraf");
 const Clickup = require("../../../api");
-const sendMessageDriverMenu = require("../../../keyboards/mainMenu/sendMessageDriverMenu");
+const sendMessageDriverMenu = require("../../MainMenu/keyboards/sendMessageDriverMenu.keyboard");
 const { resolveAllCheckListsAndItems } = require('../../../features/resolveCheckList.feature')
 const { sendError } = require("../../../utils/sendLoadings");
-
-const CLOSEROUTE = 'closeRoute'
+const { closeRouteComoserActions: Actions } = require("../actions");
 
 const composer = new Composer()
 
-composer.action(CLOSEROUTE, async (ctx) => {
+composer.action(Actions.CLOSE_ROUTE, async (ctx) => {
   try {
     const ClickAPI = new Clickup(ctx.session.user.CU_Token);
     await ctx.deleteMessage();

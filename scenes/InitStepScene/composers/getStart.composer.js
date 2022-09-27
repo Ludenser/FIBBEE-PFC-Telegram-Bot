@@ -1,12 +1,11 @@
 const { Composer } = require("telegraf");
 const { sendError } = require("../../../utils/sendLoadings");
-const sendMessageInitKeyboardInitStep = require('../../../keyboards/scenes/initStepSceneKeyboards/sendMessageInitKeyboard.initStep')
-
-const GET_START = 'get_start'
+const sendMessageInitKeyboardInitStep = require('../keyboards/sendMessageInitKeyboard.keyboard');
+const { getStartComposerActions: Actions } = require("../actions");
 
 const composer = new Composer()
 
-composer.action(GET_START, async (ctx) => {
+composer.action(Actions.GET_START, async (ctx) => {
   try {
     await ctx.deleteMessage();
     await sendMessageInitKeyboardInitStep(ctx);
@@ -18,7 +17,6 @@ composer.action(GET_START, async (ctx) => {
     await sendError(ctx, e)
     await sendMessageInitKeyboardInitStep(ctx);
   }
-
 })
 
 module.exports = composer

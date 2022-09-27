@@ -2,7 +2,7 @@ const { Composer } = require('telegraf');
 _ = require('lodash');
 const openRouteComposer = require('./composers/openRoute.composer');
 const closeRoute = require('./composers/closeRoute.composer');
-const leaveAction = require('./composers/leaveAction.composer');
+const leaveScene = require('./composers/leaveScene.composer');
 const divisionSceneTextHandler = require('./handlers/text.handler');
 const divisionScenePhotoHandler = require('./handlers/photo.handler');
 
@@ -21,7 +21,7 @@ divisionStep_scene.use(async (ctx, next) => {
     divisionSceneTextHandler(),
     divisionScenePhotoHandler(),
     closeRoute,
-    leaveAction
+    leaveScene
   )
   await next()
 })

@@ -1,14 +1,14 @@
 const { Composer } = require('telegraf');
+const { menu_states } = require('../../../lib/otherSettings');
 const { sendProses } = require('../../../utils/sendLoadings');
-
-const INIT_SCENE = 'init_scene'
+const { preventHandlersComposersActions: Actions } = require('../actions');
 
 const initSceneTextHandler = () => {
   const composer = new Composer()
 
-  composer.on('text', async (ctx) => {
+  composer.on(Actions.TEXT, async (ctx) => {
     switch (ctx.session.states.currentMenuState) {
-      case INIT_SCENE:
+      case menu_states.INIT_SCENE:
         await ctx.deleteMessage()
         await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         break;

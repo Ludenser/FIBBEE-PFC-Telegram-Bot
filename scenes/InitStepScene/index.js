@@ -1,5 +1,5 @@
 const { Composer } = require('telegraf');
-const leaveAction = require('./composers/leaveAction.composer');
+const leaveScene = require('./composers/leaveScene.composer');
 const getStart = require('./composers/getStart.composer');
 const initScenePhotoHandler = require('./handlers/photo.handler');
 const initSceneTextHandler = require('./handlers/text.handler');
@@ -17,7 +17,7 @@ initStepScene.use(
   initScenePhotoHandler(),
   initSceneTextHandler(),
   getStart,
-  leaveAction
+  leaveScene
 )
 
 

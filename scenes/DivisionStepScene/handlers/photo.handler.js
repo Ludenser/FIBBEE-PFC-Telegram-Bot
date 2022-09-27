@@ -1,14 +1,14 @@
 const { Composer } = require('telegraf');
+const { menu_states } = require('../../../lib/otherSettings');
 const { sendProses, sendError } = require('../../../utils/sendLoadings');
-
-const DIVISION_SCENE = 'division_scene'
+const { preventHandlersComposersActions: Actions } = require('../actions');
 
 const divisionScenePhotoHandler = () => {
   const composer = new Composer()
 
-  composer.on('photo', async (ctx) => {
+  composer.on(Actions.PHOTO, async (ctx) => {
     switch (ctx.session.states.currentMenuState) {
-      case DIVISION_SCENE:
+      case menu_states.DIVISION_SCENE:
         try {
           await ctx.deleteMessage()
           await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))

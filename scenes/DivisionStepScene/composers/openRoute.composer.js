@@ -1,23 +1,23 @@
 const { Composer } = require("telegraf");
 const Clickup = require("../../../api");
 const setAssigneeFeature = require("../../../features/setAssignee.feature");
-const sendMessageDriverMenu = require("../../../keyboards/mainMenu/sendMessageDriverMenu");
-const sendMessageCarPhotoRouteMenu = require("../../../keyboards/scenes/divisionStepSceneKeyboards/sendMessageCarPhoto.routeMenu");
+const sendMessageDriverMenu = require("../../MainMenu/keyboards/sendMessageDriverMenu.keyboard");
+const sendMessageCarPhotoRouteMenu = require("../keyboards/sendMessageCarPhoto.keyboard");
+const { menu_states } = require("../../../lib/otherSettings");
 const { sendError } = require("../../../utils/sendLoadings");
-
-const OPENROUTE = 'openRoute'
+const { openRouteComposerActions: Actions } = require("../actions");
 
 module.exports = (ctx) => {
   const composer = new Composer();
 
   const divisionStepActions = _(ctx.session.all_lists).map((el, i) => {
 
-    composer.action(OPENROUTE + i, async (ctx) => {
+    composer.action(Actions.OPEN_ROUTE + i, async (ctx) => {
 
       try {
         const ClickAPI = new Clickup(ctx.session.user.CU_Token);
         await ctx.deleteMessage();
-        ctx.session.states.currentMenuState = 'init_scene'
+        ctx.session.states.currentMenuState = menu_states.INIT_SCENE
 
         await ClickAPI.Tasks.setStatus(ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id, 'in progress');
         await setAssigneeFeature(ctx.session.userName, ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id, ctx.session.user.CU_Token);

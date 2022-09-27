@@ -1,16 +1,15 @@
 const { Composer } = require('telegraf');
 const Clickup = require('../../../api');
 const { resolveAllCheckListsAndItems } = require('../../../features/resolveCheckList.feature');
-const sendMessageRouteEnterExScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessageRouteEnterEx.scene');
+const sendMessageRouteEnterExScene = require('../keyboards/sendMessageRouteEnterEx.keyboard');
 const deleteMessagesById = require('../../../utils/deleteMessagesById');
 const { sendError } = require('../../../utils/sendLoadings');
-
-const EXIT = 'exit'
+const { exitComposerActions: Actions } = require('../actions');
 
 const complexSceneExitHandler = (task_id, task_checklists, driverTask_id) => {
   const composer = new Composer()
 
-  composer.action(EXIT, async (ctx) => {
+  composer.action(Actions.EXIT, async (ctx) => {
 
     try {
       const ClickAPI = new Clickup(ctx.session.user.CU_Token);

@@ -7,6 +7,7 @@ const list_ids = require('../lib/list_idsFromClickUp');
 const Clickup = require('../api');
 const { sendError } = require('../utils/sendLoadings');
 const chalk = require('chalk');
+const { menu_states } = require('../lib/otherSettings');
 
 
 /**
@@ -83,7 +84,7 @@ module.exports = async (ctx) => {
         ctx.session.states.attention_msg.isDeleted = false
         ctx.session.states.currentLocationName = ''
         ctx.session.states.currentLocationLabel = ''
-        ctx.session.states.currentMenuState = 'main_menu'
+        ctx.session.states.currentMenuState = menu_states.MAIN
         ctx.session.states.currentList_id = ''
         ctx.session.states.currentTask_id = ''
         ctx.session.states.currentTask_discordWebHook = ''

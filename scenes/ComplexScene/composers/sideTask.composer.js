@@ -1,18 +1,14 @@
 const { Composer } = require('telegraf');
-const sendMessageRouteEnterScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessageRouteEnter.scene');
-const sendMessageSideTaskMenuScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessageSideTaskMenu.scene');
-const sendMessageSideTaskSelectScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessageSideTaskSelect.scene');
+const sendMessageRouteEnterScene = require('../keyboards/sendMessageRouteEnter.keyboard');
+const sendMessageSideTaskMenuScene = require('../keyboards/sendMessageSideTaskMenu.keyboard');
+const sendMessageSideTaskSelectScene = require('../keyboards/sendMessageSideTaskSelect.keyboard');
+const sendMessagePhotoScene = require('../keyboards/sendMessagePhoto.keyboard');
+const sendMessageCommentScene = require('../keyboards/sendMessageComment.keyboard');
 const deleteMessagesById = require('../../../utils/deleteMessagesById');
 const { sendError } = require('../../../utils/sendLoadings');
-const sendMessagePhotoScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessagePhoto.scene');
-const sendMessageCommentScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessageComment.scene');
 const setAssigneeFeature = require('../../../features/setAssignee.feature');
-const { postCommentFromMsg, postCommentFromPhoto } = require('../../../features/postComment.feature');
-
-const SIDETASK_MENU = 'sideTask_menu'
-const SIDETASK_UPL_PHOTO = 'sideTask_upl_photo'
-const SIDETASK_UPL_COMMENT = 'sideTask_upl_comment'
-const SIDETASK_UPL_PHOTO_DONE = 'sideTask_upl_comment_done'
+const { postCommentFromPhoto } = require('../../../features/postComment.feature');
+const { sideTaskComposerActions: Actions } = require('../actions');
 
 module.exports = (ctx, task_id, task_name, task) => {
 
@@ -30,7 +26,7 @@ module.exports = (ctx, task_id, task_name, task) => {
   // console.log(currentSideTasks, '-Все валуе Из текущего таска', exisSideTasks, '- находим ');
   const composer = new Composer()
 
-  composer.action(SIDETASK_MENU, async (ctx) => {
+  composer.action(Actions.SIDETASK_MENU, async (ctx) => {
     try {
       ctx.session.states.currentMenuState = 'sideTask'
       if (!ctx.session.states.attention_msg.isDeleted) {
@@ -60,7 +56,7 @@ module.exports = (ctx, task_id, task_name, task) => {
   })
 
 
-  composer.action(SIDETASK_UPL_PHOTO, async (ctx) => {
+  composer.action(Actions.SIDETASK_UPL_PHOTO, async (ctx) => {
     try {
       ctx.deleteMessage()
       ctx.session.states.currentMenuState = 'sideTask_photo'
@@ -71,7 +67,7 @@ module.exports = (ctx, task_id, task_name, task) => {
     }
   })
 
-  composer.action(SIDETASK_UPL_PHOTO_DONE, async (ctx) => {
+  composer.action(Actions.SIDETASK_UPL_PHOTO_DONE, async (ctx) => {
     try {
       ctx.deleteMessage()
       ctx.session.states.currentMenuState = 'sideTask_photo'
@@ -83,7 +79,7 @@ module.exports = (ctx, task_id, task_name, task) => {
     }
   })
 
-  composer.action(SIDETASK_UPL_COMMENT, async (ctx) => {
+  composer.action(Actions.SIDETASK_UPL_COMMENT, async (ctx) => {
     try {
       ctx.session.states.currentMenuState = 'sideTask_comment'
       await ctx.deleteMessage()
