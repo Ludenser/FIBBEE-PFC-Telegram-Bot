@@ -11,7 +11,7 @@ const totalSceneInitComposer = require('./totalSceneInit.composer');
 const selectRouteComposer = require('./selectRoute.composer');
 const globalPhotoHandler = require('../handlers/photo.handler');
 const globalTextHandler = require('../handlers/text.handler');
-const altModeComposer = require('./altMode.composer')
+const altModeComposer = require('../../AltMode/composers/altMode.composer');
 const { menu_states } = require('../../../config/otherSettings');
 const { startComposerActions: Actions } = require('../actions');
 
@@ -71,7 +71,7 @@ startComposer.start(async (ctx) => {
 
 startComposer.action(Actions.START, async (ctx) => {
   try {
-    ctx.session.states.currentMenuState = menu_states.MAIN
+    ctx.session.states.current.menu_state = menu_states.MAIN
     await ctx.deleteMessage()
     await sendMessageStart(ctx)
 

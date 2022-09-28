@@ -7,7 +7,7 @@ const initSceneTextHandler = () => {
   const composer = new Composer()
 
   composer.on(Actions.TEXT, async (ctx) => {
-    switch (ctx.session.states.currentMenuState) {
+    switch (ctx.session.states.current.menu_state) {
       case menu_states.INIT_SCENE:
         await ctx.deleteMessage()
         await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))

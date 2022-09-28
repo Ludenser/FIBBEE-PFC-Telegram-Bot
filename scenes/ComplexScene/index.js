@@ -23,7 +23,7 @@ module.exports = (tasks, driverTask) => {
       const complex_scene = new Composer();
       complex_scene.use(complexSceneEnterActions(task.id, task.name, task))
       complex_scene.use(
-        textActionHandlerComposer(task.id),
+        textActionHandlerComposer(),
         complexScenePhotoHandler(),
         complexSceneNextStepActions(tasks, task, driverTask.id),
         complexSceneExitActions(task.id, task.checklists, driverTask.id),

@@ -11,8 +11,8 @@ const complexScenePhotoProcess = (task_id, task_name) => {
   composer.action(Actions.UPL_PHOTO, async (ctx) => {
 
     try {
-      ctx.session.states.currentMenuState = 'photo'
-      ctx.session.states.currentTask_id = task_id
+      ctx.session.states.current.menu_state = 'photo'
+      ctx.session.states.current.task.id = task_id
       await ctx.deleteMessage();
       ctx.session.states.attention_msg.id = await deleteMessagesById(ctx, ctx.session.states.attention_msg.id)
       await sendMessagePhotoScene(ctx, task_name)

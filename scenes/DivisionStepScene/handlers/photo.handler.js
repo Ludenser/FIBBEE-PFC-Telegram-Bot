@@ -7,7 +7,7 @@ const divisionScenePhotoHandler = () => {
   const composer = new Composer()
 
   composer.on(Actions.PHOTO, async (ctx) => {
-    switch (ctx.session.states.currentMenuState) {
+    switch (ctx.session.states.current.menu_state) {
       case menu_states.DIVISION_SCENE:
         try {
           await ctx.deleteMessage()

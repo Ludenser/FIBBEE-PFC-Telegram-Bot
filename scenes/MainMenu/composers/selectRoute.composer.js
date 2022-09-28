@@ -24,7 +24,7 @@ module.exports = (ctx) => {
                 try {
                     await ctx.deleteMessage()
                     ctx.session.currentRouteNumber = i
-                    ctx.session.states.currentMenuState = menu_states.DIVISION_SCENE
+                    ctx.session.states.current.menu_state = menu_states.DIVISION_SCENE
                     if (!ctx.session.states.route_msg.isDeleted) {
                         ctx.session.states.route_msg.id = await deleteMessagesById(ctx, ctx.session.states.route_msg.id, ctx.session.states.route_msg.isDeleted)
                     }

@@ -20,7 +20,7 @@ module.exports = async (ctx, task, msg) => {
     if (task) {
         const currentTaskLabel = task.custom_fields.find(o => o.type === 'labels')
         if (currentTaskLabel && currentTaskLabel.hasOwnProperty('value')) {
-            ctx.session.states.currentLocationLabel = currentTaskLabel.value[0]
+            ctx.session.states.current.task.locationLabel = currentTaskLabel.value[0]
             if (ctx.session.all_lists[ctx.session.currentRouteNumber].hasOwnProperty('sideTasks')) {
                 let labels_id = []
                 for (let sideTask of ctx.session.all_lists[ctx.session.currentRouteNumber].sideTasks) {
@@ -34,7 +34,7 @@ module.exports = async (ctx, task, msg) => {
                     }
                 }
                 if (labels_id.includes(currentTaskLabel.value.join())) {
-                    ctx.session.states.currentSideTask.ids = labels_id.filter((item, index) => {
+                    ctx.session.states.current.side_task.ids = labels_id.filter((item, index) => {
                         return labels_id.indexOf(item) === index
                     })
                     msg += '\n' + ctx.i18n.t('mainComplex_scene_keyBoard_header_ifSideTaskMenu')

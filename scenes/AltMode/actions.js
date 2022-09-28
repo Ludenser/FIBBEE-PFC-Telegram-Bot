@@ -1,10 +1,5 @@
 const _ = require('lodash')
 
-const preventHandlersComposersActions = {
-    TEXT: 'text',
-    PHOTO: 'photo',
-}
-
 const enterComposerActions = {
     ENTER: 'enter',
     REENTER: 'reenter',
@@ -39,20 +34,16 @@ const customFieldsComposerActions = {
     ERASE_CF: 'erase_CF',
 }
 
-const allComposerActions = _(preventHandlersComposersActions)
-    .merge(
-        enterComposerActions,
-        commentComposerActions,
-        customFieldsComposerActions,
-        exitComposerActions,
-        nextStepComposerActions,
-        photoProcessComposerActions,
-        sideTaskComposerActions
-    )
-    .value()
+const allComposersActions = _.merge(
+    enterComposerActions,
+    commentComposerActions,
+    customFieldsComposerActions,
+    exitComposerActions,
+    nextStepComposerActions,
+    photoProcessComposerActions,
+    sideTaskComposerActions)
 
 module.exports = {
-    preventHandlersComposersActions,
     enterComposerActions,
     commentComposerActions,
     customFieldsComposerActions,
@@ -60,5 +51,5 @@ module.exports = {
     nextStepComposerActions,
     photoProcessComposerActions,
     sideTaskComposerActions,
-    allComposerActions
+    allComposersActions
 }

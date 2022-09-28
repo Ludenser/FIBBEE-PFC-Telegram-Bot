@@ -29,11 +29,21 @@ const preventHandlersComposersActions = {
     PHOTO: 'photo',
 }
 
+const allComposerActions = _(preventHandlersComposersActions)
+    .merge(preventHandlersComposersActions,
+        altModeComposerActions,
+        startComposerActions,
+        selectRouteComposerActions,
+        routesInfoComposerActions,
+        mainMenuComposerActions)
+    .value()
+
 module.exports = {
     mainMenuComposerActions,
     routesInfoComposerActions,
     selectRouteComposerActions,
     startComposerActions,
     altModeComposerActions,
-    preventHandlersComposersActions
+    preventHandlersComposersActions,
+    allComposerActions
 }

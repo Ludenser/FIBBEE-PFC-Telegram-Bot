@@ -11,7 +11,7 @@ const complexSceneCommentHandler = (task_id, task_name) => {
   composer.action(Actions.UPL_COMMENT, async (ctx) => {
 
     try {
-      ctx.session.states.currentMenuState = 'comment'
+      ctx.session.states.current.menu_state = 'comment'
       ctx.session.states.attention_msg.id = await deleteMessagesById(ctx, ctx.session.states.attention_msg.id)
       await ctx.deleteMessage();
       await sendMessageCommentScene(ctx);

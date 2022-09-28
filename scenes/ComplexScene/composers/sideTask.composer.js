@@ -28,7 +28,7 @@ module.exports = (ctx, task_id, task_name, task) => {
 
   composer.action(Actions.SIDETASK_MENU, async (ctx) => {
     try {
-      ctx.session.states.currentMenuState = 'sideTask'
+      ctx.session.states.current.menu_state = 'sideTask'
       if (!ctx.session.states.attention_msg.isDeleted) {
         ctx.session.states.attention_msg.id = await deleteMessagesById(ctx, ctx.session.states.attention_msg.id)
       }
@@ -45,8 +45,8 @@ module.exports = (ctx, task_id, task_name, task) => {
         await setAssigneeFeature(ctx.session.userName, sideTask.id, ctx.session.user.CU_Token)
         ctx.deleteMessage()
 
-        ctx.session.states.currentSideTask.id = sideTask.id
-        ctx.session.states.currentSideTask.name = sideTask.name
+        ctx.session.states.current.side_task.id = sideTask.id
+        ctx.session.states.current.side_task.name = sideTask.name
         await sendMessageSideTaskMenuScene(ctx)
       } catch (e) {
         await sendError(ctx, e);
@@ -59,8 +59,8 @@ module.exports = (ctx, task_id, task_name, task) => {
   composer.action(Actions.SIDETASK_UPL_PHOTO, async (ctx) => {
     try {
       ctx.deleteMessage()
-      ctx.session.states.currentMenuState = 'sideTask_photo'
-      await sendMessagePhotoScene(ctx, ctx.session.states.currentSideTask.name)
+      ctx.session.states.current.menu_state = 'sideTask_photo'
+      await sendMessagePhotoScene(ctx, ctx.session.states.current.side_task.name)
     } catch (e) {
       await sendError(ctx, e);
       await sendMessageRouteEnterScene(ctx, task_name, task_id);
@@ -70,8 +70,8 @@ module.exports = (ctx, task_id, task_name, task) => {
   composer.action(Actions.SIDETASK_UPL_PHOTO_DONE, async (ctx) => {
     try {
       ctx.deleteMessage()
-      ctx.session.states.currentMenuState = 'sideTask_photo'
-      await postCommentFromPhoto(ctx, ctx.session.states.currentSideTask.id, ctx.session.states.currentLocationName)
+      ctx.session.states.current.menu_state = 'sideTask_photo'
+      await postCommentFromPhoto(ctx, ctx.session.states.current.side_task.id, ctx.session.states.current.task.locationName)
       await sendMessageSideTaskMenuScene(ctx)
     } catch (e) {
       await sendError(ctx, e);
@@ -81,7 +81,7 @@ module.exports = (ctx, task_id, task_name, task) => {
 
   composer.action(Actions.SIDETASK_UPL_COMMENT, async (ctx) => {
     try {
-      ctx.session.states.currentMenuState = 'sideTask_comment'
+      ctx.session.states.current.menu_state = 'sideTask_comment'
       await ctx.deleteMessage()
       await sendMessageCommentScene(ctx);
     } catch (e) {

@@ -12,7 +12,7 @@ module.exports = async (ctx, name) => {
   await ctx.reply(ctx.i18n.t('mainComplex_scene_keyBoard_uploadPhotoMenu_header'),
     Markup.inlineKeyboard(
       [
-        ctx.session.states.currentSideTask.id
+        ctx.session.states.current.side_task.id
           ? Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_uploadPhotoMenu_doneUplButton'), 'sideTask_upl_comment_done')
           : Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_uploadPhotoMenu_doneUplButton'), 'reenter'),
       ]

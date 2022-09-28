@@ -2,13 +2,13 @@ const { Composer } = require('telegraf');
 const { postAttachments } = require('../../../features/postAttachments.feature');
 const { menu_states } = require('../../../config/otherSettings');
 const { sendProses, sendError } = require('../../../utils/sendLoadings');
-const { allComposersActions: Actions } = require('../actions');
+const { allComposerActions: Actions } = require('../actions');
 
 const complexScenePhotoHandler = () => {
   const composer = new Composer()
 
   composer.on(Actions.PHOTO, async (ctx) => {
-    switch (ctx.session.states.currentMenuState) {
+    switch (ctx.session.states.current.menu_state) {
       case menu_states.MAIN:
         try {
           await ctx.deleteMessage()
@@ -31,7 +31,7 @@ const complexScenePhotoHandler = () => {
 
       case menu_states.PHOTO:
         try {
-          await postAttachments(ctx, ctx.session.states.currentTask_id);
+          await postAttachments(ctx, ctx.session.states.current.task.id);
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -70,7 +70,7 @@ const complexScenePhotoHandler = () => {
 
       case menu_states.SIDETASK_PHOTO:
         try {
-          await postAttachments(ctx, ctx.session.states.currentSideTask.id)
+          await postAttachments(ctx, ctx.session.states.current.side_task.id)
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)

@@ -48,7 +48,7 @@ const postCommentFromMsg = async (ctx, task_id) => {
       }
       if (stringWithMention) {
 
-        await sendMsgToDiscord(ctx.session.user.username, stringWithMention, ctx.session.states.currentTask_discordWebHook)
+        await sendMsgToDiscord(ctx.session.user.username, stringWithMention, ctx.session.states.current.task.discordWebHook)
         await sendProses(ctx, ctx.i18n.t('mainComplex_scene_commentActions_discordMention'))
       }
 

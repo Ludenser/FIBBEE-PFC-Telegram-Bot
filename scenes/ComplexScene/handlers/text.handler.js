@@ -1,15 +1,15 @@
 const { Composer } = require('telegraf');
 const { editCustom_field } = require('../../../features/editCustomFields.feature');
-const { sendProses } = require('../../../utils/sendLoadings');
+const { sendProses, sendError } = require('../../../utils/sendLoadings');
 const { postCommentFromMsg } = require('../../../features/postComment.feature');
 const { menu_states } = require('../../../config/otherSettings');
-const { allComposersActions: Actions } = require('../actions');
+const { allComposerActions: Actions } = require('../actions');
 
-const complexSceneTextHandler = (task_id) => {
+const complexSceneTextHandler = () => {
   const composer = new Composer()
 
   composer.on(Actions.TEXT, async (ctx) => {
-    switch (ctx.session.states.currentMenuState) {
+    switch (ctx.session.states.current.menu_state) {
       case menu_states.MAIN:
         try {
           await ctx.deleteMessage()
@@ -23,7 +23,7 @@ const complexSceneTextHandler = (task_id) => {
       case menu_states.COMMENT:
         try {
           await ctx.deleteMessage()
-          await postCommentFromMsg(ctx, task_id);
+          await postCommentFromMsg(ctx, ctx.session.states.current.task.id);
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -43,7 +43,7 @@ const complexSceneTextHandler = (task_id) => {
       case menu_states.CUSTOM_FIELD:
         try {
           await ctx.deleteMessage()
-          await editCustom_field(ctx, task_id)
+          await editCustom_field(ctx, ctx.session.states.current.task.id)
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -63,7 +63,7 @@ const complexSceneTextHandler = (task_id) => {
       case menu_states.SIDETASK_COMMENT:
         try {
           await ctx.deleteMessage()
-          await postCommentFromMsg(ctx, ctx.session.states.currentSideTask.id)
+          await postCommentFromMsg(ctx, ctx.session.states.current.side_task.id)
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)

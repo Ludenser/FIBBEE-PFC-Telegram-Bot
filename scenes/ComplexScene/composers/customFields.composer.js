@@ -23,7 +23,7 @@ const complexSceneCustomFieldsActionsHandler = (task_id) => {
   composer.action(Actions.EDIT_CF, async (ctx) => {
     try {
       await ctx.deleteMessage()
-      ctx.session.states.currentMenuState = 'custom_field'
+      ctx.session.states.current.menu_state = 'custom_field'
       await sendMessageEditCustomFieldHelperScene(ctx)
     } catch (e) {
       await sendProses(ctx, e)
