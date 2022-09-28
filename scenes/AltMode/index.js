@@ -1,12 +1,11 @@
 const { Composer } = require('telegraf');
 const _ = require('lodash');
-const textActionHandler = require('./handlers/text.handler');
-const photoActionHandler = require('./handlers/photo.handler');
 const altModeSceneCustomFieldsActions = require('./composers/customFields.composer');
 const altModeScenePhotoProcess = require('./composers/photoProcess.composer');
 const altModeSceneEnterActions = require('./composers/enter.composer');
 const altModeSceneCommentActions = require('./composers/comment.composer');
 const altModeSceneSideTaskActions = require('./composers/sideTask.composer');
+const altModeSceneExitActions = require('./composers/exit.composer')
 
 /**
  * Сцена обслуживания комплекса.
@@ -25,6 +24,7 @@ module.exports = (ctx) => {
             altModeScenePhotoProcess(task.id, task.name),
             altModeSceneCommentActions(task.id),
             altModeSceneCustomFieldsActions(task.id),
+            altModeSceneExitActions(task.id)
         )
         if (ctx.session.all_lists[ctx.session.currentRouteNumber].hasOwnProperty('sideTasks')) {
             altMode_scene.use(altModeSceneSideTaskActions(ctx, task.id, task.name, task),)

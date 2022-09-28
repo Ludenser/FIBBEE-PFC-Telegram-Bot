@@ -1,12 +1,12 @@
 const { Composer } = require('telegraf');
 const Clickup = require('../../../api');
 const { resolveAllCheckListsAndItems } = require('../../../features/resolveCheckList.feature');
-const sendMessageRouteEnterExScene = require('../keyboards/sendMessageRouteEnterEx.keyboard');
 const deleteMessagesById = require('../../../utils/deleteMessagesById');
 const { sendError } = require('../../../utils/sendLoadings');
 const { exitComposerActions: Actions } = require('../actions');
+const sendMessageALtModeTasksKeyboard = require('../keyboards/sendMessageALtModeTasks.keyboard');
 
-const complexSceneExitHandler = (task_id, task_checklists, driverTask_id) => {
+const complexSceneExitHandler = (task_id, task_checklists) => {
   const composer = new Composer()
 
   composer.action(`${Actions.EXIT}${task_id}`, async (ctx) => {
@@ -18,14 +18,13 @@ const complexSceneExitHandler = (task_id, task_checklists, driverTask_id) => {
       }
       await ClickAPI.Tasks.setStatus(task_id, 'done');
       await ClickAPI.TimeTracking.stopEntry(task_id);
-      await ClickAPI.TimeTracking.startEntry(driverTask_id);
       await resolveAllCheckListsAndItems(task_checklists, 'true', ctx.session.user.CU_Token);
       await ctx.deleteMessage();
-      await sendMessageRouteEnterExScene(ctx);
+      await sendMessageALtModeTasksKeyboard(ctx)
 
     } catch (e) {
       await sendError(ctx, e);
-      await sendMessageRouteEnterExScene(ctx);
+      await sendMessageALtModeTasksKeyboard(ctx)
     }
   });
 

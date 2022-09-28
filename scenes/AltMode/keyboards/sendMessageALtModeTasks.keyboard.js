@@ -9,8 +9,6 @@ module.exports = async (ctx) => {
             ctx.session.all_lists[ctx.session.currentRouteNumber].tasksWithoutDriverTaskAndSide.forEach(task => {
                 buttonsArray.push(Markup.button.callback(`${task.name}`, `${task.id}`))
             })
-
-
             buttonsArray.push(Markup.button.callback(ctx.i18n.t('return_button'), 'modeChange'))
         } else {
             buttonsArray.push(Markup.button.callback(ctx.i18n.t('return_button'), 'modeChange'))

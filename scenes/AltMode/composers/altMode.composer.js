@@ -18,7 +18,6 @@ module.exports = (ctx) => {
       await sendError(ctx, e)
       await sendMessageDriverMenu(ctx)
     }
-
   })
   ctx.session.all_lists.forEach((list, i) => {
 
@@ -31,11 +30,7 @@ module.exports = (ctx) => {
       await sendMessageALtModeTasksKeyboard(ctx)
       composer.use(...altModeComposer(ctx))
     })
-
-
   })
-
-
 
   return composer
 }

@@ -90,7 +90,6 @@ const complexSceneTextHandler = (task_id) => {
         }
         break;
     }
-
   })
   return composer
 }

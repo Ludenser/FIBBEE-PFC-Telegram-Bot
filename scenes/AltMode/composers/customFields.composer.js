@@ -38,7 +38,6 @@ const complexSceneCustomFieldsActionsHandler = (task_id) => {
       await sendProses(ctx, e)
       console.log(e)
     }
-
   })
   return composer
 }

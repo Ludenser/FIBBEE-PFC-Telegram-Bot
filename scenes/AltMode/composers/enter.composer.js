@@ -13,7 +13,6 @@ const complexSceneEnterHandler = (task_id, task_name, task) => {
   composer.action(`${task_id}`, async (ctx) => {
 
     try {
-
       const ClickAPI = new Clickup(ctx.session.user.CU_Token);
       ctx.session.states.current.task.discordWebHook = task.custom_fields.find(o => o.name === 'Discord_WebHook').value
       ctx.session.states.current.menu_state = menu_states.MAIN

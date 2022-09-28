@@ -19,7 +19,6 @@ const complexSceneCommentHandler = (task_id) => {
       await sendError(ctx, e);
       await sendMessageRouteEnterScene(ctx, ctx.session.states.current.task.locationName, ctx.session.states.current.task.id);
     }
-
   });
 
   return composer

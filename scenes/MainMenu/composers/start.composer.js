@@ -102,8 +102,8 @@ startComposer.command(Actions.UPDATE, async (ctx) => {
       startComposer.use(altModeComposer(ctx))
       startComposer.use(totalSceneInitComposer(ctx))
       startComposer.use(...selectRouteComposer(ctx))
-
       await ctx.deleteMessage()
+      await sendMessageStart(ctx)
     } else {
       await sendProses(ctx, ctx.i18n.t('noAccessError_message'))
     }
