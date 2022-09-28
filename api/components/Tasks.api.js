@@ -2,7 +2,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const FormData = require('form-data');
-const settings = JSON.parse(fs.readFileSync('./lib/setting.json'));
+const settings = JSON.parse(fs.readFileSync('./config/setting.json'));
 const qs = require('qs');
 const dueTime = require('../../utils/timePeriodDate')
 const { team_id } = settings;

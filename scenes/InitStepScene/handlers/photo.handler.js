@@ -1,15 +1,15 @@
 const { Composer } = require('telegraf');
 const { postAttachments } = require('../../../features/postAttachments.feature');
+const { menu_states } = require('../../../config/otherSettings');
 const { sendError } = require('../../../utils/sendLoadings');
-
-const INIT_SCENE = 'init_scene'
+const { preventHandlersComposersActions: Actions } = require('../actions');
 
 const initScenePhotoHandler = () => {
   const composer = new Composer()
 
-  composer.on('photo', async (ctx) => {
-    switch (ctx.session.states.currentMenuState) {
-      case INIT_SCENE:
+  composer.on(Actions.PHOTO, async (ctx) => {
+    switch (ctx.session.states.current.menu_state) {
+      case menu_states.INIT_SCENE:
         try {
           await postAttachments(ctx, ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id);
         } catch (e) {

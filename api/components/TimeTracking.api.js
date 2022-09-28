@@ -1,7 +1,7 @@
 
 const axios = require('axios');
 const fs = require('fs');
-const settings = JSON.parse(fs.readFileSync('./lib/setting.json'));
+const settings = JSON.parse(fs.readFileSync('./config/setting.json'));
 const { team_id } = settings;
 /**
     * Взаимодействия с таймером

@@ -1,5 +1,4 @@
 const axios = require('axios');
-const { model } = require('../../db');
 require('dotenv').config();
 class Token {
   async getToken(code) {

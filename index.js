@@ -1,17 +1,18 @@
-const { Telegraf } = require('telegraf');
-const { I18n } = require('@grammyjs/i18n');
+const { Telegraf, Context } = require('telegraf');
+const { I18n } = require("@grammyjs/i18n")
 const updateLogger = require('telegraf-update-logger');
 const chalk = require('chalk');
 const path = require('path');
-const startComposer = require('./composers/start.composer');
-const mainMenuComposer = require('./composers/mainMenu.composer');
-const routesInfoComposer = require('./composers/routesInfo.composer');
 const LocalSession = require('telegraf-session-local');
+const startComposer = require('./scenes/MainMenu/composers/start.composer');
+const mainMenuComposer = require('./scenes/MainMenu/composers/mainMenu.composer');
+const routesInfoComposer = require('./scenes/MainMenu/composers/routesInfo.composer');
+
 require('dotenv').config();
 
 const i18n = new I18n({
     defaultLanguage: 'ru',
-    allowMissing: false, // Default true
+    allowMissing: true,
     directory: path.resolve(__dirname, 'locales')
 })
 
@@ -31,7 +32,7 @@ bot.use(
         },
     }),
 );
-
+/* tslint:disable-next-line */
 bot.use(i18n.middleware())
 bot.use(startComposer)
 bot.use(mainMenuComposer)

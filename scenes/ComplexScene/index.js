@@ -2,7 +2,7 @@ const { Composer } = require('telegraf');
 const _ = require('lodash');
 const textActionHandlerComposer = require('./handlers/text.handler');
 const complexSceneCustomFieldsActions = require('./composers/customFields.composer');
-const complexScenePhotoAction = require('./composers/photoAction.composer');
+const complexScenePhotoProcess = require('./composers/photoProcess.composer');
 const complexSceneEnterActions = require('./composers/enter.composer');
 const complexSceneCommentActions = require('./composers/comment.composer');
 const complexSceneNextStepActions = require('./composers/nextStep.composer');
@@ -23,11 +23,11 @@ module.exports = (tasks, driverTask) => {
       const complex_scene = new Composer();
       complex_scene.use(complexSceneEnterActions(task.id, task.name, task))
       complex_scene.use(
-        textActionHandlerComposer(task.id),
+        textActionHandlerComposer(),
         complexScenePhotoHandler(),
         complexSceneNextStepActions(tasks, task, driverTask.id),
         complexSceneExitActions(task.id, task.checklists, driverTask.id),
-        complexScenePhotoAction(task.id, task.name),
+        complexScenePhotoProcess(task.id, task.name),
         complexSceneCommentActions(task.id, task.name),
         complexSceneCustomFieldsActions(task.id),
       )

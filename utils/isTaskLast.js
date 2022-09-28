@@ -9,10 +9,10 @@ module.exports = (session) => {
 
   session.states.isTaskFirst = false
 
-  if (session.states.currentTask_id.includes(session.all_lists[session.currentRouteNumber].tasksWithoutDriverTaskAndSide.at(-1).id)) {
+  if (session.states.current.task.id.includes(session.all_lists[session.currentRouteNumber].tasksWithoutDriverTaskAndSide.at(-1).id)) {
     session.states.isTaskLast = true
   }
-  if (session.states.currentTask_id.includes(session.all_lists[session.currentRouteNumber].tasksWithoutDriverTaskAndSide.at(0).id)) {
+  if (session.states.current.task.id.includes(session.all_lists[session.currentRouteNumber].tasksWithoutDriverTaskAndSide.at(0).id)) {
     session.states.isTaskFirst = true
   }
 

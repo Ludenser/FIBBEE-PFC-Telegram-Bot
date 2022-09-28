@@ -1,19 +1,15 @@
 const { Composer } = require('telegraf');
 const { removeCustom_field } = require('../../../features/editCustomFields.feature');
-const sendMessageCustomFieldEditScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessageCustomFieldEdit.scene');
-const sendMessageEditCustomFieldHelperScene = require('../../../keyboards/scenes/complexSceneKeyboards/sendMessageEditCustomFieldHelper.scene');
+const sendMessageCustomFieldEditScene = require('../keyboards/sendMessageCustomFieldEdit.keyboard');
+const sendMessageEditCustomFieldHelperScene = require('../keyboards/sendMessageEditCustomFieldHelper.keyboard');
 const deleteMessagesById = require('../../../utils/deleteMessagesById');
 const { sendProses } = require('../../../utils/sendLoadings');
-
-const CUSTOM_FIELD_EDIT_ACT = 'custom_field_edit_act'
-const EDIT_CF = 'edit_CF'
-const ERASE_CF = 'erase_CF'
-
+const { customFieldsComposerActions: Actions } = require('../actions');
 
 const complexSceneCustomFieldsActionsHandler = (task_id) => {
   const composer = new Composer()
 
-  composer.action(CUSTOM_FIELD_EDIT_ACT, async (ctx) => {
+  composer.action(Actions.CUSTOM_FIELD_EDIT_ACT, async (ctx) => {
     try {
       await ctx.deleteMessage()
       ctx.session.states.attention_msg.id = await deleteMessagesById(ctx, ctx.session.states.attention_msg.id)
@@ -22,23 +18,20 @@ const complexSceneCustomFieldsActionsHandler = (task_id) => {
       await sendProses(ctx, e)
       console.log(e)
     }
-
   })
 
-  composer.action(EDIT_CF, async (ctx) => {
+  composer.action(Actions.EDIT_CF, async (ctx) => {
     try {
       await ctx.deleteMessage()
-      ctx.session.states.currentMenuState = 'custom_field'
+      ctx.session.states.current.menu_state = 'custom_field'
       await sendMessageEditCustomFieldHelperScene(ctx)
     } catch (e) {
       await sendProses(ctx, e)
       console.log(e)
     }
-
-
   })
 
-  composer.action(ERASE_CF, async (ctx) => {
+  composer.action(Actions.ERASE_CF, async (ctx) => {
     try {
       await removeCustom_field(ctx, task_id)
     } catch (e) {

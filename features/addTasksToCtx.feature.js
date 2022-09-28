@@ -1,12 +1,12 @@
-
 const _ = require('lodash')
 const fs = require('fs');
-const setting = JSON.parse(fs.readFileSync('./lib/setting.json'));
+const setting = JSON.parse(fs.readFileSync('./config/setting.json'));
 const { team_id } = setting;
-const list_ids = require('../lib/list_idsFromClickUp');
+const list_ids = require('../config/list_idsFromClickUp');
 const Clickup = require('../api');
 const { sendError } = require('../utils/sendLoadings');
 const chalk = require('chalk');
+const { menu_states } = require('../config/otherSettings');
 
 
 /**
@@ -24,36 +24,36 @@ module.exports = async (ctx) => {
 
 
         let allTasksWithoutSide = _(all_tasks_any_status.data.tasks)
-            .filter(item => item.name.includes('Обслуживание') || item.name.includes('водителя') || item.name.includes('Пополнение'))
-            .groupBy(item => item.list.id)
+            .filter(task => task.name.includes('Обслуживание') || task.name.includes('водителя') || task.name.includes('Пополнение'))
+            .groupBy(task => task.list.id)
             .map((value, key) => ({ list_id: key, allTasksWithoutSide: value, }))
             .value();
 
         let driverTask = _(all_tasks_any_status.data.tasks)
             .reverse()
-            .filter(item => item.name.includes('водителя'))
-            .groupBy(item => item.list.id)
+            .filter(task => task.name.includes('водителя'))
+            .groupBy(task => task.list.id)
             .map((value, key) => (value[0].status.status.includes('in progress') ? { list_id: key, driverTask: value, isOpened: true, } : { list_id: key, driverTask: value }))
             .value();
 
         let tasksWithoutDriverTaskAndSide = _(all_tasks_any_status.data.tasks)
-            .reject(item => {
-                for (let elem of item.tags) {
+            .reject(task => {
+                for (let elem of task.tags) {
                     return elem.name === 'side'
                 }
             })
-            .filter(item => !item.name.includes('водителя'))
-            .groupBy(item => item.list.id)
+            .filter(task => !task.name.includes('водителя'))
+            .groupBy(task => task.list.id)
             .map((value, key) => ({ list_id: key, tasksWithoutDriverTaskAndSide: value }))
             .value();
 
         let sideTasks = _(all_tasks_any_status.data.tasks)
-            .filter(item => {
-                for (let elem of item.tags) {
+            .filter(task => {
+                for (let elem of task.tags) {
                     return elem.name === 'side'
                 }
             })
-            .groupBy(item => item.list.id)
+            .groupBy(task => task.list.id)
             .map((value, key) => ({ list_id: key, sideTasks: value, }))
             .value();
         if (!driverTask || !tasksWithoutDriverTaskAndSide) {
@@ -69,6 +69,7 @@ module.exports = async (ctx) => {
             )
         })
 
+        ctx.session.currentRouteNumber = ''
         ctx.session.all_lists = all_lists.filter(el => el.hasOwnProperty('driverTask'))
         ctx.session.all_existLabels = all_existLabels
         ctx.session.team_id = team_id
@@ -81,16 +82,22 @@ module.exports = async (ctx) => {
         ctx.session.states.attention_msg = {}
         ctx.session.states.attention_msg.id = []
         ctx.session.states.attention_msg.isDeleted = false
-        ctx.session.states.currentLocationName = ''
-        ctx.session.states.currentLocationLabel = ''
-        ctx.session.states.currentMenuState = 'main_menu'
-        ctx.session.states.currentList_id = ''
-        ctx.session.states.currentTask_id = ''
-        ctx.session.states.currentTask_discordWebHook = ''
-        ctx.session.states.currentSideTask = {}
-        ctx.session.states.currentSideTask.id = ''
-        ctx.session.states.currentSideTask.ids = []
-        ctx.session.states.currentSideTask.name = ''
+        ctx.session.states.current = {
+            task: {},
+            side_task: {},
+            menu_state: '',
+            list_id: '',
+        }
+        ctx.session.states.current.task.locationName = ''
+        ctx.session.states.current.task.locationLabel = ''
+        ctx.session.states.current.menu_state = menu_states.MAIN
+        ctx.session.states.current.list_id = ''
+        ctx.session.states.current.task.id = ''
+        ctx.session.states.current.task.discordWebHook = ''
+        ctx.session.states.current.side_task = {}
+        ctx.session.states.current.side_task.id = ''
+        ctx.session.states.current.side_task.ids = []
+        ctx.session.states.current.side_task.name = ''
         console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
 
     } catch (error) {

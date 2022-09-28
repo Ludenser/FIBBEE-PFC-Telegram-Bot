@@ -1,10 +1,10 @@
 const _ = require('lodash');
 const Clickup = require('../api');
-const supplyTeam_ids = require('../lib/supplyTeam_ids');
+const supplyTeam_ids = require('../config/supplyTeam_ids');
 const userModel = require('../db/models');
 const { sendProses } = require('../utils/sendLoadings');
 /**
-  * Функция для поиска telegram username текущего пользователя в списке зарегистрированных пользователей из файла lib/supplyTeam_ids
+  * Функция для поиска telegram username текущего пользователя в списке зарегистрированных пользователей из файла config/supplyTeam_ids
   * @param {Ctx} ctx - объект контекста telegraf
   */
 module.exports = async (ctx) => {
