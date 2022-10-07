@@ -60,7 +60,8 @@ module.exports = (tasks, driverTask) => {
       // });
 
       return complex_scene;
-    });
+    })
+    .value()
 
   return complexSceneArray;
 };

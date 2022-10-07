@@ -4,6 +4,7 @@
   "description": "Bot telegram use lib telegraf",
   "main": "index.js",
   "nodemonConfig": {
+    "exec": "ts-node ./index.js",
     "ignore": [
       "*.json"
     ]
@@ -43,7 +44,6 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.34",
-    "nodemon": "^2.0.19",
     "os": "^0.1.1",
     "performance-now": "^2.1.0",
     "pg": "^8.8.0",
@@ -53,5 +53,10 @@
     "telegraf": "^4.9.1",
     "telegraf-session-local": "^2.1.0",
     "telegraf-update-logger": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/qs": "^6.9.7",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1"
   }
 }

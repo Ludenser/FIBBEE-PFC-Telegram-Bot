@@ -5,7 +5,7 @@ const sequelize = require('../../../db/index')
 const userModel = require('../../../db/models');
 const sendMessageStart = require('../keyboards/sendMessageStart.keyboard');
 const { sendError, sendProses } = require('../../../utils/sendLoadings');
-const addTasksToCtx = require('../../../features/addTasksToCtx.feature');
+const { addTasksToCtx } = require('../../../features/addTasksToCtx.feature');
 const authUserFeature = require('../../../features/authUser.feature');
 const totalSceneInitComposer = require('./totalSceneInit.composer');
 const selectRouteComposer = require('./selectRoute.composer');
@@ -57,11 +57,9 @@ startComposer.start(async (ctx) => {
     if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
 
       await addTasksToCtx(ctx)
-
       startComposer.use(altModeComposer(ctx))
       startComposer.use(totalSceneInitComposer(ctx))
       startComposer.use(...selectRouteComposer(ctx))
-
     }
   } catch (e) {
     await sendError(ctx, e)
@@ -78,11 +76,9 @@ startComposer.action(Actions.START, async (ctx) => {
     startComposer.use(async (ctx, next) => {
       if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
         await addTasksToCtx(ctx)
-
         startComposer.use(altModeComposer(ctx))
         startComposer.use(totalSceneInitComposer(ctx))
         startComposer.use(...selectRouteComposer(ctx))
-
       }
       await next()
     })
@@ -98,12 +94,10 @@ startComposer.command(Actions.UPDATE, async (ctx) => {
     ctx.session.isAlreadyFilled = false
     if (ctx.session.isAuthUser) {
       await addTasksToCtx(ctx)
-
       startComposer.use(altModeComposer(ctx))
       startComposer.use(totalSceneInitComposer(ctx))
       startComposer.use(...selectRouteComposer(ctx))
       await ctx.deleteMessage()
-      await sendMessageStart(ctx)
     } else {
       await sendProses(ctx, ctx.i18n.t('noAccessError_message'))
     }

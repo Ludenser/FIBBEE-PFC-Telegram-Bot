@@ -2,7 +2,7 @@
 const _ = require('lodash')
 const { Markup } = require('telegraf');
 const toLocalTime = require('../utils/toLocalTime');
-const Clickup = require('../api');
+const {Clickup} = require('../api');
 
 function formattedTaskString(value, index) {
   const timeStamp = toLocalTime(value)

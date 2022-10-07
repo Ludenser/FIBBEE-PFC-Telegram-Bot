@@ -1,4 +1,4 @@
-const Clickup = require('../api/index');
+const {Clickup} = require('../api/index');
 const _ = require('lodash');
 const { sendProses } = require('../utils/sendLoadings');
 

@@ -1,16 +1,20 @@
-
-const axios = require('axios');
-const fs = require('fs');
-const FormData = require('form-data');
-const settings = JSON.parse(fs.readFileSync('./config/setting.json'));
-const qs = require('qs');
-const dueTime = require('../../utils/timePeriodDate')
+import { Task } from '../../global';
+import axios from 'axios';
+import fs from 'fs';
+import FormData from 'form-data';
+import qs from 'qs';
+import dueTime from '../../utils/timePeriodDate'
+const settings = JSON.parse(fs.readFileSync('./config/setting.json', 'utf-8'));
 const { team_id } = settings;
 /**
     * Взаимодействия с тасками.
     */
-class Tasks {
-  constructor(token) {
+
+export interface Tasks {
+  token:string
+}
+export class Tasks {
+  constructor(token:string) {
     this.token = token
   }
 
@@ -18,9 +22,9 @@ class Tasks {
       * Получение Object[ ] указанного таска
       * @param {String} task_id - ClickUp-Ids of current task
       */
-  async getTaskByTaskId(task_id) {
+  async getTaskByTaskId(task_id: string) {
 
-    const response = await axios.get(`https://api.clickup.com/api/v2/task/${task_id}/`,
+    const response = await axios.get<Task>(`https://api.clickup.com/api/v2/task/${task_id}/`,
       {
         headers: {
           'Authorization': this.token,
@@ -34,7 +38,7 @@ class Tasks {
       * Получение Object[ ] всех тасков в таск-листе со статусом 'to do' и 'in progress', в диапазоне времени от "3 часов до текущего времени" и "20 часов после текущего времени.
       * @param {String[]} list_ids - ClickUp-Ids of current task-list
       */
-  async getTodayTasksWithAnyStatus(list_ids) {
+  async getTodayTasksWithAnyStatus(list_ids: string[]) {
 
     const response = await axios.get(`https://api.clickup.com/api/v2/team/${team_id}/task`,
       {
@@ -59,9 +63,9 @@ class Tasks {
       * Получение Object[ ] всех тасков в таск-листе только со статусом 'to do', в диапазоне времени от "3 часов до текущего времени" и "20 часов после текущего времени".
       * @param {String[]} list_ids - ClickUp-Ids of current task-list
       */
-  async getTodayTasksWithStatusTodo(list_ids) {
+  async getTodayTasksWithStatusTodo(list_ids: string[]) {
 
-    const response = await axios.get(`https://api.clickup.com/api/v2/team/${team_id}/task`,
+    const response = await axios.get<Task[]>(`https://api.clickup.com/api/v2/team/${team_id}/task`,
       {
         params: {
           statuses: ['to do'],
@@ -86,7 +90,7 @@ class Tasks {
       * @param {String} task_id ClickUp-Id of current task
       * @param {String} updatedStatus Status to be set for the current task. ('to do', 'in progress', 'done', etc.)
       */
-  async setStatus(task_id, updatedStatus) {
+  async setStatus(task_id: string, updatedStatus: string) {
     const response = await axios.put(`https://api.clickup.com/api/v2/task/${task_id}/`,
       {
         'status': updatedStatus
@@ -105,7 +109,7 @@ class Tasks {
       * @param {String} task_id ClickUp-Id of current task
       * @param {Number} user_id ClickUp-Id of current user
       */
-  async setAssignee(task_id, user_id) {
+  async setAssignee(task_id: string, user_id: number) {
     const response = await axios.put(`https://api.clickup.com/api/v2/task/${task_id}/`,
       {
         'assignees': {
@@ -128,7 +132,7 @@ class Tasks {
       * @param {String} message_text text from telegram.update.message
       * @param {String} task_id ClickUp-Id of current task
       */
-  async createComment(message_text, task_id) {
+  async createComment(message_text: string, task_id: string) {
 
     await axios({
       method: 'post',
@@ -155,7 +159,7 @@ class Tasks {
       * @param {String} task_id - ClickUp-Id of current task
       * @param {Number} user_id - ClickUp-Id of user to be tagged
       */
-  async createCommentWithAssignee(message_text, task_id, user_id) {
+  async createCommentWithAssignee(message_text: string, task_id: string, user_id: number) {
 
     await axios({
       method: 'post',
@@ -184,7 +188,7 @@ class Tasks {
       * @param {String} task_id ClickUp-Id of current task
       * @param {ReadableStream} stream - Readable stream from telegram getFileLink() or same type from other source.
       */
-  async createAttachment(message_id, task_id, stream) {
+  async createAttachment(message_id: string, task_id: string, stream: ReadableStream) {
     const form = new FormData();
     form.append('attachment', stream)
     form.append('filename', `${message_id}.jpg`)
@@ -208,7 +212,7 @@ class Tasks {
      * Получение чеклиста
      * @param {String} checklist_id - task's checklist ClickUp-uuid
      */
-  async getCheckList(checklist_id) {
+  async getCheckList(checklist_id: string) {
 
     const response = await axios({
       method: 'put',
@@ -231,7 +235,7 @@ class Tasks {
      * @param {String} checklist_item_id - ClickUp checklist item id
      * @param {Boolean} resolved - ( Default is 'true')
      */
-  async resolveCheckListItem(checklist_item_id, resolved = true) {
+  async resolveCheckListItem(checklist_item_id: string, resolved: boolean = true) {
 
     const response = await axios({
       method: 'put',
@@ -250,5 +254,3 @@ class Tasks {
   };
 
 }
-
-module.exports = Tasks

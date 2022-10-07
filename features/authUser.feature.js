@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const Clickup = require('../api');
+const {Clickup} = require('../api');
 const supplyTeam_ids = require('../config/supplyTeam_ids');
 const userModel = require('../db/models');
 const { sendProses } = require('../utils/sendLoadings');

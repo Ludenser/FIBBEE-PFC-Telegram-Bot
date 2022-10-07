@@ -15,7 +15,7 @@ const complexScene = (ctx) => {
       return new Scenes.WizardScene(`${i}`, ...complex_scene(ctx.session.all_lists[i].tasksWithoutDriverTaskAndSide, list.driverTask[0], ctx.session))
 
     })
-
+.value()
   return wizardScene
 }
 

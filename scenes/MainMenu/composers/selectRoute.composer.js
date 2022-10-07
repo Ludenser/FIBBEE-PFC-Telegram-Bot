@@ -20,7 +20,7 @@ module.exports = (ctx) => {
         .map((el, i) => {
 
             const selectComposer = new Composer()
-            selectComposer.action(`${Actions.ROUTE}${i}`, async (ctx) => {
+            selectComposer.action(`${Actions.SELECT_ROUTE}${i}`, async (ctx) => {
                 try {
                     await ctx.deleteMessage()
                     ctx.session.currentRouteNumber = i
@@ -38,5 +38,6 @@ module.exports = (ctx) => {
             })
             return selectComposer
         })
+        .value()
     return selectComposerArray
 }

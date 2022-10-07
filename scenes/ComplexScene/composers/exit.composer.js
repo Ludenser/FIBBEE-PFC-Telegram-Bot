@@ -1,5 +1,5 @@
 const { Composer } = require('telegraf');
-const Clickup = require('../../../api');
+const {Clickup} = require('../../../api');
 const { resolveAllCheckListsAndItems } = require('../../../features/resolveCheckList.feature');
 const sendMessageRouteEnterExScene = require('../keyboards/sendMessageRouteEnterEx.keyboard');
 const deleteMessagesById = require('../../../utils/deleteMessagesById');

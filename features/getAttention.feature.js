@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const Clickup = require('../api');
+const {Clickup} = require('../api');
 const { sendProses } = require('../utils/sendLoadings')
 /**
    * Функция для выдачи сообщения с информацией об актуальных особенностях комплекса.

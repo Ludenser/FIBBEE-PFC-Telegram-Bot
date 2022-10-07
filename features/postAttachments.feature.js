@@ -1,7 +1,7 @@
 
 const axios = require('axios');
 const { sendProses, sendError } = require('../utils/sendLoadings');
-const Clickup = require('../api');
+const {Clickup} = require('../api');
 
 
 /**

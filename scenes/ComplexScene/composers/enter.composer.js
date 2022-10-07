@@ -1,5 +1,5 @@
 const { Composer } = require('telegraf');
-const Clickup = require('../../../api');
+const {Clickup} = require('../../../api');
 const getAttentionFeature = require('../../../features/getAttention.feature');
 const setAssigneeFeature = require('../../../features/setAssignee.feature');
 const sendMessagePrevComplexScene = require('../keyboards/sendMessagePrevComplex.keyboard');

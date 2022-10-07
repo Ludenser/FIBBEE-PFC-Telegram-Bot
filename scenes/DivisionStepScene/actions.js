@@ -1,6 +1,6 @@
 const _ = require('lodash')
 
-const closeRouteComoserActions = {
+const closeRouteComposerActions = {
     CLOSE_ROUTE: 'closeRoute',
 }
 
@@ -17,7 +17,7 @@ const preventHandlersComposersActions = {
     PHOTO: 'photo',
 }
 module.exports = {
-    closeRouteComoserActions,
+    closeRouteComposerActions,
     leaveSceneComposerActions,
     openRouteComposerActions,
     preventHandlersComposersActions,

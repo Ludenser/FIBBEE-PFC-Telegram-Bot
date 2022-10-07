@@ -78,6 +78,25 @@ const globalPhotoHandler = () => {
         }
         break;
 
+      case menu_states.INIT_SCENE:
+        try {
+          await postAttachments(ctx, ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id);
+        } catch (e) {
+          await sendError(ctx, e)
+          console.log(e)
+        }
+        break;
+
+      case menu_states.DIVISION_SCENE:
+        try {
+          await ctx.deleteMessage()
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+        } catch (e) {
+          await sendError(ctx, e)
+          console.log(e)
+        }
+        break;
+
       default:
         try {
           await ctx.deleteMessage()

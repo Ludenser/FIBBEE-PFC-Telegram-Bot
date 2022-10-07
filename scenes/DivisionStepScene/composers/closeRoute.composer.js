@@ -1,9 +1,9 @@
 const { Composer } = require("telegraf");
-const Clickup = require("../../../api");
+const {Clickup} = require("../../../api");
 const sendMessageDriverMenu = require("../../MainMenu/keyboards/sendMessageDriverMenu.keyboard");
 const { resolveAllCheckListsAndItems } = require('../../../features/resolveCheckList.feature')
 const { sendError } = require("../../../utils/sendLoadings");
-const { closeRouteComoserActions: Actions } = require("../actions");
+const { closeRouteComposerActions: Actions } = require("../actions");
 
 const composer = new Composer()
 

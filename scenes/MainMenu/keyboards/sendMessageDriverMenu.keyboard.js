@@ -6,7 +6,7 @@ module.exports = async (ctx) => {
     let buttonsArray = []
     if (ctx.session.all_lists.length) {
       ctx.session.all_lists.forEach((el, i) => {
-        !el.isOpened ? buttonsArray.push(Markup.button.callback(`${i + 1} Маршрут`, `route${i}`)) : buttonsArray.push(Markup.button.callback(`${i + 1} Маршрут. Сейчас в работе.⚠️`, `route${i}`))
+        !el.isOpened ? buttonsArray.push(Markup.button.callback(`${i + 1} Маршрут`, `selectRoute${i}`)) : buttonsArray.push(Markup.button.callback(`${i + 1} Маршрут. Сейчас в работе.⚠️`, `selectRoute${i}`))
       })
       buttonsArray.push(Markup.button.callback(ctx.i18n.t('driverMenu_keyBoard_tasksOverview'), 'routesInfo'))
       buttonsArray.push(Markup.button.callback('Режим выбора комплекса', 'modeChange'))

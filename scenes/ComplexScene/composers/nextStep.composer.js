@@ -1,11 +1,12 @@
 const { Composer } = require('telegraf');
-const Clickup = require('../../../api');
+const {Clickup} = require('../../../api');
 const { resolveAllCheckListsAndItems } = require('../../../features/resolveCheckList.feature');
 const sendMessageNextStepScene = require('../keyboards/sendMessageNextStep.keyboard');
 const sendMessageRouteEnterScene = require('../keyboards/sendMessageRouteEnter.keyboard');
 const deleteMessagesById = require('../../../utils/deleteMessagesById');
 const { sendError } = require('../../../utils/sendLoadings');
 const { nextStepComposerActions: Actions } = require('../actions');
+const sendMessageReminderKeyboard = require('../keyboards/sendMessageReminder.keyboard');
 
 const complexSceneNextStepHandler = (tasks, task, driverTask_id) => {
   const composer = new Composer()
@@ -23,6 +24,7 @@ const complexSceneNextStepHandler = (tasks, task, driverTask_id) => {
       await ClickAPI.TimeTracking.startEntry(driverTask_id);
 
       await ctx.deleteMessage();
+      await sendMessageReminderKeyboard(ctx)
       await sendMessageNextStepScene(ctx, task.name, tasks[tasks.indexOf(task) + 1].name);
       await ctx.wizard.next();
     } catch (e) {

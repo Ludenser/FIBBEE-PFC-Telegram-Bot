@@ -7,6 +7,7 @@ const composer = new Composer()
 
 composer.action(Actions.GET_START, async (ctx) => {
   try {
+    ctx.session.states.current.menu_state = 'start_step'
     await ctx.deleteMessage();
     await sendMessageInitKeyboardInitStep(ctx);
     ctx.scene.reset()

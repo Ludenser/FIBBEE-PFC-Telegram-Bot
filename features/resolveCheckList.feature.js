@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const Clickup = require('../api');
+const {Clickup} = require('../api');
 const { sendError } = require('../utils/sendLoadings');
 
 /**

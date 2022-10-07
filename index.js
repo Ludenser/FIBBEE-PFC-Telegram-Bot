@@ -4,9 +4,7 @@ const updateLogger = require('telegraf-update-logger');
 const chalk = require('chalk');
 const path = require('path');
 const LocalSession = require('telegraf-session-local');
-const startComposer = require('./scenes/MainMenu/composers/start.composer');
-const mainMenuComposer = require('./scenes/MainMenu/composers/mainMenu.composer');
-const routesInfoComposer = require('./scenes/MainMenu/composers/routesInfo.composer');
+const primeSceneComposer = require('./scenes/MainMenu');
 
 require('dotenv').config();
 
@@ -34,9 +32,7 @@ bot.use(
 );
 /* tslint:disable-next-line */
 bot.use(i18n.middleware())
-bot.use(startComposer)
-bot.use(mainMenuComposer)
-bot.use(routesInfoComposer)
+bot.use(primeSceneComposer)
 
 bot.launch()
 

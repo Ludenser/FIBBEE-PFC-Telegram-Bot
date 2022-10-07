@@ -11,7 +11,7 @@ const routesInfoComposerActions = {
 }
 
 const selectRouteComposerActions = {
-    ROUTE: 'route',
+    SELECT_ROUTE: 'selectRoute',
 }
 
 const startComposerActions = {
