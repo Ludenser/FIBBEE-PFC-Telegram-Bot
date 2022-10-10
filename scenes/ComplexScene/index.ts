@@ -1,26 +1,28 @@
-const { Composer } = require('telegraf');
-const _ = require('lodash');
-const textActionHandlerComposer = require('./handlers/text.handler');
-const complexSceneCustomFieldsActions = require('./composers/customFields.composer');
-const complexScenePhotoProcess = require('./composers/photoProcess.composer');
-const complexSceneEnterActions = require('./composers/enter.composer');
-const complexSceneCommentActions = require('./composers/comment.composer');
-const complexSceneNextStepActions = require('./composers/nextStep.composer');
-const complexSceneExitActions = require('./composers/exit.composer');
-const complexSceneSideTaskActions = require('./composers/sideTask.composer');
-const complexScenePhotoHandler = require('./handlers/photo.handler');
+import { SessionCtx, Task } from '../../global';
+
+import { Composer } from 'telegraf';
+import _ from 'lodash';
+import textActionHandlerComposer from './handlers/text.handler';
+import { complexSceneCustomFieldsActionsHandler as complexSceneCustomFieldsActions } from './composers/customFields.composer';
+import complexScenePhotoProcess from './composers/photoProcess.composer';
+import complexSceneEnterActions from './composers/enter.composer';
+import { complexSceneCommentHandler as complexSceneCommentActions } from './composers/comment.composer';
+import complexSceneNextStepActions from './composers/nextStep.composer';
+import { complexSceneExitHandler as complexSceneExitActions } from './composers/exit.composer';
+import complexSceneSideTaskActions from './composers/sideTask.composer';
+import complexScenePhotoHandler from './handlers/photo.handler';
 
 /**
  * Сцена обслуживания комплекса.
  * Динамически создается на основании массива тасков из API
- * @param {[Object]} tasks - массив с обьектами тасков без главного таска водителя-оператора
- * @param {[Object]} driverTask - массив с обьектами тасков текущего таск-листа
+ * @param {Task[]} tasks - массив с обьектами тасков без главного таска водителя-оператора
+ * @param {Task} driverTask - массив с обьектами тасков текущего таск-листа
  */
 
-module.exports = (tasks, driverTask) => {
+export const complexSceneComposer = (tasks: Task[], driverTask: Task) => {
   const complexSceneArray = _(tasks)
     .map((task, i) => {
-      const complex_scene = new Composer();
+      const complex_scene = new Composer<SessionCtx>();
       complex_scene.use(complexSceneEnterActions(task.id, task.name, task))
       complex_scene.use(
         textActionHandlerComposer(),

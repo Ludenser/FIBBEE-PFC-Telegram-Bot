@@ -1,9 +1,10 @@
-import { Task } from '../../global';
+import { Checklist, Task } from '../../global';
 import axios from 'axios';
 import fs from 'fs';
 import FormData from 'form-data';
 import qs from 'qs';
 import dueTime from '../../utils/timePeriodDate'
+import { ResponseChecklist } from '../models';
 const settings = JSON.parse(fs.readFileSync('./config/setting.json', 'utf-8'));
 const { team_id } = settings;
 /**
@@ -11,10 +12,10 @@ const { team_id } = settings;
     */
 
 export interface Tasks {
-  token:string
+  token: string
 }
 export class Tasks {
-  constructor(token:string) {
+  constructor(token: string) {
     this.token = token
   }
 
@@ -88,9 +89,9 @@ export class Tasks {
   /**
       * Установка статуса таску
       * @param {String} task_id ClickUp-Id of current task
-      * @param {String} updatedStatus Status to be set for the current task. ('to do', 'in progress', 'done', etc.)
+      * @param {String} updatedStatus Status to be set for the current task. 
       */
-  async setStatus(task_id: string, updatedStatus: string) {
+  async setStatus(task_id: string, updatedStatus: 'to do' | 'in progress' | 'done') {
     const response = await axios.put(`https://api.clickup.com/api/v2/task/${task_id}/`,
       {
         'status': updatedStatus
@@ -214,28 +215,26 @@ export class Tasks {
      */
   async getCheckList(checklist_id: string) {
 
-    const response = await axios({
-      method: 'put',
-      url: `https://api.clickup.com/api/v2/checklist/${checklist_id}`,
-      data:
+    const response = await axios.put<ResponseChecklist>(`https://api.clickup.com/api/v2/checklist/${checklist_id}`,
       {
         'position': 0
       }
       ,
-      headers: {
-        'Authorization': this.token,
-        'Content-Type': 'application/json'
-      },
-    })
+      {
+        headers: {
+          'Authorization': this.token,
+          'Content-Type': 'application/json'
+        }
+      })
     return response
   };
 
   /**
      * Отметка элемента чек-листа решенным(по-дефолту)/нерешенным
      * @param {String} checklist_item_id - ClickUp checklist item id
-     * @param {Boolean} resolved - ( Default is 'true')
+     * @param {Boolean} resolved 
      */
-  async resolveCheckListItem(checklist_item_id: string, resolved: boolean = true) {
+  async resolveCheckListItem(checklist_item_id: string, resolved: 'true' | 'false') {
 
     const response = await axios({
       method: 'put',

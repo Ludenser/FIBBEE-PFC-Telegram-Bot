@@ -4,7 +4,7 @@ const updateLogger = require('telegraf-update-logger');
 const chalk = require('chalk');
 const path = require('path');
 const LocalSession = require('telegraf-session-local');
-const primeSceneComposer = require('./scenes/MainMenu');
+const { primeSceneComposer } = require('./scenes/MainMenu');
 
 require('dotenv').config();
 

@@ -1,4 +1,4 @@
-import { Task as apiTask } from "../api/models/index";
+import { Task as apiTask } from "../global";
 
 export interface MyContext {
     sessions: Session[];

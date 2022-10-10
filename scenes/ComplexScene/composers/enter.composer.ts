@@ -1,15 +1,15 @@
-const { Composer } = require('telegraf');
-const {Clickup} = require('../../../api');
-const getAttentionFeature = require('../../../features/getAttention.feature');
-const setAssigneeFeature = require('../../../features/setAssignee.feature');
-const sendMessagePrevComplexScene = require('../keyboards/sendMessagePrevComplex.keyboard');
-const sendMessageRouteEnterScene = require('../keyboards/sendMessageRouteEnter.keyboard');
-const { menu_states } = require('../../../config/otherSettings');
-const { sendError } = require('../../../utils/sendLoadings');
-const { enterComposerActions: Actions } = require('../actions');
+import { Composer } from 'telegraf';
+import {Clickup} from '../../../api';
+import getAttentionFeature from '../../../features/getAttention.feature';
+import setAssigneeFeature from '../../../features/setAssignee.feature';
+import sendMessageRouteEnterScene from '../keyboards/sendMessageRouteEnter.keyboard';
+import { menu_states } from '../../../config/otherSettings';
+import { sendError } from '../../../utils/sendLoadings';
+import { enterComposerActions as Actions } from '../actions';
+import { SessionCtx, Task } from '../../../global';
 
-const complexSceneEnterHandler = (task_id, task_name, task) => {
-  const composer = new Composer()
+export default (task_id:string, task_name:string, task:Task) => {
+  const composer = new Composer<SessionCtx>()
 
   composer.action(Actions.ENTER, async (ctx) => {
 
@@ -47,20 +47,6 @@ const complexSceneEnterHandler = (task_id, task_name, task) => {
     }
   });
 
-  composer.action(Actions.BACK, async (ctx) => {
-
-    try {
-      await ctx.wizard.back();
-      await sendMessagePrevComplexScene(ctx)
-    } catch (e) {
-      await sendError(ctx, e);
-      await sendMessageRouteEnterScene(ctx, task, task_name);
-    }
-  });
-
-
-
   return composer
 }
 
-module.exports = complexSceneEnterHandler

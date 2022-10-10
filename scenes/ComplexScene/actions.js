@@ -8,7 +8,6 @@ const preventHandlersComposersActions = {
 const enterComposerActions = {
     ENTER: 'enter',
     REENTER: 'reenter',
-    BACK: 'back',
 }
 
 const commentComposerActions = {

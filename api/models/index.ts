@@ -1,4 +1,4 @@
-import { Creator as ClickUser} from '../../global';
+import { Checklist, Creator as ClickUser } from '../../global';
 
 export interface ResponseUser {
     user: ClickUser;
@@ -13,21 +13,21 @@ export interface ResponseTime {
 }
 
 export interface Datum {
-    user:      ClickUser;
-    time:      number;
+    user: ClickUser;
+    time: number;
     intervals: TimerInterval[];
 }
 
 export interface TimerInterval {
-    id:          string;
-    start:       string;
-    end:         string;
-    time:        string;
-    source:      string;
-    date_added:  string;
-    billable:    boolean;
+    id: string;
+    start: string;
+    end: string;
+    time: string;
+    source: string;
+    date_added: string;
+    billable: boolean;
     description: string;
-    tags:        null;
+    tags: null;
 }
 
 export interface ResponseCustomFields {
@@ -35,28 +35,32 @@ export interface ResponseCustomFields {
 }
 
 export interface CustomField {
-    id:               string;
-    name:             string;
-    type:             string;
-    type_config:      TypeConfig;
-    date_created:     string;
+    id: string;
+    name: string;
+    type: string;
+    type_config: TypeConfig;
+    date_created: string;
     hide_from_guests: boolean;
-    required:         boolean;
+    required: boolean;
 }
 
 export interface TypeConfig {
-    tracking?:       Tracking;
-    complete_on?:    number;
+    tracking?: Tracking;
+    complete_on?: number;
     subtask_rollup?: boolean;
-    options?:        Option[];
+    options?: Option[];
 }
 
 export interface Option {
-    id:    string;
+    id: string;
     label: string;
     color: string;
 }
 
 export interface Tracking {
     checklists: boolean;
+}
+
+export interface ResponseChecklist {
+    checklist: Checklist;
 }

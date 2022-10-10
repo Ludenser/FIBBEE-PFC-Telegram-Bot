@@ -1,19 +1,19 @@
-const { Composer } = require('telegraf');
-const convertTranslit = require('cyrillic-to-translit-js')
-const _ = require('lodash');
-const sequelize = require('../../../db/index')
-const userModel = require('../../../db/models');
-const sendMessageStart = require('../keyboards/sendMessageStart.keyboard');
-const { sendError, sendProses } = require('../../../utils/sendLoadings');
-const { addTasksToCtx } = require('../../../features/addTasksToCtx.feature');
-const authUserFeature = require('../../../features/authUser.feature');
-const totalSceneInitComposer = require('./totalSceneInit.composer');
-const selectRouteComposer = require('./selectRoute.composer');
-const globalPhotoHandler = require('../handlers/photo.handler');
-const globalTextHandler = require('../handlers/text.handler');
-const altModeComposer = require('../../AltMode/composers/altMode.composer');
-const { menu_states } = require('../../../config/otherSettings');
-const { startComposerActions: Actions } = require('../actions');
+import { Composer } from 'telegraf';
+import convertTranslit from 'cyrillic-to-translit-js';
+import _ from 'lodash';
+import { dbConfig, userModel } from '../../../db/index';
+import sendMessageStart from '../keyboards/sendMessageStart.keyboard';
+import { sendError, sendProses } from '../../../utils/sendLoadings';
+import { addTasksToCtx } from '../../../features/addTasksToCtx.feature';
+import authUserFeature from '../../../features/authUser.feature';
+import totalSceneInitComposer from './totalSceneInit.composer';
+import selectRouteComposer from './selectRoute.composer';
+import globalPhotoHandler from '../handlers/photo.handler';
+import globalTextHandler from '../handlers/text.handler';
+import altModeComposer from '../../AltMode/composers/altMode.composer';
+import { menu_states } from '../../../config/otherSettings';
+import { startComposerActions as Actions } from '../actions';
+import { SessionCtx } from '../../../global';
 
 /**
   * Обработчик стартовых команд.
@@ -21,29 +21,31 @@ const { startComposerActions: Actions } = require('../actions');
   * Если пройдена - добавление в контекст инфы о тасках из ClickUp. И добавление композера регистрации сцен.
   */
 
-const startComposer = new Composer();
-
-const cyrillicToTranslit = new convertTranslit();
+export const startComposer = new Composer<SessionCtx>();
 
 startComposer.start(async (ctx) => {
   try {
 
     await ctx.deleteMessage()
-    await sequelize.authenticate()
-    await sequelize.sync()
+    await dbConfig.authenticate()
+    await dbConfig.sync()
     startComposer.use(globalPhotoHandler())
     startComposer.use(globalTextHandler())
 
 
     const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name}`
-    ctx.session.userName = cyrillicToTranslit.transform(userName)
+    ctx.session.userName = convertTranslit().transform(userName)
     ctx.session.isAuthUser = false
     const userDb = await userModel.findOne({ where: { tg_username: userName } })
     console.log(userDb);
     if (!userDb) {
       await authUserFeature(ctx)
     } else {
-      const { clickup_user_id, tg_username, clickup_token } = userDb
+      const {
+        clickup_user_id,
+        tg_username,
+        clickup_token
+      } = userDb
       ctx.session.user = {
         id: clickup_user_id,
         username: tg_username,
@@ -99,12 +101,10 @@ startComposer.command(Actions.UPDATE, async (ctx) => {
       startComposer.use(...selectRouteComposer(ctx))
       await ctx.deleteMessage()
     } else {
-      await sendProses(ctx, ctx.i18n.t('noAccessError_message'))
+      await sendProses(ctx, ctx.i18n.t('ru', 'noAccessError_message'))
     }
   } catch (e) {
     await sendError(ctx, e)
     console.log(e);
   }
 })
-
-module.exports = startComposer

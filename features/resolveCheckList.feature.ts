@@ -1,6 +1,6 @@
-const _ = require('lodash');
-const {Clickup} = require('../api');
-const { sendError } = require('../utils/sendLoadings');
+import _ from 'lodash';
+import { Clickup } from '../api';
+import { Checklist } from '../global';
 
 /**
    * Функция для отметки элемента чек-листа и вложенных в него элементов решенными.
@@ -9,7 +9,7 @@ const { sendError } = require('../utils/sendLoadings');
    * @param {String} CU_Token - Токен Clickup для текущего пользователя, инициирующего action.
    */
 
-const resolveCurrentChecklistAndItems = async (checklist_id, resolved, CU_Token) => {
+export const resolveCurrentChecklistAndItems = async (checklist_id: string, resolved: 'true' | 'false' = 'true', CU_Token: string) => {
 
   const ClickAPI = new Clickup(CU_Token)
 
@@ -30,12 +30,12 @@ const resolveCurrentChecklistAndItems = async (checklist_id, resolved, CU_Token)
 
 /**
    * Функция для групповой отметки всех элементов чек-листа во всех чек-листах таска решенными
-   * @param {[Object]} checklists - массив объектов всех чеклистов таска.
+   * @param {Checklist[]} checklists - массив объектов всех чеклистов таска.
    * @param {Boolean} resolved - ( Default is 'true')
    * @param {String} CU_Token - Токен Clickup для текущего пользователя, инициирующего action.
    */
 
-const resolveAllCheckListsAndItems = async (checklists, resolved, CU_Token) => {
+export const resolveAllCheckListsAndItems = async (checklists: Checklist[], resolved: 'true' | 'false' = 'true', CU_Token: string) => {
   _(checklists)
     .forEach(async element => {
       try {
@@ -45,9 +45,4 @@ const resolveAllCheckListsAndItems = async (checklists, resolved, CU_Token) => {
       }
 
     })
-}
-
-module.exports = {
-  resolveAllCheckListsAndItems,
-  resolveCurrentChecklistAndItems
 }
