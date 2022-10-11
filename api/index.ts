@@ -1,9 +1,9 @@
 
-import {Tasks} from './components/Tasks.api';
-import {TimeTracking} from "./components/TimeTracking.api";
-import {Users} from "./components/Users.api";
-import {Custom_fields} from "./components/Custom_fields.api";
-import {Token} from './components/Token.api';
+import { Tasks } from './components/Tasks.api';
+import { TimeTracking } from "./components/TimeTracking.api";
+import { Users } from "./components/Users.api";
+import { Custom_fields } from "./components/Custom_fields.api";
+import { Token } from './components/Token.api';
 
 export interface Clickup {
   token: string;
@@ -15,7 +15,7 @@ export interface Clickup {
 }
 
 export class Clickup {
-  constructor(token:string) {
+  constructor(token?: string) {
     this.token = token;
     this.Token = new Token;
     this.Tasks = new Tasks(this.token);

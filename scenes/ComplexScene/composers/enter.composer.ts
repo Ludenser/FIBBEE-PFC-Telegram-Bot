@@ -1,5 +1,5 @@
 import { Composer } from 'telegraf';
-import {Clickup} from '../../../api';
+import { Clickup } from '../../../api';
 import getAttentionFeature from '../../../features/getAttention.feature';
 import setAssigneeFeature from '../../../features/setAssignee.feature';
 import sendMessageRouteEnterScene from '../keyboards/sendMessageRouteEnter.keyboard';
@@ -8,7 +8,7 @@ import { sendError } from '../../../utils/sendLoadings';
 import { enterComposerActions as Actions } from '../actions';
 import { SessionCtx, Task } from '../../../global';
 
-export default (task_id:string, task_name:string, task:Task) => {
+export default (task_id: string, task_name: string, task: Task) => {
   const composer = new Composer<SessionCtx>()
 
   composer.action(Actions.ENTER, async (ctx) => {

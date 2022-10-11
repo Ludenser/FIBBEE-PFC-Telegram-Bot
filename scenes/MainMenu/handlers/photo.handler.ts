@@ -1,19 +1,19 @@
-const { Composer } = require('telegraf');
-const { menu_states } = require('../../../config/otherSettings');
-const { postAttachments } = require('../../../features/postAttachments.feature');
-const { sendProses, sendError } = require('../../../utils/sendLoadings');
-const { allComposerActions: Actions } = require('../actions');
+import { Composer } from 'telegraf';
+import { menu_states } from '../../../config/otherSettings';
+import { postAttachments } from '../../../features/postAttachments.feature';
+import { SessionCtx } from '../../../global';
+import { sendProses, sendError } from '../../../utils/sendLoadings';
+import * as Actions from '../actions';
 
+export default () => {
+  const composer = new Composer<SessionCtx>()
 
-const globalPhotoHandler = () => {
-  const composer = new Composer()
-
-  composer.on(Actions.PHOTO, async (ctx) => {
+  composer.on(Actions.preventHandlersComposersActions.PHOTO, async (ctx) => {
     switch (ctx.session.states.current.menu_state) {
       case menu_states.MAIN:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -23,7 +23,7 @@ const globalPhotoHandler = () => {
       case menu_states.COMMENT:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -42,7 +42,7 @@ const globalPhotoHandler = () => {
       case menu_states.CUSTOM_FIELD:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -52,7 +52,7 @@ const globalPhotoHandler = () => {
       case menu_states.SIDETASK:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -62,7 +62,7 @@ const globalPhotoHandler = () => {
       case menu_states.SIDETASK_COMMENT:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -90,7 +90,7 @@ const globalPhotoHandler = () => {
       case menu_states.DIVISION_SCENE:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -100,7 +100,7 @@ const globalPhotoHandler = () => {
       default:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -111,6 +111,3 @@ const globalPhotoHandler = () => {
   })
   return composer
 }
-
-
-module.exports = globalPhotoHandler

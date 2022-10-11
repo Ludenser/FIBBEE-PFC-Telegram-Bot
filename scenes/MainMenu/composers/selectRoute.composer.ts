@@ -1,11 +1,12 @@
-const { Composer } = require('telegraf');
-const { sendError } = require('../../../utils/sendLoadings');
-const _ = require('lodash');
-const { sendFormatMsgFromCurrentClickUpList } = require('../../../features/getRoute.feature');
-const sendMessageInitRouteMenu = require('../keyboards/sendMessageInit.keyboard');
-const deleteMessagesById = require('../../../utils/deleteMessagesById');
-const { menu_states } = require('../../../config/otherSettings');
-const { selectRouteComposerActions: Actions } = require('../actions');
+import { Composer } from 'telegraf';
+import { sendError } from '../../../utils/sendLoadings';
+import _ from 'lodash';
+import { sendFormatMsgFromCurrentClickUpList } from '../../../features/getRoute.feature';
+import sendMessageInitRouteMenu from '../keyboards/sendMessageInit.keyboard';
+import deleteMessagesById from '../../../utils/deleteMessagesById';
+import { menu_states } from '../../../config/otherSettings';
+import { selectRouteComposerActions as Actions } from '../actions';
+import { SessionCtx } from '../../../global';
 
 /**
   * Обработчик сцены выбора роута. 
@@ -14,12 +15,12 @@ const { selectRouteComposerActions: Actions } = require('../actions');
   * 
   * Главная регистрация всех сцен бота.
   */
-module.exports = (ctx) => {
+export default (ctx: SessionCtx) => {
 
     const selectComposerArray = _(ctx.session.all_lists)
         .map((el, i) => {
 
-            const selectComposer = new Composer()
+            const selectComposer = new Composer<SessionCtx>()
             selectComposer.action(`${Actions.SELECT_ROUTE}${i}`, async (ctx) => {
                 try {
                     await ctx.deleteMessage()

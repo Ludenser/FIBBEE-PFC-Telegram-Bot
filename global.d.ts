@@ -3,6 +3,7 @@ import { Context } from 'telegraf';
 import { SceneContextScene, WizardContextWizard, WizardSession, WizardSessionData } from 'telegraf/typings/scenes';
 
 export interface SessionCtx extends Context {
+    startPayload: string;
     i18n: I18n;
     session: Session;
     scene: SceneContextScene<SessionCtx, WizardSessionData>;
@@ -44,6 +45,7 @@ export interface Task {
     space: Space;
 }
 export interface Session extends WizardSession {
+    clickUpUser: Creator;
     userName: string;
     isAuthUser: boolean;
     user: SessionUser;

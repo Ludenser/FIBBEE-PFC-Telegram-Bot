@@ -1,12 +1,12 @@
-const _ = require('lodash');
-const {Clickup} = require('../api');
-const { sendProses } = require('../utils/sendLoadings')
+import { SessionCtx } from '../global';
+import _ from 'lodash';
+import { Clickup } from '../api';
+import { sendProses } from '../utils/sendLoadings';
+
 /**
    * Функция для выдачи сообщения с информацией об актуальных особенностях комплекса.
-   * @param {Ctx} ctx - объект контекста telegraf
-   * @param {String} task_id - id текущего task в ClickUp
    */
-module.exports = async (ctx, task_id) => {
+export default async (ctx: SessionCtx, task_id: string) => {
     try {
         ctx.session.states.attention_msg.id = []
 
@@ -30,6 +30,4 @@ module.exports = async (ctx, task_id) => {
     } catch (e) {
         await sendProses(ctx, e)
     }
-
-
 }

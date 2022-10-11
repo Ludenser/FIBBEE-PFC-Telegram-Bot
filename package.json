@@ -4,6 +4,7 @@
   "description": "Bot telegram use lib telegraf",
   "main": "index.js",
   "nodemonConfig": {
+    "ext": "js,ts",
     "exec": "ts-node ./index.js",
     "ignore": [
       "*.json"

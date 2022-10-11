@@ -1,15 +1,16 @@
-const { Composer } = require('telegraf');
-const sendMessageInfo = require('../keyboards/sendMessageInfo.keyboard');
-const sendMessageDocs = require('../keyboards/sendMessageDocs.keyboard');
-const sendMessageDriverMenu = require('../keyboards/sendMessageDriverMenu.keyboard');
-const sendMessageStart = require('../keyboards/sendMessageStart.keyboard');
-const { sendError, sendProses } = require('../../../utils/sendLoadings');
-const { mainMenuComposerActions: Actions } = require('../actions');
+import { Composer } from 'telegraf';
+import sendMessageInfo from '../keyboards/sendMessageInfo.keyboard';
+import sendMessageDocs from '../keyboards/sendMessageDocs.keyboard';
+import sendMessageDriverMenu from '../keyboards/sendMessageDriverMenu.keyboard';
+import sendMessageStart from '../keyboards/sendMessageStart.keyboard';
+import { sendError, sendProses } from '../../../utils/sendLoadings';
+import { mainMenuComposerActions as Actions } from '../actions';
+import { SessionCtx } from '../../../global';
 
 /**
   * Обработчик главного меню
   */
-const mainMenuComposer = new Composer();
+export const mainMenuComposer = new Composer<SessionCtx>();
 
 mainMenuComposer.action(Actions.INFO, async (ctx) => {
   try {
@@ -25,7 +26,7 @@ mainMenuComposer.action(Actions.DOCS, async (ctx) => {
   try {
     await ctx.deleteMessage()
     if (ctx.session.isAuthUser === false) {
-      await sendProses(ctx, ctx.i18n.t('authError_message'))
+      await sendProses(ctx, ctx.i18n.t('ru', 'authError_message'))
       await sendMessageStart(ctx)
     } else {
       await sendMessageDocs(ctx)
@@ -40,7 +41,7 @@ mainMenuComposer.action(Actions.DRIVERMENU, async (ctx) => {
   try {
     await ctx.deleteMessage()
     if (ctx.session.isAuthUser === false) {
-      await sendProses(ctx, ctx.i18n.t('authError_message'))
+      await sendProses(ctx, ctx.i18n.t('ru', 'authError_message'))
       await sendMessageStart(ctx)
     } else {
       await sendMessageDriverMenu(ctx)
@@ -50,6 +51,3 @@ mainMenuComposer.action(Actions.DRIVERMENU, async (ctx) => {
   }
 
 })
-
-
-module.exports = mainMenuComposer

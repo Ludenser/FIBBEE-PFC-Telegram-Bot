@@ -1,9 +1,9 @@
-import {SessionCtx, Task } from '../global';
+import { SessionCtx, Task } from '../global';
 
 import _ from 'lodash'
 import fs from 'fs';
-import {list_ids} from '../config/list_idsFromClickUp';
-import {Clickup} from '../api';
+import { list_ids } from '../config/list_idsFromClickUp';
+import { Clickup } from '../api';
 import { sendError } from '../utils/sendLoadings';
 import chalk from 'chalk';
 import { menu_states } from '../config/otherSettings';
@@ -16,7 +16,7 @@ const { team_id } = setting;
   */
 
 
-export const addTasksToCtx = async (ctx:SessionCtx) => {
+export const addTasksToCtx = async (ctx: SessionCtx) => {
 
     try {
         console.log(chalk.whiteBright.bgRed('ctx.session is empty'))
@@ -68,7 +68,7 @@ export const addTasksToCtx = async (ctx:SessionCtx) => {
                 tasksWithoutDriverTaskAndSide[index],
             )
         })
-ctx.session.currentRouteNumber = 0
+        ctx.session.currentRouteNumber = 0
         ctx.session.all_lists = all_lists.filter((el: { hasOwnProperty: (arg0: string) => any; }) => el.hasOwnProperty('driverTask'))
         ctx.session.team_id = team_id
         ctx.session.isAlreadyFilled = true
@@ -94,13 +94,13 @@ ctx.session.currentRouteNumber = 0
             id: '',
             discordWebHook: '',
         }
-     
+
         ctx.session.states.current.side_task = {
-            id:'',
-            ids:[],
-            name:'',
+            id: '',
+            ids: [],
+            name: '',
         }
-    
+
         console.log(chalk.blackBright.bgGreen('ctx.session was filled'))
 
     } catch (error) {
