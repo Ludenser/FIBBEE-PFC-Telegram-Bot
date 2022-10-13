@@ -26,10 +26,10 @@ export default (ctx: SessionCtx, task_id: string, task_name: string, task: Task)
       }
     })
   }
-
+  // console.log(currentSideTasks, '-Все валуе Из текущего таска', exisSideTasks, '- находим ');
   const composer = new Composer<SessionCtx>()
 
-  composer.action(Actions.SIDETASK_MENU, async (ctx) => {
+  composer.action(`${Actions.SIDETASK_MENU}${task_id}`, async (ctx) => {
     try {
       ctx.session.states.current.menu_state = menu_states.SIDETASK
       if (!ctx.session.states.attention_msg.isDeleted) {
@@ -42,7 +42,6 @@ export default (ctx: SessionCtx, task_id: string, task_name: string, task: Task)
       await sendMessageRouteEnterScene(ctx, task, task_name);
     }
   })
-
   existSideTasks.forEach(sideTask => {
     composer.action(`${sideTask.id}`, async (ctx) => {
       try {

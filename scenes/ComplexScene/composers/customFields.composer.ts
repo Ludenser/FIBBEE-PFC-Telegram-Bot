@@ -7,7 +7,7 @@ import deleteMessagesById from '../../../utils/deleteMessagesById';
 import { sendProses } from '../../../utils/sendLoadings';
 import { customFieldsComposerActions as Actions } from '../actions';
 
-export const complexSceneCustomFieldsActionsHandler = (task_id: string) => {
+const complexSceneCustomFieldsActionsHandler = (task_id: string) => {
   const composer = new Composer<SessionCtx>()
 
   composer.action(Actions.CUSTOM_FIELD_EDIT_ACT, async (ctx) => {
@@ -43,3 +43,5 @@ export const complexSceneCustomFieldsActionsHandler = (task_id: string) => {
   })
   return composer
 }
+
+export default complexSceneCustomFieldsActionsHandler

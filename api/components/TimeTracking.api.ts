@@ -1,9 +1,7 @@
 
 import axios from 'axios';
-import fs from 'fs';
 import { ResponseTime } from '../models';
-const settings = JSON.parse(fs.readFileSync('./config/setting.json', 'utf-8'));
-const { team_id } = settings;
+import { Settings } from '../../config/setting';
 /**
     * Взаимодействия с таймером
     */
@@ -12,7 +10,7 @@ export interface TimeTracking {
   token: string;
 }
 export class TimeTracking {
-  constructor(token:string) {
+  constructor(token: string) {
     this.token = token
   }
 
@@ -54,7 +52,7 @@ export class TimeTracking {
       * @param {String} task_id ClickUp-Id of current task
       */
   async createEntry(task_id: string) {  //(сколько затрачено на задачу), время нужно получать из логики приложения. в теле запроса указывается либо total, либо start и end в UNIX
-    const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/`,
+    const response = await axios.post(`https://api.clickup.com/api/v2/team/${Settings.TEAM_ID}/time_entries/`,
       {
         "description": "received from Bot",
         "start": Date.now(),
@@ -75,7 +73,7 @@ export class TimeTracking {
       * @param {String} task_id - ClickUp-Id from current task
       */
   async startEntry(task_id: string) {
-    const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/start/`,
+    const response = await axios.post(`https://api.clickup.com/api/v2/team/${Settings.TEAM_ID}/time_entries/start/`,
       {
         "description": "received from Bot",
         "tid": task_id
@@ -95,7 +93,7 @@ export class TimeTracking {
       */
   async stopEntry(task_id: string) {
 
-    const response = await axios.post(`https://api.clickup.com/api/v2/team/${team_id}/time_entries/stop`,
+    const response = await axios.post(`https://api.clickup.com/api/v2/team/${Settings.TEAM_ID}/time_entries/stop`,
       {
         "description": "received from Bot",
         "tid": task_id

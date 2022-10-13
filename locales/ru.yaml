@@ -1,9 +1,9 @@
 start_keyBoard_header: |
   ●▬🦾 FIBBEE 🦿▬●
 
-  🔸 NameBot : *${ctx.botInfo.first_name}*
+  🔸 NameBot : ${ctx.botInfo.first_name}
   🔸 Version : 0.1.0
-  🔸 Owner : *${ownerbot}*
+  🔸 Owner : ${extra}
 
 start_keyBoard_info: |
   ❔Информация❔
@@ -155,7 +155,7 @@ successPhotoUpload_message: |
   Все фото успешно загружены.
 
 error_message: |
-  Ошибка! Сообщите об этом в чате supply-team, ${e}
+  Ошибка! Сообщите об этом в чате supply-team. ${e}
 
 authError_message: |
   Пользователь не зарегистрирован. Нет доступа.

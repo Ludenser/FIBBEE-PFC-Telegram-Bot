@@ -7,7 +7,7 @@ import deleteMessagesById from '../../../utils/deleteMessagesById';
 import { sendError } from '../../../utils/sendLoadings';
 import { exitComposerActions as Actions } from '../actions';
 
-export const complexSceneExitHandler = (task_id: string, task_checklists: Checklist[], driverTask_id: string) => {
+const complexSceneExitHandler = (task_id: string, task_checklists: Checklist[], driverTask_id: string) => {
   const composer = new Composer<SessionCtx>()
 
   composer.action(Actions.EXIT, async (ctx) => {
@@ -35,3 +35,4 @@ export const complexSceneExitHandler = (task_id: string, task_checklists: Checkl
   return composer
 }
 
+export default complexSceneExitHandler

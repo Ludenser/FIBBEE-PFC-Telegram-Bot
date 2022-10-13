@@ -9,7 +9,7 @@ import { nextStepComposerActions as Actions } from '../actions';
 import sendMessageReminderKeyboard from '../keyboards/sendMessageReminder.keyboard';
 import { SessionCtx, Task } from '../../../global';
 
-export const complexSceneNextStepHandler = (tasks: Task[], task: Task, driverTask_id: string) => {
+const complexSceneNextStepHandler = (tasks: Task[], task: Task, driverTask_id: string) => {
   const composer = new Composer<SessionCtx>()
 
   composer.action(Actions.NEXT_STEP, async (ctx) => {
@@ -30,9 +30,11 @@ export const complexSceneNextStepHandler = (tasks: Task[], task: Task, driverTas
       await ctx.wizard.next();
     } catch (e) {
       await sendError(ctx, e);
-      await sendMessageRouteEnterScene(ctx, task.name, task.id);
+      await sendMessageRouteEnterScene(ctx, task, task.name);
     }
   });
 
   return composer
 }
+
+export default complexSceneNextStepHandler

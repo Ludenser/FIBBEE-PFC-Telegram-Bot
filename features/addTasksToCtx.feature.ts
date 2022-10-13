@@ -1,15 +1,11 @@
-import { SessionCtx, Task } from '../global';
-
+import { SessionCtx } from '../global';
 import _ from 'lodash'
-import fs from 'fs';
 import { list_ids } from '../config/list_idsFromClickUp';
 import { Clickup } from '../api';
 import { sendError } from '../utils/sendLoadings';
 import chalk from 'chalk';
 import { menu_states } from '../config/otherSettings';
-
-const setting = JSON.parse(fs.readFileSync('./config/setting.json', 'utf-8'));
-const { team_id } = setting;
+import { Settings } from '../config/setting';
 
 /**
   * Добавление в контекст объекта тасков из ClickUp.
@@ -75,7 +71,7 @@ export const addTasksToCtx = async (ctx: SessionCtx) => {
 
         ctx.session.currentRouteNumber = null
         ctx.session.all_lists = all_lists.filter(el => el.hasOwnProperty('driverTask'))
-        ctx.session.team_id = team_id
+        ctx.session.team_id = Settings.TEAM_ID
         ctx.session.isAlreadyFilled = true
         ctx.session.states = {}
         ctx.session.states.route_msg = {

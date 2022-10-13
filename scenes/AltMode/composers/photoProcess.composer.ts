@@ -9,7 +9,7 @@ import { SessionCtx, Task } from '../../../global';
 const complexScenePhotoProcess = (task_id: string, task_name: string, task: Task) => {
   const composer = new Composer<SessionCtx>()
 
-  composer.action(Actions.UPL_PHOTO, async (ctx) => {
+  composer.action(`${Actions.UPL_PHOTO}${task_id}`, async (ctx) => {
 
     try {
       ctx.session.states.current.menu_state = 'photo'

@@ -22,7 +22,7 @@ export interface Task {
     date_updated: string;
     date_closed: null;
     archived: boolean;
-    creator: Creator;
+    creator: ClickUser;
     assignees: any[];
     watchers: any[];
     checklists: Checklist[];
@@ -45,7 +45,7 @@ export interface Task {
     space: Space;
 }
 export interface Session extends WizardSession {
-    clickUpUser: Creator;
+    clickUpUser: ClickUser;
     userName: string;
     isAuthUser: boolean;
     user: SessionUser;
@@ -58,6 +58,7 @@ export interface Session extends WizardSession {
 
 export interface AllList {
     list_id: string;
+    isOpened?: boolean;
     driverTask: DriverTask[];
     sideTasks?: Task[],
     tasksWithoutDriverTaskAndSide: TasksWithoutDriverTaskAndSide[];
@@ -75,7 +76,7 @@ export interface DriverTask {
     date_updated: string;
     date_closed: null;
     archived: boolean;
-    creator: Creator;
+    creator: ClickUser;
     assignees: any[];
     watchers: any[];
     checklists: Checklist[];
@@ -122,7 +123,7 @@ export interface Item {
     children: Item[];
 }
 
-export interface Creator {
+export interface ClickUser {
     id: number;
     username: string;
     email: string;
@@ -196,7 +197,7 @@ export interface TasksWithoutDriverTaskAndSide {
     date_updated: string;
     date_closed: null;
     archived: boolean;
-    creator: Creator;
+    creator: ClickUser;
     assignees: any[];
     watchers: any[];
     checklists: Checklist[];
