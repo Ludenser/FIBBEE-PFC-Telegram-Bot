@@ -13,7 +13,7 @@ export default () => {
       case menu_states.MAIN:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -23,7 +23,7 @@ export default () => {
       case menu_states.COMMENT:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -42,7 +42,7 @@ export default () => {
       case menu_states.CUSTOM_FIELD:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -52,7 +52,7 @@ export default () => {
       case menu_states.SIDETASK:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -62,7 +62,7 @@ export default () => {
       case menu_states.SIDETASK_COMMENT:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -90,7 +90,7 @@ export default () => {
       case menu_states.DIVISION_SCENE:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -100,7 +100,7 @@ export default () => {
       default:
         try {
           await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('ru', 'isNotAllowedAction_message'))
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)

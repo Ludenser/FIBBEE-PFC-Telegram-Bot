@@ -1,4 +1,4 @@
-import { Checklist, Creator as ClickUser } from '../../global';
+import { Checklist, Creator as ClickUser, Task } from '../../global';
 
 export interface ResponseUser {
     user: ClickUser;
@@ -63,4 +63,8 @@ export interface Tracking {
 
 export interface ResponseChecklist {
     checklist: Checklist;
+}
+
+export interface ResponseTasks {
+    tasks: Task[]
 }

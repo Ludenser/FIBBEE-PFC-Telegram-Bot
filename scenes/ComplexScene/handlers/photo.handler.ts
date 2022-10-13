@@ -1,14 +1,15 @@
-const { Composer } = require('telegraf');
-const { editCustom_field } = require('../../../features/editCustomFields.feature');
-const { sendProses, sendError } = require('../../../utils/sendLoadings');
-const { postCommentFromMsg } = require('../../../features/postComment.feature');
-const { menu_states } = require('../../../config/otherSettings');
-const { allComposerActions: Actions } = require('../actions');
 
-const complexSceneTextHandler = () => {
-  const composer = new Composer()
+import { Composer } from 'telegraf';
+import { postAttachments } from '../../../features/postAttachments.feature';
+import { menu_states } from '../../../config/otherSettings';
+import { sendProses, sendError } from '../../../utils/sendLoadings';
+import { preventHandlersComposersActions as Actions } from '../actions';
+import { SessionCtx } from '../../../global';
 
-  composer.on(Actions.TEXT, async (ctx) => {
+export default () => {
+  const composer = new Composer<SessionCtx>()
+
+  composer.on(Actions.PHOTO, async (ctx) => {
     switch (ctx.session.states.current.menu_state) {
       case menu_states.MAIN:
         try {
@@ -23,7 +24,7 @@ const complexSceneTextHandler = () => {
       case menu_states.COMMENT:
         try {
           await ctx.deleteMessage()
-          await postCommentFromMsg(ctx, ctx.session.states.current.task.id);
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -32,8 +33,7 @@ const complexSceneTextHandler = () => {
 
       case menu_states.PHOTO:
         try {
-          await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+          await postAttachments(ctx, ctx.session.states.current.task.id);
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -43,7 +43,7 @@ const complexSceneTextHandler = () => {
       case menu_states.CUSTOM_FIELD:
         try {
           await ctx.deleteMessage()
-          await editCustom_field(ctx, ctx.session.states.current.task.id)
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -63,7 +63,7 @@ const complexSceneTextHandler = () => {
       case menu_states.SIDETASK_COMMENT:
         try {
           await ctx.deleteMessage()
-          await postCommentFromMsg(ctx, ctx.session.states.current.side_task.id)
+          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -72,8 +72,7 @@ const complexSceneTextHandler = () => {
 
       case menu_states.SIDETASK_PHOTO:
         try {
-          await ctx.deleteMessage()
-          await sendProses(ctx, ctx.i18n.t('isNotAllowedAction_message'))
+          await postAttachments(ctx, ctx.session.states.current.side_task.id)
         } catch (e) {
           await sendError(ctx, e)
           console.log(e)
@@ -94,6 +93,3 @@ const complexSceneTextHandler = () => {
   })
   return composer
 }
-
-
-module.exports = complexSceneTextHandler

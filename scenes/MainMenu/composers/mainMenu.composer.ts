@@ -26,7 +26,7 @@ mainMenuComposer.action(Actions.DOCS, async (ctx) => {
   try {
     await ctx.deleteMessage()
     if (ctx.session.isAuthUser === false) {
-      await sendProses(ctx, ctx.i18n.t('ru', 'authError_message'))
+      await sendProses(ctx, ctx.i18n.t('authError_message'))
       await sendMessageStart(ctx)
     } else {
       await sendMessageDocs(ctx)
@@ -41,7 +41,7 @@ mainMenuComposer.action(Actions.DRIVERMENU, async (ctx) => {
   try {
     await ctx.deleteMessage()
     if (ctx.session.isAuthUser === false) {
-      await sendProses(ctx, ctx.i18n.t('ru', 'authError_message'))
+      await sendProses(ctx, ctx.i18n.t('authError_message'))
       await sendMessageStart(ctx)
     } else {
       await sendMessageDriverMenu(ctx)

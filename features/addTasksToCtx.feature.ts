@@ -23,37 +23,37 @@ export const addTasksToCtx = async (ctx: SessionCtx) => {
         const ClickAPI = new Clickup(ctx.session?.user?.CU_Token)
         const all_tasks_any_status = await ClickAPI.Tasks.getTodayTasksWithAnyStatus(list_ids)
 
-        let allTasksWithoutSide = _<Task>(all_tasks_any_status.data.tasks)
-            .filter((task) => task.name.includes('Обслуживание') || task.name.includes('водителя') || task.name.includes('Пополнение'))
-            .groupBy((task) => task.list.id)
+        let allTasksWithoutSide = _(all_tasks_any_status.data.tasks)
+            .filter(task => task.name.includes('Обслуживание') || task.name.includes('водителя') || task.name.includes('Пополнение'))
+            .groupBy(task => task.list.id)
             .map((value, key) => ({ list_id: key, allTasksWithoutSide: value, }))
             .value();
 
-        let driverTask = _<Task>(all_tasks_any_status.data.tasks)
+        let driverTask = _(all_tasks_any_status.data.tasks)
             .reverse()
-            .filter((task) => task.name.includes('водителя'))
-            .groupBy((task) => task.list.id)
+            .filter(task => task.name.includes('водителя'))
+            .groupBy(task => task.list.id)
             .map((value, key) => (value[0].status.status.includes('in progress') ? { list_id: key, driverTask: value, isOpened: true, } : { list_id: key, driverTask: value }))
             .value();
 
         let tasksWithoutDriverTaskAndSide = _(all_tasks_any_status.data.tasks)
-            .reject((task) => {
-                for (let elem of task.tags) {
-                    return elem.name === 'side' ? true : false
-                }
-            })
-            .filter((task) => !task.name.includes('водителя'))
-            .groupBy((task) => task.list.id)
-            .map((value, key) => ({ list_id: key, tasksWithoutDriverTaskAndSide: value }))
-            .value();
-
-        let sideTasks = _(all_tasks_any_status.data.tasks)
-            .filter((task) => {
+            .reject(task => {
                 for (let elem of task.tags) {
                     return elem.name === 'side'
                 }
             })
-            .groupBy((task) => task.list.id)
+            .filter(task => !task.name.includes('водителя'))
+            .groupBy(task => task.list.id)
+            .map((value, key) => ({ list_id: key, tasksWithoutDriverTaskAndSide: value }))
+            .value();
+
+        let sideTasks = _(all_tasks_any_status.data.tasks)
+            .filter(task => {
+                for (let elem of task.tags) {
+                    return elem.name === 'side'
+                }
+            })
+            .groupBy(task => task.list.id)
             .map((value, key) => ({ list_id: key, sideTasks: value, }))
             .value();
         if (!driverTask || !tasksWithoutDriverTaskAndSide) {
@@ -68,8 +68,9 @@ export const addTasksToCtx = async (ctx: SessionCtx) => {
                 tasksWithoutDriverTaskAndSide[index],
             )
         })
-        ctx.session.currentRouteNumber = 0
-        ctx.session.all_lists = all_lists.filter((el: { hasOwnProperty: (arg0: string) => any; }) => el.hasOwnProperty('driverTask'))
+
+        ctx.session.currentRouteNumber = null
+        ctx.session.all_lists = all_lists.filter(el => el.hasOwnProperty('driverTask'))
         ctx.session.team_id = team_id
         ctx.session.isAlreadyFilled = true
         ctx.session.states = {}
