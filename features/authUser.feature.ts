@@ -1,5 +1,4 @@
 import { SessionCtx } from '../global';
-
 import _ from 'lodash';
 import { Clickup } from '../api';
 import supplyTeam_ids from '../config/supplyTeam_ids';

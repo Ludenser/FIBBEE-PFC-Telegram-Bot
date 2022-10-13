@@ -101,7 +101,7 @@ startComposer.command(Actions.UPDATE, async (ctx) => {
       startComposer.use(...selectRouteComposer(ctx))
       await ctx.deleteMessage()
     } else {
-      await sendProses(ctx, ctx.i18n.t('ru', 'noAccessError_message'))
+      await sendProses(ctx, ctx.i18n.t('noAccessError_message'))
     }
   } catch (e) {
     await sendError(ctx, e)

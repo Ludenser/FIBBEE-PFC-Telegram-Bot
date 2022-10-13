@@ -4,7 +4,7 @@ import fs from 'fs';
 import FormData from 'form-data';
 import qs from 'qs';
 import dueTime from '../../utils/timePeriodDate'
-import { ResponseChecklist } from '../models';
+import { ResponseChecklist, ResponseTasks } from '../models';
 const settings = JSON.parse(fs.readFileSync('./config/setting.json', 'utf-8'));
 const { team_id } = settings;
 /**
@@ -41,7 +41,7 @@ export class Tasks {
       */
   async getTodayTasksWithAnyStatus(list_ids: string[]) {
 
-    const response = await axios.get(`https://api.clickup.com/api/v2/team/${team_id}/task`,
+    const response = await axios.get<ResponseTasks>(`https://api.clickup.com/api/v2/team/${team_id}/task`,
       {
         params: {
           statuses: ['to do', 'in progress'],
@@ -64,9 +64,9 @@ export class Tasks {
       * Получение Object[ ] всех тасков в таск-листе только со статусом 'to do', в диапазоне времени от "3 часов до текущего времени" и "20 часов после текущего времени".
       * @param {String[]} list_ids - ClickUp-Ids of current task-list
       */
-  async getTodayTasksWithStatusTodo(list_ids: string[]) {
+  async getTodayTasksWithStatusTodo(list_ids: string | string[]) {
 
-    const response = await axios.get<Task[]>(`https://api.clickup.com/api/v2/team/${team_id}/task`,
+    const response = await axios.get<ResponseTasks>(`https://api.clickup.com/api/v2/team/${team_id}/task`,
       {
         params: {
           statuses: ['to do'],

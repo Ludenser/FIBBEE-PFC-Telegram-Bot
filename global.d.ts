@@ -1,10 +1,10 @@
-import { I18n } from '@grammyjs/i18n/dist/source';
+import { I18nContext } from '@grammyjs/i18n/dist/source';
 import { Context } from 'telegraf';
 import { SceneContextScene, WizardContextWizard, WizardSession, WizardSessionData } from 'telegraf/typings/scenes';
 
 export interface SessionCtx extends Context {
     startPayload: string;
-    i18n: I18n;
+    i18n: I18nContext;
     session: Session;
     scene: SceneContextScene<SessionCtx, WizardSessionData>;
     wizard: WizardContextWizard<SessionCtx>

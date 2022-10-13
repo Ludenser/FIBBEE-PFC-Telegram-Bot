@@ -1,8 +1,10 @@
-const {Clickup} = require('../api/index');
-const _ = require('lodash');
-const { sendProses } = require('../utils/sendLoadings');
+import { Clickup } from '../api/index';
+import _ from 'lodash';
+import { sendProses } from '../utils/sendLoadings';
+import { SessionCtx } from '../global';
 
-const getCustomFieldIdFromCurrentTask = async (list_id, ClickAPI) => {
+
+const getCustomFieldIdFromCurrentTask = async (list_id: string, ClickAPI: Clickup) => {
 
   const custom_fields = await ClickAPI.Custom_fields.getAllCustomFields(list_id)
 
@@ -14,30 +16,27 @@ const getCustomFieldIdFromCurrentTask = async (list_id, ClickAPI) => {
 }
 /**
    * Изменение поля custom_field "Обратить внимание!"
-   * @param {Ctx} ctx - объект контекста telegraf
+   * @param {SessionCtx} ctx - объект контекста telegraf
    * @param {String} task_id - id текущего task в ClickUp
    */
 
-const editCustom_field = async (ctx, task_id) => {
+export const editCustom_field = async (ctx: SessionCtx, task_id: string) => {
   const ClickAPI = new Clickup(ctx.session.user.CU_Token)
   const customField_id = await getCustomFieldIdFromCurrentTask(ctx.session.all_lists[ctx.session.currentRouteNumber].list_id, ClickAPI)
-  await ClickAPI.Custom_fields.setValue(task_id, customField_id, ctx.update.message.text)
+  if ('message' in ctx.update && 'text' in ctx.update.message) {
+    await ClickAPI.Custom_fields.setValue(task_id, customField_id, ctx.update.message.text)
+  }
   await sendProses(ctx, ctx.i18n.t('mainComplex_scene_keyBoard_customFieldEditAction_editDone'))
 
 }
 /**
    * Очистка поля custom_field "Обратить внимание!"
-   * @param {Ctx} ctx - объект контекста telegraf
+   * @param {SessionCtx} ctx - объект контекста telegraf
    * @param {String} task_id - id текущего task в ClickUp
    */
-const removeCustom_field = async (ctx, task_id) => {
+export const removeCustom_field = async (ctx: SessionCtx, task_id: string) => {
   const ClickAPI = new Clickup(ctx.session.user.CU_Token)
   const customField_id = await getCustomFieldIdFromCurrentTask(ctx.session.all_lists[ctx.session.currentRouteNumber].list_id, ClickAPI)
   await ClickAPI.Custom_fields.removeValue(task_id, customField_id)
   await sendProses(ctx, ctx.i18n.t('mainComplex_scene_keyBoard_customFieldEditMenu_eraseDone'))
-}
-
-module.exports = {
-  editCustom_field,
-  removeCustom_field
 }

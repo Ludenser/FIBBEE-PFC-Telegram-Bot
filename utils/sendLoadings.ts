@@ -5,7 +5,7 @@ import { SessionCtx } from '../global'
   */
 export const sendError = async function sendError(ctx: SessionCtx, e: Error) {
   console.log(e)
-  await ctx.reply(ctx.i18n.t('ru', 'error_message'))
+  await ctx.reply(ctx.i18n.t('error_message'))
     .then((result) => {
       setTimeout(() => {
         ctx.deleteMessage(result.message_id)
