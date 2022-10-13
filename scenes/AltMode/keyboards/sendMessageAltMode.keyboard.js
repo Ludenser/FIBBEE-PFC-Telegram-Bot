@@ -9,9 +9,9 @@ module.exports = async (ctx) => {
         buttonsArray.push(Markup.button.callback(`${i + 1} Маршрут`, `${list.list_id}`))
       })
       buttonsArray.push(Markup.button.callback(ctx.i18n.t('driverMenu_keyBoard_tasksOverview'), 'routesInfo'))
-      buttonsArray.push(Markup.button.callback(ctx.i18n.t('return_button'), 'start'))
+      buttonsArray.push(Markup.button.callback(ctx.i18n.t('return_button'), 'driverMenu'))
     } else {
-      buttonsArray.push(Markup.button.callback(ctx.i18n.t('return_button'), 'start'))
+      buttonsArray.push(Markup.button.callback(ctx.i18n.t('return_button'), 'driverMenu'))
     }
     return buttonsArray
   }

@@ -1,7 +1,7 @@
 
 const supplyTeam_ids = require('../config/supplyTeam_ids');
 const _ = require('lodash');
-const Clickup = require('../api');
+const {Clickup} = require('../api');
 
 /**
  * Функция установки Assignee текущего таска на пользователя

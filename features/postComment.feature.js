@@ -27,19 +27,19 @@ const postCommentFromMsg = async (ctx, task_id) => {
       let stringWithMention = ''
       switch (true) {
         case (mentionString[0] === '@monitoring' || mentionString[0] === '@monitoring team'):
-          stringWithMention = replaceMatch(text, `<@&${discord_role_ids.monitoring}>`)
+          stringWithMention = replaceMatch(text, `<@&${discord_role_ids.MONITORING}>`)
           break;
 
         case (mentionString[0] === '@service' || mentionString[0] === '@service team'):
-          stringWithMention = replaceMatch(text, `<@&${discord_role_ids.service}>`)
+          stringWithMention = replaceMatch(text, `<@&${discord_role_ids.SERVICE}>`)
           break;
 
         case (mentionString[0] === '@daily' || mentionString[0] === '@daily team'):
-          stringWithMention = replaceMatch(text, `<@&${discord_role_ids.daily}>`)
+          stringWithMention = replaceMatch(text, `<@&${discord_role_ids.DAILY}>`)
           break;
 
         case (mentionString[0] === '@supply' || mentionString[0] === '@supply team'):
-          stringWithMention = replaceMatch(text, `<@&${discord_role_ids.supply}>`)
+          stringWithMention = replaceMatch(text, `<@&${discord_role_ids.SUPPLY}>`)
           break;
 
         default:

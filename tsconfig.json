@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "noImplicitAny": true,
+        "module": "ESNext",
+        "target": "es5",
+        "jsx": "react-jsx",
+        "allowJs": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strictPropertyInitialization": false,
+    },
+    "ts-node": {
+        "compilerOptions": {
+            "lib": [
+                "es6",
+                "es2017"
+            ],
+            "target": "es5",
+            "module": "CommonJS",
+        }
+    }
+}
