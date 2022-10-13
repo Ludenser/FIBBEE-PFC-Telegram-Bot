@@ -59,6 +59,7 @@ export interface Session extends WizardSession {
 export interface AllList {
     list_id: string;
     driverTask: DriverTask[];
+    sideTasks?: Task[],
     tasksWithoutDriverTaskAndSide: TasksWithoutDriverTaskAndSide[];
 }
 
@@ -139,7 +140,7 @@ export interface CustomField {
     date_created: string;
     hide_from_guests: boolean;
     required: boolean;
-    value?: CustomField["type"] extends Type.AutomaticProgress ? ValueClass : string
+    value?: string[] | string;
 }
 
 

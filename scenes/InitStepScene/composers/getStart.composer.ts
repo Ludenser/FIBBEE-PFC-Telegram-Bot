@@ -1,9 +1,10 @@
-const { Composer } = require("telegraf");
-const { sendError } = require("../../../utils/sendLoadings");
-const sendMessageInitKeyboardInitStep = require('../keyboards/sendMessageInitKeyboard.keyboard');
-const { getStartComposerActions: Actions } = require("../actions");
+import { Composer } from "telegraf";
+import { sendError } from "../../../utils/sendLoadings";
+import sendMessageInitKeyboardInitStep from '../keyboards/sendMessageInitKeyboard.keyboard';
+import { getStartComposerActions as Actions } from "../actions";
+import { SessionCtx } from '../../../global';
 
-const composer = new Composer()
+const composer = new Composer<SessionCtx>()
 
 composer.action(Actions.GET_START, async (ctx) => {
   try {
@@ -20,4 +21,4 @@ composer.action(Actions.GET_START, async (ctx) => {
   }
 })
 
-module.exports = composer
+export default composer

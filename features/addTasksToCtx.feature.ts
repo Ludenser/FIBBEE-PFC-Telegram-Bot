@@ -56,8 +56,12 @@ export const addTasksToCtx = async (ctx: SessionCtx) => {
             .groupBy(task => task.list.id)
             .map((value, key) => ({ list_id: key, sideTasks: value, }))
             .value();
-        if (!driverTask || !tasksWithoutDriverTaskAndSide) {
+        if (!driverTask.length) {
+            console.log(chalk.whiteBright.bgRed('driverTask не найден!'))
+        }
+        if (!driverTask.length || !tasksWithoutDriverTaskAndSide.length) {
             console.log(chalk.whiteBright.bgRed('ctx.session fill is incomplete!'))
+            return
         }
 
         let all_lists = allTasksWithoutSide.map((element, index) => {

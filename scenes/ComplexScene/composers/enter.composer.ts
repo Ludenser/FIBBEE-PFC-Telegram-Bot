@@ -16,7 +16,10 @@ export default (task_id: string, task_name: string, task: Task) => {
     try {
 
       const ClickAPI = new Clickup(ctx.session.user.CU_Token);
-      ctx.session.states.current.task.discordWebHook = task.custom_fields.find(o => o.name === 'Discord_WebHook').value
+      const discordWebHook = task.custom_fields.find(o => o.name === 'Discord_WebHook').value
+      if (!Array.isArray(discordWebHook)) {
+        ctx.session.states.current.task.discordWebHook = discordWebHook
+      }
       ctx.session.states.current.menu_state = menu_states.MAIN
       ctx.session.states.current.task.locationName = task_name
       ctx.session.states.current.task.id = task_id

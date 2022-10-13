@@ -1,14 +1,16 @@
-const { Composer } = require("telegraf");
-const { Clickup } = require("../../../api");
-const setAssigneeFeature = require("../../../features/setAssignee.feature");
-const sendMessageDriverMenu = require("../../MainMenu/keyboards/sendMessageDriverMenu.keyboard");
-const sendMessageCarPhotoRouteMenu = require("../keyboards/sendMessageCarPhoto.keyboard");
-const { menu_states } = require("../../../config/otherSettings");
-const { sendError } = require("../../../utils/sendLoadings");
-const { openRouteComposerActions: Actions } = require("../actions");
+import { SessionCtx } from '../../../global';
+import _ from 'lodash';
+import { Composer } from "telegraf";
+import { Clickup } from "../../../api";
+import setAssigneeFeature from "../../../features/setAssignee.feature";
+import sendMessageDriverMenu from "../../MainMenu/keyboards/sendMessageDriverMenu.keyboard";
+import sendMessageCarPhotoRouteMenu from "../keyboards/sendMessageCarPhoto.keyboard";
+import { menu_states } from "../../../config/otherSettings";
+import { sendError } from "../../../utils/sendLoadings";
+import { openRouteComposerActions as Actions } from "../actions";
 
-module.exports = (ctx) => {
-  const composer = new Composer();
+export default (ctx: SessionCtx) => {
+  const composer = new Composer<SessionCtx>();
 
   const divisionStepActions = _(ctx.session.all_lists)
     .map((el, i) => {

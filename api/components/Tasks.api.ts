@@ -1,5 +1,5 @@
-import { Checklist, Task } from '../../global';
-import axios from 'axios';
+import { Task } from '../../global';
+import axios, { AxiosResponse } from 'axios';
 import fs from 'fs';
 import FormData from 'form-data';
 import qs from 'qs';
@@ -189,7 +189,7 @@ export class Tasks {
       * @param {String} task_id ClickUp-Id of current task
       * @param {ReadableStream} stream - Readable stream from telegram getFileLink() or same type from other source.
       */
-  async createAttachment(message_id: string, task_id: string, stream: ReadableStream) {
+  async createAttachment(message_id: number, task_id: string, stream: AxiosResponse<any>) {
     const form = new FormData();
     form.append('attachment', stream)
     form.append('filename', `${message_id}.jpg`)

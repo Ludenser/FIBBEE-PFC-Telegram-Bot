@@ -1,11 +1,12 @@
-const { Composer } = require("telegraf");
-const {Clickup} = require("../../../api");
-const sendMessageDriverMenu = require("../../MainMenu/keyboards/sendMessageDriverMenu.keyboard");
-const { resolveAllCheckListsAndItems } = require('../../../features/resolveCheckList.feature')
-const { sendError } = require("../../../utils/sendLoadings");
-const { closeRouteComposerActions: Actions } = require("../actions");
+import { SessionCtx } from '../../../global';
+import { Composer } from "telegraf";
+import { Clickup } from "../../../api";
+import sendMessageDriverMenu from "../../MainMenu/keyboards/sendMessageDriverMenu.keyboard";
+import { resolveAllCheckListsAndItems } from '../../../features/resolveCheckList.feature';
+import { sendError } from "../../../utils/sendLoadings";
+import { closeRouteComposerActions as Actions } from "../actions";
 
-const composer = new Composer()
+const composer = new Composer<SessionCtx>()
 
 composer.action(Actions.CLOSE_ROUTE, async (ctx) => {
   try {
@@ -23,5 +24,4 @@ composer.action(Actions.CLOSE_ROUTE, async (ctx) => {
   }
 });
 
-
-module.exports = composer
+export default composer

@@ -1,36 +1,38 @@
-const { Composer } = require('telegraf');
-const sendMessageRouteEnterScene = require('../keyboards/sendMessageRouteEnter.keyboard');
-const sendMessageSideTaskMenuScene = require('../keyboards/sendMessageSideTaskMenu.keyboard');
-const sendMessageSideTaskSelectScene = require('../keyboards/sendMessageSideTaskSelect.keyboard');
-const sendMessagePhotoScene = require('../keyboards/sendMessagePhoto.keyboard');
-const sendMessageCommentScene = require('../keyboards/sendMessageComment.keyboard');
-const deleteMessagesById = require('../../../utils/deleteMessagesById');
-const { sendError } = require('../../../utils/sendLoadings');
-const setAssigneeFeature = require('../../../features/setAssignee.feature');
-const { postCommentFromPhoto } = require('../../../features/postComment.feature');
-const { sideTaskComposerActions: Actions } = require('../actions');
+import { Composer } from 'telegraf';
+import sendMessageRouteEnterScene from '../keyboards/sendMessageRouteEnter.keyboard';
+import sendMessageSideTaskMenuScene from '../keyboards/sendMessageSideTaskMenu.keyboard';
+import sendMessageSideTaskSelectScene from '../keyboards/sendMessageSideTaskSelect.keyboard';
+import sendMessagePhotoScene from '../keyboards/sendMessagePhoto.keyboard';
+import sendMessageCommentScene from '../keyboards/sendMessageComment.keyboard';
+import deleteMessagesById from '../../../utils/deleteMessagesById';
+import { sendError } from '../../../utils/sendLoadings';
+import setAssigneeFeature from '../../../features/setAssignee.feature';
+import { postCommentFromPhoto } from '../../../features/postComment.feature';
+import { sideTaskComposerActions as Actions } from '../actions';
+import { SessionCtx, Task } from '../../../global';
 
-module.exports = (ctx, task_id, task_name, task) => {
+export default (ctx: SessionCtx, task_id: string, task_name: string, task: Task) => {
 
   const current_list = ctx.session.all_lists.find(o => o.list_id === task.list.id)
   const currentSideTasks = task.custom_fields.find(o => o.name === 'Комплекс').value
-
-  const existSideTasks = current_list.sideTasks.filter(o => {
-    for (element of o.custom_fields) {
-      if (element.hasOwnProperty('value') && Array.isArray(element.value)) {
-        return element.value.includes(currentSideTasks.join())
+  let existSideTasks: Task[] = []
+  if (Array.isArray(currentSideTasks)) {
+    existSideTasks = current_list.sideTasks.filter(o => {
+      for (let element of o.custom_fields) {
+        if (element.hasOwnProperty('value') && Array.isArray(element.value)) {
+          return element.value.includes(currentSideTasks.join())
+        }
       }
-    }
-  })
+    })
+  }
 
-  // console.log(currentSideTasks, '-Все валуе Из текущего таска', exisSideTasks, '- находим ');
-  const composer = new Composer()
+  const composer = new Composer<SessionCtx>()
 
   composer.action(Actions.SIDETASK_MENU, async (ctx) => {
     try {
       ctx.session.states.current.menu_state = 'sideTask'
       if (!ctx.session.states.attention_msg.isDeleted) {
-        ctx.session.states.attention_msg.id = await deleteMessagesById(ctx, ctx.session.states.attention_msg.id)
+        ctx.session.states.attention_msg.id = await deleteMessagesById(ctx, ctx.session.states.attention_msg.id, ctx.session.states.attention_msg.isDeleted)
       }
       await ctx.deleteMessage();
       await sendMessageSideTaskSelectScene(ctx, existSideTasks)
@@ -39,6 +41,7 @@ module.exports = (ctx, task_id, task_name, task) => {
       await sendMessageRouteEnterScene(ctx, task_name, task_id);
     }
   })
+
   existSideTasks.forEach(sideTask => {
     composer.action(`${sideTask.id}`, async (ctx) => {
       try {
@@ -54,7 +57,6 @@ module.exports = (ctx, task_id, task_name, task) => {
       }
     })
   })
-
 
   composer.action(Actions.SIDETASK_UPL_PHOTO, async (ctx) => {
     try {

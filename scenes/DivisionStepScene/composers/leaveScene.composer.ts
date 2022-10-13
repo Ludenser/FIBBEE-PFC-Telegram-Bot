@@ -1,11 +1,13 @@
-const { Composer } = require("telegraf");
-const sendMessageDriverMenu = require("../../MainMenu/keyboards/sendMessageDriverMenu.keyboard");
-const deleteMessagesById = require("../../../utils/deleteMessagesById");
-const { sendError } = require("../../../utils/sendLoadings");
-const { leaveSceneComposerActions: Actions } = require("../actions");
+import { SessionCtx } from '../../../global';
+
+import { Composer } from "telegraf";
+import sendMessageDriverMenu from "../../MainMenu/keyboards/sendMessageDriverMenu.keyboard";
+import { sendError } from "../../../utils/sendLoadings";
+import { leaveSceneComposerActions as Actions } from "../actions";
+import deleteMessagesById from '../../../utils/deleteMessagesById';
 
 
-const composer = new Composer()
+const composer = new Composer<SessionCtx>()
 
 composer.action(Actions.LEAVE_SCENE, async (ctx) => {
   try {
@@ -22,5 +24,4 @@ composer.action(Actions.LEAVE_SCENE, async (ctx) => {
   }
 });
 
-
-module.exports = composer
+export default composer

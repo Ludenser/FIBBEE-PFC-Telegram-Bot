@@ -13,6 +13,11 @@
     },
     "ts-node": {
         "compilerOptions": {
+            "lib": [
+                "es6",
+                "es2017"
+            ],
+            "target": "es5",
             "module": "CommonJS",
         }
     }
