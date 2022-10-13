@@ -11,6 +11,9 @@ import altModeSceneExitActions from './composers/exit.composer';
 export default (ctx: SessionCtx) => {
     const altMode_sceneComposers = ctx.session.all_lists[ctx.session.currentRouteNumber].tasksWithoutDriverTaskAndSide.map(task => {
         const altMode_scene = new Composer<SessionCtx>();
+        if (ctx.session.all_lists[ctx.session.currentRouteNumber].hasOwnProperty('sideTasks')) {
+            altMode_scene.use(altModeSceneSideTaskActions(ctx, task.id, task.name, task),)
+        }
         altMode_scene.use(altModeSceneEnterActions(task.id, task.name, task))
         altMode_scene.use(
             altModeScenePhotoProcess(task.id, task.name, task),
@@ -18,9 +21,7 @@ export default (ctx: SessionCtx) => {
             altModeSceneCustomFieldsActions(task.id),
             altModeSceneExitActions(task.id, task.checklists)
         )
-        if (ctx.session.all_lists[ctx.session.currentRouteNumber].hasOwnProperty('sideTasks')) {
-            altMode_scene.use(altModeSceneSideTaskActions(ctx, task.id, task.name, task),)
-        }
+
 
 
 

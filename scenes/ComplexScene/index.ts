@@ -21,6 +21,13 @@ export const complexSceneComposer = (tasks: Task[], driverTask: Task) => {
   const complexSceneArray = _(tasks)
     .map((task, i) => {
       const complex_scene = new Composer<SessionCtx>();
+      complex_scene.use(async (ctx, next) => {
+
+        if (ctx.session.all_lists[ctx.session.currentRouteNumber].hasOwnProperty('sideTasks')) {
+          complex_scene.use(complexSceneSideTaskActions(ctx, task.id, task.name, task),)
+        }
+        await next()
+      })
       complex_scene.use(complexSceneEnterActions(task.id, task.name, task))
       complex_scene.use(
         textActionHandlerComposer(),
@@ -31,13 +38,7 @@ export const complexSceneComposer = (tasks: Task[], driverTask: Task) => {
         complexSceneCommentActions(task, task.name),
         complexSceneCustomFieldsActions(task.id),
       )
-      complex_scene.use(async (ctx, next) => {
 
-        if (ctx.session.all_lists[ctx.session.currentRouteNumber].hasOwnProperty('sideTasks')) {
-          complex_scene.use(complexSceneSideTaskActions(ctx, task.id, task.name, task),)
-        }
-        await next()
-      })
 
       // complex_scene.action('leaveScene', async (ctx) => {
       //   const ClickAPI = new Clickup(ctx.session.user.CU_Token);
