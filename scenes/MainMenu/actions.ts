@@ -3,7 +3,7 @@ import _ from 'lodash'
 export const enum mainMenuComposerActions {
     INFO = 'info',
     DOCS = 'docs',
-    DRIVERMENU = 'driverMenu',
+    MODE_CHANGE = 'modeChange',
 }
 
 export const enum routesInfoComposerActions {

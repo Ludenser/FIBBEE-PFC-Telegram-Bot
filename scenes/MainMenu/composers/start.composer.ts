@@ -6,11 +6,9 @@ import sendMessageStart from '../keyboards/sendMessageStart.keyboard';
 import { sendError, sendProses } from '../../../utils/sendLoadings';
 import { addTasksToCtx } from '../../../features/addTasksToCtx.feature';
 import authUserFeature from '../../../features/authUser.feature';
-import totalSceneInitComposer from './totalSceneInit.composer';
 import selectRouteComposer from './selectRoute.composer';
 import globalPhotoHandler from '../handlers/photo.handler';
 import globalTextHandler from '../handlers/text.handler';
-import altModeComposer from '../../AltMode/composers/altMode.composer';
 import { menu_states } from '../../../config/otherSettings';
 import { startComposerActions as Actions } from '../actions';
 import { SessionCtx } from '../../../global';
@@ -31,7 +29,6 @@ startComposer.start(async (ctx) => {
     await dbConfig.sync()
     startComposer.use(globalPhotoHandler())
     startComposer.use(globalTextHandler())
-
 
     const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name}`
     ctx.session.userName = convertTranslit().transform(userName)
@@ -59,8 +56,6 @@ startComposer.start(async (ctx) => {
     if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
 
       await addTasksToCtx(ctx)
-      startComposer.use(altModeComposer(ctx))
-      startComposer.use(totalSceneInitComposer(ctx))
       startComposer.use(...selectRouteComposer(ctx))
     }
   } catch (e) {
@@ -78,8 +73,6 @@ startComposer.action(Actions.START, async (ctx) => {
     startComposer.use(async (ctx, next) => {
       if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
         await addTasksToCtx(ctx)
-        startComposer.use(altModeComposer(ctx))
-        startComposer.use(totalSceneInitComposer(ctx))
         startComposer.use(...selectRouteComposer(ctx))
       }
       await next()
@@ -96,8 +89,6 @@ startComposer.command(Actions.UPDATE, async (ctx) => {
     ctx.session.isAlreadyFilled = false
     if (ctx.session.isAuthUser) {
       await addTasksToCtx(ctx)
-      startComposer.use(altModeComposer(ctx))
-      startComposer.use(totalSceneInitComposer(ctx))
       startComposer.use(...selectRouteComposer(ctx))
       await ctx.deleteMessage()
     } else {

@@ -10,6 +10,7 @@ export const enum commentComposerActions {
 
 export const enum exitComposerActions {
     EXIT = 'exit',
+    LEAVE = 'leave',
 }
 
 export const enum nextStepComposerActions {

@@ -29,7 +29,7 @@ export default (ctx: SessionCtx) => {
                     if (!ctx.session.states.route_msg.isDeleted) {
                         ctx.session.states.route_msg.id = await deleteMessagesById(ctx, ctx.session.states.route_msg.id, ctx.session.states.route_msg.isDeleted)
                     }
-                    await sendFormatMsgFromCurrentClickUpList(ctx, ctx.session.all_lists[i].tasksWithoutDriverTaskAndSide)
+                    await sendFormatMsgFromCurrentClickUpList(ctx, ctx.session.all_lists[i].allTasksWithoutSide)
                     await sendMessageInitRouteMenu(ctx)
                     await ctx.scene.enter('INITIAL_WIZARD_ID')
                 } catch (e) {

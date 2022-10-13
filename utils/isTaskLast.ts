@@ -5,7 +5,7 @@ import { Session } from '../global'
 
 export default (session: Session) => {
 
-  if (session.states.current.task.id.includes(session.all_lists[session.currentRouteNumber].tasksWithoutDriverTaskAndSide.at(-1).id)) {
+  if (session.states.current.task.id.includes(session.all_lists[session.currentRouteNumber].allTasksWithoutSide.at(-1).id)) {
     session.states.isTaskLast = true
   }
 

@@ -23,7 +23,7 @@ export const sendFormatMsgFromAllClickUpLists = async (ctx: SessionCtx) => {
 
   const resArray = _(ctx.session.all_lists)
     .map((list) => {
-      const nameValues = _(list.tasksWithoutDriverTaskAndSide)
+      const nameValues = _(list.allTasksWithoutSide)
         .map((value, index) => { return formattedTaskString(value, index) })
         .value()
       return nameValues
@@ -36,7 +36,7 @@ export const sendFormatMsgFromAllClickUpLists = async (ctx: SessionCtx) => {
 
   ctx.replyWithHTML(msg.toString(),
     Markup.inlineKeyboard([
-      Markup.button.callback(ctx.i18n.t('return_button'), 'driverMenu')
+      Markup.button.callback(ctx.i18n.t('return_button'), 'modeChange')
     ]))
 }
 

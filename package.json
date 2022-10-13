@@ -59,6 +59,7 @@
     "@types/bluebird": "^3.5.37",
     "@types/node": "^18.8.5",
     "@types/qs": "^6.9.7",
+    "heroku": "^7.65.0",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1"
   }

@@ -139,6 +139,9 @@ mainComplex_scene_keyBoard_sideTaskMenu_actions_header: |
 mainComplex_scene_keyBoard_finish: |
   Закончить обслуживание
 
+mainComplex_scene_keyBoard_leave: |
+  Вернуться к выбору комплекса
+
 nextStep_scene_keyBoard_header: |
   Заканчиваем ${current_complex}, следующий комплекс - ${next_complex}
 
@@ -171,3 +174,9 @@ return_button: |
 
 isNotAllowedAction_message: |
   Здесь такое не приветствуется.
+
+selectMenu_keyboard_header: |
+  Выбери номер маршрута:
+
+selectTaskMenu_keyboard_header: |
+  Выбери нужный таск:

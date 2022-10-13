@@ -59,9 +59,8 @@ export interface Session extends WizardSession {
 export interface AllList {
     list_id: string;
     isOpened?: boolean;
-    driverTask: DriverTask[];
     sideTasks?: Task[],
-    tasksWithoutDriverTaskAndSide: TasksWithoutDriverTaskAndSide[];
+    allTasksWithoutSide: TasksWithoutDriverTaskAndSide[];
 }
 
 export interface DriverTask {

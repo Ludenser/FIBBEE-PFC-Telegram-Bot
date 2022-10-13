@@ -7,7 +7,7 @@ export default async (ctx: SessionCtx) => {
         let buttonsArray = []
         if (ctx.session.all_lists.length) {
 
-            ctx.session.all_lists[ctx.session.currentRouteNumber].tasksWithoutDriverTaskAndSide.forEach(task => {
+            ctx.session.all_lists[ctx.session.currentRouteNumber].allTasksWithoutSide.forEach(task => {
                 buttonsArray.push(Markup.button.callback(`${task.name}`, `${task.id}`))
             })
             buttonsArray.push(Markup.button.callback(ctx.i18n.t('return_button'), 'modeChange'))
@@ -18,7 +18,7 @@ export default async (ctx: SessionCtx) => {
     }
 
 
-    await ctx.reply('РЕЖИМ: ВЫБОР КОМПЛЕКСА. Выбери нужный таск:',
+    await ctx.reply(ctx.i18n.t('selectTaskMenu_keyboard_header'),
         Markup.inlineKeyboard(
             [
                 ...routesKeyboard()
