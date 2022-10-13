@@ -4,10 +4,10 @@ import sendMessageRouteEnterScene from '../keyboards/sendMessageRouteEnter.keybo
 import deleteMessagesById from '../../../utils/deleteMessagesById';
 import { sendError } from '../../../utils/sendLoadings';
 import { commentComposerActions as Actions } from '../actions';
-import { SessionCtx } from '../../../global';
+import { SessionCtx, Task } from '../../../global';
 import { menu_states } from '../../../config/otherSettings';
 
-export const complexSceneCommentHandler = (task_id: string, task_name: string) => {
+const complexSceneCommentHandler = (task: Task, task_name: string) => {
   const composer = new Composer<SessionCtx>()
 
   composer.action(Actions.UPL_COMMENT, async (ctx) => {
@@ -20,10 +20,12 @@ export const complexSceneCommentHandler = (task_id: string, task_name: string) =
       await sendMessageCommentScene(ctx);
     } catch (e) {
       await sendError(ctx, e);
-      await sendMessageRouteEnterScene(ctx, task_name, task_id);
+      await sendMessageRouteEnterScene(ctx, task, task_name);
     }
 
   });
 
   return composer
 }
+
+export default complexSceneCommentHandler

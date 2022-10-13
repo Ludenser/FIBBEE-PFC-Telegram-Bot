@@ -1,4 +1,4 @@
-import { Checklist, Creator as ClickUser, Task } from '../../global';
+import { Checklist, ClickUser, Task } from '../../global';
 
 export interface ResponseUser {
     user: ClickUser;

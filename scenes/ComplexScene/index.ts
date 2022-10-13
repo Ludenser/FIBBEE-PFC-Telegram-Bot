@@ -1,22 +1,20 @@
 import { SessionCtx, Task } from '../../global';
-
 import { Composer } from 'telegraf';
 import _ from 'lodash';
 import textActionHandlerComposer from './handlers/text.handler';
-import { complexSceneCustomFieldsActionsHandler as complexSceneCustomFieldsActions } from './composers/customFields.composer';
-import { complexScenePhotoProcess } from './composers/photoProcess.composer';
+import complexSceneCustomFieldsActions from './composers/customFields.composer';
+import complexScenePhotoProcess from './composers/photoProcess.composer';
 import complexSceneEnterActions from './composers/enter.composer';
-import { complexSceneCommentHandler as complexSceneCommentActions } from './composers/comment.composer';
-import { complexSceneNextStepHandler as complexSceneNextStepActions } from './composers/nextStep.composer';
-import { complexSceneExitHandler as complexSceneExitActions } from './composers/exit.composer';
+import complexSceneCommentActions from './composers/comment.composer';
+import complexSceneNextStepActions from './composers/nextStep.composer';
+import complexSceneExitActions from './composers/exit.composer';
 import complexSceneSideTaskActions from './composers/sideTask.composer';
 import complexScenePhotoHandler from './handlers/photo.handler';
 
 /**
  * Сцена обслуживания комплекса.
- * Динамически создается на основании массива тасков из API
- * @param {Task[]} tasks - массив с обьектами тасков без главного таска водителя-оператора
- * @param {Task} driverTask - массив с обьектами тасков текущего таск-листа
+ * @param {Task[]} tasks - таски без таска водителя-оператора
+ * @param {Task} driverTask - таск водителя-оператора
  */
 
 export const complexSceneComposer = (tasks: Task[], driverTask: Task) => {
@@ -29,8 +27,8 @@ export const complexSceneComposer = (tasks: Task[], driverTask: Task) => {
         complexScenePhotoHandler(),
         complexSceneNextStepActions(tasks, task, driverTask.id),
         complexSceneExitActions(task.id, task.checklists, driverTask.id),
-        complexScenePhotoProcess(task.id, task.name),
-        complexSceneCommentActions(task.id, task.name),
+        complexScenePhotoProcess(task.id, task.name, task),
+        complexSceneCommentActions(task, task.name),
         complexSceneCustomFieldsActions(task.id),
       )
       complex_scene.use(async (ctx, next) => {

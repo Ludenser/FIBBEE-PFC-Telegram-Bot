@@ -1,4 +1,4 @@
-import { Telegraf, Context } from 'telegraf';
+import { Telegraf } from 'telegraf';
 import { I18n } from "@grammyjs/i18n";
 import updateLogger from 'telegraf-update-logger';
 import chalk from 'chalk';
