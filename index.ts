@@ -1,10 +1,11 @@
-const { Telegraf, Context } = require('telegraf');
-const { I18n } = require("@grammyjs/i18n")
-const updateLogger = require('telegraf-update-logger');
-const chalk = require('chalk');
-const path = require('path');
-const LocalSession = require('telegraf-session-local');
-const { primeSceneComposer } = require('./scenes/MainMenu');
+import { Telegraf, Context } from 'telegraf';
+import { I18n } from "@grammyjs/i18n";
+import updateLogger from 'telegraf-update-logger';
+import chalk from 'chalk';
+import path from 'path';
+import LocalSession from 'telegraf-session-local';
+import { primeSceneComposer } from './scenes/MainMenu';
+import { SessionCtx } from './global';
 
 require('dotenv').config();
 
@@ -16,7 +17,7 @@ const i18n = new I18n({
 
 const token = process.env.TOKEN;
 
-const bot = new Telegraf(token)
+const bot = new Telegraf<SessionCtx>(token)
 
 bot.use((new LocalSession({ database: 'session_db.json' })).middleware())
 

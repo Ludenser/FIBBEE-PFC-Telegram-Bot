@@ -2,18 +2,18 @@
   "name": "pfcBot",
   "version": "0.1.0",
   "description": "Bot telegram use lib telegraf",
-  "main": "index.js",
+  "main": "index.ts",
   "nodemonConfig": {
     "ext": "js,ts",
-    "exec": "ts-node ./index.js",
+    "exec": "ts-node ./index.ts",
     "ignore": [
       "*.json"
     ]
   },
   "scripts": {
-    "start": "nodemon index.js",
-    "heroku": "node index.js",
-    "heroku-auth-server": "node ./authServer/index.js",
+    "start": "nodemon index.ts",
+    "heroku": "node index.ts",
+    "heroku-auth-server": "node ./authServer/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
