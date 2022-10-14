@@ -1,7 +1,6 @@
 import { SessionCtx } from '../global';
 import _ from 'lodash';
 import { Clickup } from '../api';
-import supplyTeam_ids from '../config/supplyTeam_ids';
 import { userModel } from '../db/index';
 import { sendProses } from '../utils/sendLoadings';
 /**
@@ -10,12 +9,7 @@ import { sendProses } from '../utils/sendLoadings';
   */
 export default async (ctx: SessionCtx) => {
     try {
-        const userIdMatch = _(supplyTeam_ids)
-            .find(['username', ctx.session.userName])
-        ctx.session.user = userIdMatch
-
-        if (ctx.session.user) {
-            if (ctx.startPayload) {
+        if (ctx.startPayload) {
                 const code = ctx.startPayload
                 const token = await new Clickup().Token.getToken(code)
                 ctx.session.user.CU_Token = token.access_token
@@ -28,8 +22,8 @@ export default async (ctx: SessionCtx) => {
                     clickup_token: ctx.session.user.CU_Token
                 })
                 ctx.session.isAuthUser = true
-            }
         }
+        
     } catch (e) {
         await sendProses(ctx, 'Такая запись уже есть')
     }

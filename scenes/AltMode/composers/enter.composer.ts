@@ -27,7 +27,7 @@ const complexSceneEnterHandler = (task_id: string, task_name: string, task: Task
       await ctx.deleteMessage();
       await ClickAPI.Tasks.setStatus(task_id, 'in progress');
       await ClickAPI.TimeTracking.startEntry(task_id);
-      await setAssigneeFeature(ctx.session.userName, task_id, ctx.session.user.CU_Token);
+      await setAssigneeFeature(ctx.session.clickUpUser.id, task_id, ctx.session.user.CU_Token);
       await sendMessageRouteEnterScene(ctx, task, task_name);
       await getAttentionFeature(ctx, task_id);
       composer.action(`${Actions.REENTER}${ctx.session.states.current.task.id}`, async (ctx) => {

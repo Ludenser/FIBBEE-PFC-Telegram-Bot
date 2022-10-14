@@ -41,11 +41,13 @@ startComposer.start(async (ctx) => {
       const {
         clickup_user_id,
         tg_username,
-        clickup_token
+        clickup_token,
+        isOverskilled,
       } = userDb
       ctx.session.user = {
         id: clickup_user_id,
         username: tg_username,
+        isOverskilled,
         CU_Token: clickup_token
       }
       ctx.session.isAuthUser = true

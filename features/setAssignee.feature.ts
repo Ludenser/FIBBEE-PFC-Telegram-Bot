@@ -1,21 +1,17 @@
 
-import supplyTeam_ids from '../config/supplyTeam_ids';
-import _ from 'lodash';
 import { Clickup } from '../api';
+import { SessionCtx } from '../global';
 
 /**
  * Функция установки Assignee текущего таска на пользователя
- * @param {string} userName - username для текущего пользователя, инициирующего action.
+ * @param {number} clickUp_id - объект контекста telegraf
  * @param {string} task_id - ClickUp-Id текущего таска
  * @param {string} CU_Token - Токен Clickup для текущего пользователя, инициирующего action.
  */
+export default async (clickUp_id: number,task_id: string, CU_Token: string) => {
 
-export default async (userName: string, task_id: string, CU_Token: string) => {
-
-    const userIdMatch = _(supplyTeam_ids)
-        .find(['username', userName])
     try {
-        await new Clickup(CU_Token).Tasks.setAssignee(task_id, userIdMatch.id)
+        await new Clickup(CU_Token).Tasks.setAssignee(task_id, clickUp_id)
     } catch (error) {
         console.log(error)
     }
