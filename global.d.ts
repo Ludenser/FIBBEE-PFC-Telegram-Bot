@@ -257,5 +257,6 @@ export interface SessionTask {
 export interface SessionUser {
     id: number;
     username: string;
+    isOverskilled: 0|1;
     CU_Token: string;
 }

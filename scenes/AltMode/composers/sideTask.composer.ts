@@ -45,7 +45,7 @@ export default (ctx: SessionCtx, task_id: string, task_name: string, task: Task)
   existSideTasks.forEach(sideTask => {
     composer.action(`${sideTask.id}`, async (ctx) => {
       try {
-        await setAssigneeFeature(ctx.session.userName, sideTask.id, ctx.session.user.CU_Token)
+        await setAssigneeFeature(ctx.session.user.id, sideTask.id, ctx.session.user.CU_Token)
         ctx.deleteMessage()
 
         ctx.session.states.current.side_task.id = sideTask.id

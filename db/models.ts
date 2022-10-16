@@ -6,6 +6,7 @@ export interface UserAttributes {
   clickup_user_id: number;
   clickup_username: string;
   clickup_token: string;
+  isOverskilled: 0|1;
 }
 export interface UserModel extends Model<UserAttributes>, UserAttributes { }
 export class User extends Model<UserModel, UserAttributes> { }
@@ -24,18 +25,21 @@ export function UserFactory(sequelize: Sequelize): UserStatic {
     },
     tg_username: {
       type: DataTypes.STRING,
-      unique: true
+      unique: true,
     },
     clickup_user_id: {
       type: DataTypes.INTEGER,
-      unique: true
+      unique: true,
     },
     clickup_username: {
       type: DataTypes.STRING,
-      unique: true
+      unique: true,
     },
     clickup_token: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+    },
+    isOverskilled: {
+      type: DataTypes.INTEGER,
     }
   })
 }

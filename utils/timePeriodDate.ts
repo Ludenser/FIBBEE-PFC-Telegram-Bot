@@ -5,7 +5,7 @@
 export default (n: number) => {
 
   const time = new Date(Date.now())
-  const due = new Date(time.setHours(time.getHours() + n)).toDateString()
+  const due = new Date(time.setHours(time.getHours() + n)).toString()
 
   return Date.parse(due)
 }

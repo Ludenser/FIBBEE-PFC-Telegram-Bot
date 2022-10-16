@@ -23,7 +23,7 @@ export default (ctx: SessionCtx) => {
           ctx.session.states.current.menu_state = menu_states.INIT_SCENE
 
           await ClickAPI.Tasks.setStatus(ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id, 'in progress');
-          await setAssigneeFeature(ctx.session.userName, ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id, ctx.session.user.CU_Token);
+          await setAssigneeFeature(ctx.session.user.id, ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id, ctx.session.user.CU_Token);
           await ClickAPI.TimeTracking.startEntry(ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id);
 
           await sendMessageCarPhotoRouteMenu(ctx)
