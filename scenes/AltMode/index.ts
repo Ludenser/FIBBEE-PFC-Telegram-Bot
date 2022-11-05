@@ -9,7 +9,8 @@ import altModeSceneSideTaskActions from './composers/sideTask.composer';
 import altModeSceneExitActions from './composers/exit.composer';
 
 export default (ctx: SessionCtx) => {
-    const altMode_sceneComposers = ctx.session.all_lists[ctx.session.currentRouteNumber].tasksWithoutDriverTaskAndSide.map(task => {
+    const altMode_sceneComposers = ctx.session.all_lists[ctx.session.currentRouteNumber].tasksWithoutDriverTaskAndSide
+    .map(task => {
         const altMode_scene = new Composer<SessionCtx>();
         if (ctx.session.all_lists[ctx.session.currentRouteNumber].hasOwnProperty('sideTasks')) {
             altMode_scene.use(altModeSceneSideTaskActions(ctx, task.id, task.name, task),)

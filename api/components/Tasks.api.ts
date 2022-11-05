@@ -1,10 +1,11 @@
-import { Task } from '../../global';
 import axios, { AxiosResponse } from 'axios';
 import FormData from 'form-data';
 import qs from 'qs';
+import { Task } from '../../global';
 import dueTime from '../../utils/timePeriodDate'
-import { ResponseChecklist, ResponseTasks } from '../models';
 import { Settings } from '../../config/setting';
+import { ResponseChecklist, ResponseTasks } from '../models';
+
 /**
     * Взаимодействия с тасками.
     */
