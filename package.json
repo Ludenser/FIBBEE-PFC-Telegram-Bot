@@ -14,7 +14,7 @@
     "start": "nodemon index.ts",
     "prod": "ts-node index.ts",
     "heroku": "node index.ts",
-    "heroku-auth-server": "node ./authServer/index.js"
+    "auth-server": "node ./authServer/index.js"
   },
   "repository": {
     "type": "git",
