@@ -5,8 +5,8 @@ import { sendProses } from '../utils/sendLoadings';
 import { Clickup } from '../api';
 /**
   * Функция для обработки отправляемых файлов в телеграме и отправке их в ClickUp
-  * @param {Ctx} ctx - объект контекста telegraf
-  * @param {String} task_id - ClickUp-Id of current task
+  * @param {SessionCtx} ctx - объект контекста telegraf
+  * @param {string} task_id - ClickUp-Id of current task
   */
 
 export const postAttachments = async (ctx: SessionCtx, task_id: string) => {

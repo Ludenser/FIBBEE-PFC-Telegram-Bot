@@ -1,12 +1,16 @@
 import { SessionCtx } from '../../../global';
 import { Composer } from 'telegraf';
 import { altModeComposerActions as Actions } from '../../MainMenu/actions';
-import sendMessageAltMode from '../keyboards/sendMessageAltMode.keyboard';
+import sendMessageAltMode from '../../MainMenu/keyboards/sendMessageAltMode.keyboard';
 import sendMessageDriverMenu from '../../MainMenu/keyboards/sendMessageDriverMenu.keyboard';
 import { sendError } from '../../../utils/sendLoadings';
 import sendMessageALtModeTasksKeyboard from '../keyboards/sendMessageALtModeTasks.keyboard';
 import altModeComposer from '../../AltMode/index';
 
+/**
+    * Обработка выбора маршрута
+    * @param {SessionCtx} ctx - объект контекста telegraf
+    */
 export default (ctx: SessionCtx) => {
   const composer = new Composer<SessionCtx>()
 

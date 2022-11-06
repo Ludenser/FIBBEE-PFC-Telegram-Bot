@@ -4,16 +4,24 @@ import sendMessageCustomFieldEditScene from '../keyboards/sendMessageCustomField
 import sendMessageEditCustomFieldHelperScene from '../keyboards/sendMessageEditCustomFieldHelper.keyboard';
 import deleteMessagesById from '../../../utils/deleteMessagesById';
 import { sendProses } from '../../../utils/sendLoadings';
-import { customFieldsComposerActions as Actions } from '../actions';
+import { customFieldsComposerActions as cf_Actions } from '../actions';
 import { SessionCtx } from '../../../global';
 
+/**
+    * Обработчик меню custom-fields
+    * @param {string} task_id - id текущего таска
+    */
 const complexSceneCustomFieldsActionsHandler = (task_id: string) => {
   const composer = new Composer<SessionCtx>()
 
-  composer.action(`${Actions.CUSTOM_FIELD_EDIT_ACT}${task_id}`, async (ctx) => {
+  composer.action(`${cf_Actions.CUSTOM_FIELD_EDIT_ACT}${task_id}`, async (ctx) => {
     try {
       await ctx.deleteMessage()
-      ctx.session.states.attention_msg.id = await deleteMessagesById(ctx, ctx.session.states.attention_msg.id, ctx.session.states.attention_msg.isDeleted)
+      ctx.session.states.attention_msg.id = await deleteMessagesById(
+        ctx,
+        ctx.session.states.attention_msg.id,
+        ctx.session.states.attention_msg.isDeleted
+      )
       await sendMessageCustomFieldEditScene(ctx)
     } catch (e) {
       await sendProses(ctx, e)
@@ -21,7 +29,7 @@ const complexSceneCustomFieldsActionsHandler = (task_id: string) => {
     }
   })
 
-  composer.action(Actions.EDIT_CF, async (ctx) => {
+  composer.action(cf_Actions.EDIT_CF, async (ctx) => {
     try {
       await ctx.deleteMessage()
       ctx.session.states.current.menu_state = 'custom_field'
@@ -32,7 +40,7 @@ const complexSceneCustomFieldsActionsHandler = (task_id: string) => {
     }
   })
 
-  composer.action(Actions.ERASE_CF, async (ctx) => {
+  composer.action(cf_Actions.ERASE_CF, async (ctx) => {
     try {
       await removeCustom_field(ctx, ctx.session.states.current.task.id)
     } catch (e) {

@@ -10,8 +10,6 @@ import { Settings } from '../config/setting';
 /**
   * Добавление в контекст объекта тасков из ClickUp.
   */
-
-
 export const addTasksToCtx = async (ctx: SessionCtx) => {
 
     try {
@@ -38,7 +36,7 @@ export const addTasksToCtx = async (ctx: SessionCtx) => {
                     return elem.name === 'side'
                 }
             })
-            .filter(task => !task.name.includes('водителя'))
+            // .filter(task => !task.name.includes('водителя'))
             .groupBy(task => task.list.id)
             .map((value, key) => ({ list_id: key, tasksWithoutDriverTaskAndSide: value }))
             .value();
