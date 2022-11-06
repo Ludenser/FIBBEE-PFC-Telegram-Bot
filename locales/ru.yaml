@@ -139,6 +139,9 @@ mainComplex_scene_keyBoard_sideTaskMenu_actions_header: |
 mainComplex_scene_keyBoard_finish: |
   Закончить обслуживание
 
+mainComplex_scene_keyBoard_leave: |
+  Отменить и выйти
+
 nextStep_scene_keyBoard_header: |
   Заканчиваем ${current_complex}, следующий комплекс - ${next_complex}
 

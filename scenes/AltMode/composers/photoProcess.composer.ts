@@ -3,13 +3,20 @@ import sendMessagePhotoScene from '../keyboards/sendMessagePhoto.keyboard';
 import sendMessageRouteEnterScene from '../keyboards/sendMessageRouteEnter.keyboard';
 import deleteMessagesById from '../../../utils/deleteMessagesById';
 import { sendError } from '../../../utils/sendLoadings';
-import { photoProcessComposerActions as Actions } from '../actions';
+import { photoProcessComposerActions as photo_Actions } from '../actions';
 import { SessionCtx, Task } from '../../../global';
 
+
+/**
+    * Обработчик загрузки фото
+    * @param {string} task_id - id текущего таска
+    * @param {string} task_name: - название текущего таска
+    * @param {Task} task: - обьект текущего таска
+    */
 const complexScenePhotoProcess = (task_id: string, task_name: string, task: Task) => {
   const composer = new Composer<SessionCtx>()
 
-  composer.action(`${Actions.UPL_PHOTO}${task_id}`, async (ctx) => {
+  composer.action(`${photo_Actions.UPL_PHOTO}${task_id}`, async (ctx) => {
 
     try {
       ctx.session.states.current.menu_state = 'photo'

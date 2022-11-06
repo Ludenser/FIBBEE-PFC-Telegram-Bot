@@ -12,6 +12,8 @@ export const enum routesInfoComposerActions {
 
 export const enum selectRouteComposerActions {
     SELECT_ROUTE = 'selectRoute',
+    OPEN_ROUTE = 'openRoute',
+    LEAVE_SCENE = 'leaveScene',
 }
 
 export const enum startComposerActions {

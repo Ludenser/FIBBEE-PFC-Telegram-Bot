@@ -1,5 +1,7 @@
 import { Markup } from 'telegraf'
 import { SessionCtx } from '../../../global'
+import { enterComposerActions as shared_Actions } from '../actions'
+
 
 export default async (ctx: SessionCtx) => {
 
@@ -7,18 +9,25 @@ export default async (ctx: SessionCtx) => {
         let buttonsArray = []
         if (ctx.session.all_lists.length) {
 
-            ctx.session.all_lists[ctx.session.currentRouteNumber].tasksWithoutDriverTaskAndSide.forEach(task => {
-                buttonsArray.push(Markup.button.callback(`${task.name}`, `${task.id}`))
-            })
-            buttonsArray.push(Markup.button.callback(ctx.i18n.t('return_button'), 'modeChange'))
+            ctx.session.all_lists[ctx.session.currentRouteNumber].tasksWithoutDriverTaskAndSide
+                .forEach(task => {
+                    buttonsArray.push(Markup.button.callback(task.name, task.id))
+                })
+            buttonsArray.push(Markup.button.callback(
+                ctx.i18n.t('return_button'),
+                shared_Actions.MODE_CHANGE
+            ))
         } else {
-            buttonsArray.push(Markup.button.callback(ctx.i18n.t('return_button'), 'modeChange'))
+            buttonsArray.push(Markup.button.callback(
+                ctx.i18n.t('return_button'),
+                shared_Actions.MODE_CHANGE
+            ))
         }
         return buttonsArray
     }
 
-
-    await ctx.reply('РЕЖИМ: ВЫБОР КОМПЛЕКСА. Выбери нужный таск:',
+    await ctx.reply(
+        'Выбери нужный таск:',
         Markup.inlineKeyboard(
             [
                 ...routesKeyboard()

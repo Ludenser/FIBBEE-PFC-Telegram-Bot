@@ -3,13 +3,18 @@ import sendMessageCommentScene from '../keyboards/sendMessageComment.keyboard';
 import sendMessageRouteEnterScene from '../keyboards/sendMessageRouteEnter.keyboard';
 import deleteMessagesById from '../../../utils/deleteMessagesById';
 import { sendError } from '../../../utils/sendLoadings';
-import { commentComposerActions as Actions } from '../actions';
+import { commentComposerActions as comment_Actions } from '../actions';
 import { SessionCtx, Task } from '../../../global';
 
+/**
+    * Обработчик выбора меню комментариев
+    * @param {Task} task - объект текущего таска
+    * @param {string} task_id - id текущего таска
+    */
 const complexSceneCommentHandler = (task: Task, task_id: string) => {
   const composer = new Composer<SessionCtx>()
 
-  composer.action(`${Actions.UPL_COMMENT}${task_id}`, async (ctx) => {
+  composer.action(`${comment_Actions.UPL_COMMENT}${task_id}`, async (ctx) => {
 
     try {
       ctx.session.states.current.menu_state = 'comment'

@@ -6,8 +6,6 @@ import sendMessageStart from '../keyboards/sendMessageStart.keyboard';
 import { sendError, sendProses } from '../../../utils/sendLoadings';
 import { addTasksToCtx } from '../../../features/addTasksToCtx.feature';
 import authUserFeature from '../../../features/authUser.feature';
-import totalSceneInitComposer from './totalSceneInit.composer';
-import selectRouteComposer from './selectRoute.composer';
 import globalPhotoHandler from '../handlers/photo.handler';
 import globalTextHandler from '../handlers/text.handler';
 import altModeComposer from '../../AltMode/composers/altMode.composer';
@@ -17,8 +15,7 @@ import { SessionCtx } from '../../../global';
 
 /**
   * Обработчик стартовых команд.
-  * Простая аутентификация пользователя. 
-  * Если пройдена - добавление в контекст инфы о тасках из ClickUp. И добавление композера регистрации сцен.
+  * Аутентификация пользователя. 
   */
 
 export const startComposer = new Composer<SessionCtx>();
@@ -31,7 +28,6 @@ startComposer.start(async (ctx) => {
     await dbConfig.sync()
     startComposer.use(globalPhotoHandler())
     startComposer.use(globalTextHandler())
-
 
     const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name}`
     ctx.session.userName = convertTranslit().transform(userName)
@@ -62,8 +58,6 @@ startComposer.start(async (ctx) => {
 
       await addTasksToCtx(ctx)
       startComposer.use(altModeComposer(ctx))
-      startComposer.use(totalSceneInitComposer(ctx))
-      startComposer.use(...selectRouteComposer(ctx))
     }
   } catch (e) {
     await sendError(ctx, e)
@@ -81,8 +75,6 @@ startComposer.action(Actions.START, async (ctx) => {
       if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
         await addTasksToCtx(ctx)
         startComposer.use(altModeComposer(ctx))
-        startComposer.use(totalSceneInitComposer(ctx))
-        startComposer.use(...selectRouteComposer(ctx))
       }
       await next()
     })
@@ -99,8 +91,6 @@ startComposer.command(Actions.UPDATE, async (ctx) => {
     if (ctx.session.isAuthUser) {
       await addTasksToCtx(ctx)
       startComposer.use(altModeComposer(ctx))
-      startComposer.use(totalSceneInitComposer(ctx))
-      startComposer.use(...selectRouteComposer(ctx))
       await ctx.deleteMessage()
     } else {
       await sendProses(ctx, ctx.i18n.t('noAccessError_message'))

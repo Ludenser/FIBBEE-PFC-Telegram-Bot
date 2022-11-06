@@ -2,6 +2,7 @@ export const enum enterComposerActions {
     ENTER = 'enter',
     REENTER = 'reenter',
     BACK = 'back',
+    MODE_CHANGE = 'modeChange',
 }
 
 export const enum commentComposerActions {
@@ -10,6 +11,7 @@ export const enum commentComposerActions {
 
 export const enum exitComposerActions {
     EXIT = 'exit',
+    LEAVE = 'leave',
 }
 
 export const enum nextStepComposerActions {
