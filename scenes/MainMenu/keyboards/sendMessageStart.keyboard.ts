@@ -5,7 +5,7 @@ import { mainMenuComposerActions } from '../actions';
 
 require('dotenv').config();
 
-const AUTH_URL = process.env.AUTH_URL || 'telegrambotfibbee'
+const AUTH_URL = process.env.AUTH_URL
 
 export default async (ctx: SessionCtx) => {
   const extra = 'Foodtronics'
@@ -16,7 +16,7 @@ export default async (ctx: SessionCtx) => {
   !ctx.session.isAuthUser
     ? buttons.push(Markup.button.url(
       'Авторизоваться',
-      `${AUTH_URL}`
+      `${AUTH_URL}/auth/`
     ))
     : buttons.push(
       Markup.button.callback(

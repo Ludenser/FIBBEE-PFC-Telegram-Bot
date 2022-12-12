@@ -3,7 +3,7 @@ const ClientOAuth2 = require('client-oauth2')
 require('dotenv').config();
 export default () => {
   const PORT = process.env.PORT || 5000
-  const REDIRECT_AUTH_URL = process.env.REDIRECT_AUTH_URL
+  const AUTH_URL = process.env.AUTH_URL
   const CLIENT_ID = process.env.CLIENT_ID
   const CLIENT_SECRET = process.env.CLIENT_SECRET
   const BOT_NAME = 'FibbiePfcBot'
@@ -13,13 +13,13 @@ export default () => {
     clientSecret: CLIENT_SECRET,
     accessTokenUri: 'https://app.clickup.com/api/v2/oauth/token',
     authorizationUri: 'https://app.clickup.com/api',
-    redirectUri: `${REDIRECT_AUTH_URL}`
+    redirectUri: `${AUTH_URL}/auth/callback`
   })
 
   const app = express()
 
   app.listen(PORT, () => {
-    console.log(`Server is starting by ${PORT} port, with redirect to ${REDIRECT_AUTH_URL}`);
+    console.log(`Server is starting by ${PORT} port, with redirect to ${AUTH_URL}/auth/callback`);
   })
 
   app.get('/auth', function (req, res) {
