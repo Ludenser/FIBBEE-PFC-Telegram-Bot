@@ -1,0 +1,33 @@
+version: '3.8'
+
+
+x-deploy-policy: &deploy-policy
+  replicas: 1
+  restart_policy:
+    condition: on-failure
+    delay: 5s
+    window: 60s
+
+networks:
+  public:
+    external: true
+  private:
+services:
+
+  bot:
+    networks:
+      public:
+      private:
+    deploy:
+      <<: *deploy-policy
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.cdn-erp.entrypoints=http,https"
+        - "traefik.http.routers.cdn-erp.rule=Host(`authtg.${DOMAIN}`)"
+        - "traefik.http.routers.cdn-erp.tls.certresolver=le"
+        - "traefik.http.services.cdn-erp.loadbalancer.server.port=5000"
+    environment:
+      - AUTH_URL=https://authtg.${DOMAIN}/auth
+  db:
+    networks:
+      private:
