@@ -1,5 +1,13 @@
 import { Markup } from 'telegraf'
+import isSide from '../../../features/isSide.feature'
 import { SessionCtx, Task } from '../../../global'
+import {
+    exitComposerActions as exit_Actions,
+    customFieldsComposerActions as cf_Actions,
+    commentComposerActions as comment_Actions,
+    photoProcessComposerActions as photo_Actions,
+} from '../actions'
+
 
 /**
     * Клавиатура сцены обслуживания комплекса
@@ -9,47 +17,54 @@ import { SessionCtx, Task } from '../../../global'
     */
 
 export default async (ctx: SessionCtx, task: Task, msg: string) => {
-    let buttons = [
-        Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_uploadPhoto'), `upl_photo${task.id}`),
-        Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_comment'), `upl_comment${task.id}`),
-        Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_customFieldEdit'), `custom_field_edit_act${task.id}`),
-        Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_finish'), `exit${task.id}`),
-    ]
-
-    if (task) {
-        const currentTaskLabel = task.custom_fields.find(o => o.type === 'labels')
-        if (currentTaskLabel && currentTaskLabel.hasOwnProperty('value')) {
-            ctx.session.states.current.task.locationLabel = currentTaskLabel.value[0]
-            if (ctx.session.all_lists[ctx.session.currentRouteNumber].hasOwnProperty('sideTasks')) {
-                let labels_id: string[] = []
-                for (let sideTask of ctx.session.all_lists[ctx.session.currentRouteNumber].sideTasks) {
-                    for (let custom_field of sideTask.custom_fields) {
-                        if (custom_field.type === 'labels') {
-                            for (let labels_ids of custom_field.value) {
-                                const currentLabel = custom_field.type_config.options.find(o => o.id === labels_ids)
-                                labels_id.push(currentLabel.id)
-                            }
-                        }
-                    }
-                }
-                if (currentTaskLabel.hasOwnProperty('value') && Array.isArray(currentTaskLabel.value)) {
-                    if (labels_id.includes(currentTaskLabel.value.join())) {
-                        ctx.session.states.current.side_task.ids = labels_id.filter((item, index) => {
-                            return labels_id.indexOf(item) === index
-                        })
-                        msg += '\n' + ctx.i18n.t('mainComplex_scene_keyBoard_header_ifSideTaskMenu')
-                        buttons.push(Markup.button.callback(ctx.i18n.t('mainComplex_scene_keyBoard_sideTaskMenu'), `sideTask_menu${task.id}`))
-                    }
-                }
-            }
-
-        }
+    let buttons = []
+    if (task.id === ctx.session.all_lists[ctx.session.currentRouteNumber].driverTask[0].id) {
+        buttons = [
+            Markup.button.callback(
+                ctx.i18n.t('mainComplex_scene_keyBoard_uploadPhoto'),
+                `${photo_Actions.UPL_PHOTO}${task.id}`
+            ),
+            Markup.button.callback(
+                ctx.i18n.t('mainComplex_scene_keyBoard_customFieldEdit'),
+                `${cf_Actions.CUSTOM_FIELD_EDIT_ACT}${task.id}`
+            ),
+            Markup.button.callback(
+                ctx.i18n.t('exit_keyBoard_exitButton'),
+                `${exit_Actions.EXIT}${task.id}`
+            ),
+            Markup.button.callback(
+                ctx.i18n.t('mainComplex_scene_keyBoard_leave'),
+                `${exit_Actions.LEAVE}${task.id}`
+            ),
+        ]
+    } else {
+        buttons = [
+            Markup.button.callback(
+                ctx.i18n.t('mainComplex_scene_keyBoard_uploadPhoto'),
+                `${photo_Actions.UPL_PHOTO}${task.id}`
+            ),
+            Markup.button.callback(
+                ctx.i18n.t('mainComplex_scene_keyBoard_comment'),
+                `${comment_Actions.UPL_COMMENT}${task.id}`
+            ),
+            Markup.button.callback(
+                ctx.i18n.t('mainComplex_scene_keyBoard_customFieldEdit'),
+                `${cf_Actions.CUSTOM_FIELD_EDIT_ACT}${task.id}`
+            ),
+            Markup.button.callback(
+                ctx.i18n.t('mainComplex_scene_keyBoard_finish'),
+                `${exit_Actions.EXIT}${task.id}`
+            ),
+            Markup.button.callback(
+                ctx.i18n.t('mainComplex_scene_keyBoard_leave'),
+                `${exit_Actions.LEAVE}${task.id}`
+            ),
+        ]
     }
-
     await ctx.replyWithHTML(msg,
         Markup.inlineKeyboard(
-            buttons
-            , {
+            isSide(ctx, task, msg, buttons),
+            {
                 wrap: (btn, index, currentRow) => currentRow.length >= (index + 1) / 2.5
             })
     )

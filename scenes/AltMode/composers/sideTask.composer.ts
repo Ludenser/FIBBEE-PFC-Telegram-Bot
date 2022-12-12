@@ -8,10 +8,16 @@ import deleteMessagesById from '../../../utils/deleteMessagesById';
 import { sendError } from '../../../utils/sendLoadings';
 import setAssigneeFeature from '../../../features/setAssignee.feature';
 import { postCommentFromPhoto } from '../../../features/postComment.feature';
-import { sideTaskComposerActions as Actions } from '../actions';
+import { sideTaskComposerActions as st_Actions } from '../actions';
 import { SessionCtx, Task } from '../../../global';
 import { menu_states } from '../../../config/otherSettings';
 
+/**
+    * Обработчик меню дополнительных тасков, если они есть.
+    * @param {string} task_id - id текущего таска
+    * @param {string} task_name: - название текущего таска
+    * @param {Task} task: - обьект текущего таска
+    */
 export default (ctx: SessionCtx, task_id: string, task_name: string, task: Task) => {
 
   const current_list = ctx.session.all_lists.find(o => o.list_id === task.list.id)
@@ -26,10 +32,9 @@ export default (ctx: SessionCtx, task_id: string, task_name: string, task: Task)
       }
     })
   }
-  // console.log(currentSideTasks, '-Все валуе Из текущего таска', exisSideTasks, '- находим ');
   const composer = new Composer<SessionCtx>()
 
-  composer.action(`${Actions.SIDETASK_MENU}${task_id}`, async (ctx) => {
+  composer.action(`${st_Actions.SIDETASK_MENU}${task_id}`, async (ctx) => {
     try {
       ctx.session.states.current.menu_state = menu_states.SIDETASK
       if (!ctx.session.states.attention_msg.isDeleted) {
@@ -42,10 +47,11 @@ export default (ctx: SessionCtx, task_id: string, task_name: string, task: Task)
       await sendMessageRouteEnterScene(ctx, task, task_name);
     }
   })
+
   existSideTasks.forEach(sideTask => {
     composer.action(`${sideTask.id}`, async (ctx) => {
       try {
-        await setAssigneeFeature(ctx.session.userName, sideTask.id, ctx.session.user.CU_Token)
+        await setAssigneeFeature(ctx.session.user.id, sideTask.id, ctx.session.user.CU_Token)
         ctx.deleteMessage()
 
         ctx.session.states.current.side_task.id = sideTask.id
@@ -58,7 +64,7 @@ export default (ctx: SessionCtx, task_id: string, task_name: string, task: Task)
     })
   })
 
-  composer.action(Actions.SIDETASK_UPL_PHOTO, async (ctx) => {
+  composer.action(st_Actions.SIDETASK_UPL_PHOTO, async (ctx) => {
     try {
       ctx.deleteMessage()
       ctx.session.states.current.menu_state = menu_states.SIDETASK_PHOTO
@@ -69,7 +75,7 @@ export default (ctx: SessionCtx, task_id: string, task_name: string, task: Task)
     }
   })
 
-  composer.action(Actions.SIDETASK_UPL_PHOTO_DONE, async (ctx) => {
+  composer.action(st_Actions.SIDETASK_UPL_PHOTO_DONE, async (ctx) => {
     try {
       ctx.deleteMessage()
       ctx.session.states.current.menu_state = menu_states.SIDETASK_PHOTO
@@ -81,7 +87,7 @@ export default (ctx: SessionCtx, task_id: string, task_name: string, task: Task)
     }
   })
 
-  composer.action(Actions.SIDETASK_UPL_COMMENT, async (ctx) => {
+  composer.action(st_Actions.SIDETASK_UPL_COMMENT, async (ctx) => {
     try {
       ctx.session.states.current.menu_state = menu_states.SIDETASK_COMMENT
       await ctx.deleteMessage()
@@ -91,5 +97,6 @@ export default (ctx: SessionCtx, task_id: string, task_name: string, task: Task)
       await sendMessageRouteEnterScene(ctx, task, task_name);
     }
   })
+
   return composer
 }

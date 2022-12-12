@@ -4,9 +4,9 @@ import { Checklist } from '../global';
 
 /**
    * Функция для отметки элемента чек-листа и вложенных в него элементов решенными.
-   * @param {String} checklist_id - CkickUp checklist id
-   * @param {Boolean} resolved - ( Default is 'true')
-   * @param {String} CU_Token - Токен Clickup для текущего пользователя, инициирующего action.
+   * @param {string} checklist_id - CkickUp checklist id
+   * @param {boolean} resolved - ( Default is 'true')
+   * @param {string} CU_Token - Токен Clickup для текущего пользователя, инициирующего action.
    */
 
 export const resolveCurrentChecklistAndItems = async (checklist_id: string, resolved: 'true' | 'false' = 'true', CU_Token: string) => {

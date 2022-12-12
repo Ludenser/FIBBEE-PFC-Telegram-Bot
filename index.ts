@@ -6,8 +6,11 @@ import path from 'path';
 import LocalSession from 'telegraf-session-local';
 import { primeSceneComposer } from './scenes/MainMenu';
 import { SessionCtx } from './global';
+import authServer from './authServer/authServer';
 
 require('dotenv').config();
+
+authServer();
 
 const i18n = new I18n({
     defaultLanguage: 'ru',

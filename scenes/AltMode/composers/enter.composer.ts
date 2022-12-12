@@ -6,8 +6,14 @@ import setAssigneeFeature from '../../../features/setAssignee.feature';
 import sendMessageRouteEnterScene from '../keyboards/sendMessageRouteEnter.keyboard';
 import { menu_states } from '../../../config/otherSettings';
 import { sendError } from '../../../utils/sendLoadings';
-import { enterComposerActions as Actions } from '../actions';
+import { enterComposerActions as shared_Actions } from '../actions';
 
+/**
+    * Обработчик входа в сцену взаимодействия с текущим таском
+    * @param {string} task_id - id текущего таска
+    * @param {string} task_name - название текущего таска
+    * @param {Task} task - объект текущего таска
+    */
 const complexSceneEnterHandler = (task_id: string, task_name: string, task: Task) => {
   const composer = new Composer<SessionCtx>()
 
@@ -27,10 +33,10 @@ const complexSceneEnterHandler = (task_id: string, task_name: string, task: Task
       await ctx.deleteMessage();
       await ClickAPI.Tasks.setStatus(task_id, 'in progress');
       await ClickAPI.TimeTracking.startEntry(task_id);
-      await setAssigneeFeature(ctx.session.userName, task_id, ctx.session.user.CU_Token);
+      await setAssigneeFeature(ctx.session.user.id, task_id, ctx.session.user.CU_Token);
       await sendMessageRouteEnterScene(ctx, task, task_name);
       await getAttentionFeature(ctx, task_id);
-      composer.action(`${Actions.REENTER}${ctx.session.states.current.task.id}`, async (ctx) => {
+      composer.action(`${shared_Actions.REENTER}${ctx.session.states.current.task.id}`, async (ctx) => {
 
         try {
           ctx.session.states.current.menu_state = menu_states.MAIN

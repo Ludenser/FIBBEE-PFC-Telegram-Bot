@@ -1,0 +1,33 @@
+version: '3.0'
+
+services:
+  bot:
+    image: bot
+    build:
+      context: .
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST=localhost
+    volumes:
+      - .:/app
+    ports:
+      - 5000:5000/tcp
+    network_mode: host
+    command: npm run prod
+    restart: unless-stopped
+    depends_on:
+      - db
+  db:
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=authdb
+      - POSTGRES_USER=authpguser
+      - POSTGRES_PASSWORD=pgpwd4auth
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ../2. Init Database:/docker-entrypoint-initdb.d
+      - .:/var/lib/postgresql/data
+    ports:
+      - 5432:5432/tcp
+    network_mode: host

@@ -1,5 +1,8 @@
 import axios from 'axios';
 require('dotenv').config();
+import axiosRetry from 'axios-retry';
+
+axiosRetry(axios, { retries: 3 });
 
 export interface Response {
   access_token: string

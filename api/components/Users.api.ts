@@ -1,5 +1,8 @@
 import axios from 'axios';
 import { ResponseMembers, ResponseUser } from '../models';
+import axiosRetry from 'axios-retry';
+
+axiosRetry(axios, { retries: 3 });
 /**
     * Взаимодействия с пользователями.
     */

@@ -1,5 +1,8 @@
 import axios from 'axios';
 import { ResponseCustomFields } from '../models';
+import axiosRetry from 'axios-retry';
+
+axiosRetry(axios, { retries: 3 });
 
 export interface Custom_fields {
   token:string;
