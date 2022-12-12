@@ -5,7 +5,9 @@ import { Task } from '../../global';
 import dueTime from '../../utils/timePeriodDate'
 import { Settings } from '../../config/setting';
 import { ResponseChecklist, ResponseTasks } from '../models';
+import axiosRetry from 'axios-retry';
 
+axiosRetry(axios, { retries: 3 });
 /**
     * Взаимодействия с тасками.
     */
@@ -23,7 +25,7 @@ export class Tasks {
       * @param {String} task_id - ClickUp-Ids of current task
       */
   async getTaskByTaskId(task_id: string) {
-
+    
     const response = await axios.get<Task>(`https://api.clickup.com/api/v2/task/${task_id}/`,
       {
         headers: {
@@ -60,7 +62,7 @@ export class Tasks {
     return response
   }
   /**
-      * Получение Object[ ] всех тасков в таск-листе только со статусом 'to do', в диапазоне времени от "3 часов до текущего времени" и "20 часов после текущего времени".
+      * Получение Object[ ] всех тасков в таск-листе только со статусом 'to do', в диапазоне времени от "8 часов до текущего времени" и "13 часов после текущего времени".
       * @param {String[]} list_ids - ClickUp-Ids of current task-list
       */
   async getTodayTasksWithStatusTodo(list_ids: string | string[]) {
@@ -71,8 +73,8 @@ export class Tasks {
           statuses: ['to do'],
           list_ids,
           order_by: 'due_date',
-          due_date_gt: dueTime(-3),
-          due_date_lt: dueTime(20)
+          due_date_gt: dueTime(-10),
+          due_date_lt: dueTime(13)
         },
         paramsSerializer: params => {
           return qs.stringify(params, { arrayFormat: 'brackets' })

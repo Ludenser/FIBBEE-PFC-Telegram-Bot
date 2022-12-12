@@ -28,7 +28,6 @@ const complexSceneLeaveHandler = (task_id: string, task_checklists: Checklist[])
             }
             await ClickAPI.Tasks.setStatus(task_id, 'to do');
             await ClickAPI.TimeTracking.stopEntry(task_id);
-            await resolveAllCheckListsAndItems(task_checklists, 'false', ctx.session.user.CU_Token);
             await ctx.deleteMessage();
             await sendMessageALtModeTasksKeyboard(ctx)
 

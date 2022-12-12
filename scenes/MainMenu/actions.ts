@@ -19,6 +19,7 @@ export const enum selectRouteComposerActions {
 export const enum startComposerActions {
     START = 'start',
     UPDATE = 'update',
+    RESTART= 'restart',
 }
 
 export const enum altModeComposerActions {

@@ -33,7 +33,7 @@ startComposer.start(async (ctx) => {
     ctx.session.userName = convertTranslit().transform(userName)
     ctx.session.isAuthUser = false
     const userDb = await userModel.findOne({ where: { tg_username: userName } })
-    console.log(userDb);
+    console.log(userDb, userName);
     if (!userDb) {
       await authUserFeature(ctx)
     } else {
@@ -51,7 +51,7 @@ startComposer.start(async (ctx) => {
       }
       ctx.session.isAuthUser = true
     }
-
+    ctx.session.isAlreadyFilled = false
     await sendMessageStart(ctx)
 
     if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
@@ -72,6 +72,7 @@ startComposer.action(Actions.START, async (ctx) => {
     await sendMessageStart(ctx)
 
     startComposer.use(async (ctx, next) => {
+      ctx.session.isAlreadyFilled = false
       if (!ctx.session.isAlreadyFilled && ctx.session.isAuthUser) {
         await addTasksToCtx(ctx)
         startComposer.use(altModeComposer(ctx))
@@ -90,8 +91,24 @@ startComposer.command(Actions.UPDATE, async (ctx) => {
     ctx.session.isAlreadyFilled = false
     if (ctx.session.isAuthUser) {
       await addTasksToCtx(ctx)
-      startComposer.use(altModeComposer(ctx))
+      // startComposer.use(altModeComposer(ctx))
       await ctx.deleteMessage()
+    } else {
+      await sendProses(ctx, ctx.i18n.t('noAccessError_message'))
+    }
+  } catch (e) {
+    await sendError(ctx, e)
+    console.log(e);
+  }
+})
+
+startComposer.command(Actions.RESTART, async (ctx) => {
+  try {
+    await ctx.deleteMessage()
+    if (ctx.session.user.username === "Сергей Веденеев") {
+      ctx.session.all_lists = []
+      ctx.session.isAlreadyFilled = false
+      process.exit()
     } else {
       await sendProses(ctx, ctx.i18n.t('noAccessError_message'))
     }

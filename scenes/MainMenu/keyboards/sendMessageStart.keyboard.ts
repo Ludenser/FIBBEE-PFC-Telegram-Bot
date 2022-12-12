@@ -5,7 +5,7 @@ import { mainMenuComposerActions } from '../actions';
 
 require('dotenv').config();
 
-const APP_NAME = process.env.HEROKU_APP_NAME || 'telegrambotfibbee'
+const AUTH_URL = process.env.AUTH_URL || 'telegrambotfibbee'
 
 export default async (ctx: SessionCtx) => {
   const extra = 'Foodtronics'
@@ -16,7 +16,7 @@ export default async (ctx: SessionCtx) => {
   !ctx.session.isAuthUser
     ? buttons.push(Markup.button.url(
       'Авторизоваться',
-      `https://${APP_NAME}.herokuapp.com/auth/`
+      `${AUTH_URL}`
     ))
     : buttons.push(
       Markup.button.callback(

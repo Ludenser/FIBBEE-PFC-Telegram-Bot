@@ -2,26 +2,32 @@ version: '3.0'
 
 services:
   bot:
-    container_name: bot
+    image: bot
     build:
       context: .
     env_file:
       - .env
+    environment:
+      - POSTGRES_HOST=localhost
     volumes:
       - .:/app
     ports:
-      - 5000:5000
+      - 5000:5000/tcp
+    network_mode: host
     command: npm run prod
-    restart: always
-  auth-server:
-    container_name: auth-server
-    build:
-      context: .
-    env_file:
-      - .env
+    restart: unless-stopped
+    depends_on:
+      - db
+  db:
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=authdb
+      - POSTGRES_USER=authpguser
+      - POSTGRES_PASSWORD=pgpwd4auth
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - .:/app
+      - ../2. Init Database:/docker-entrypoint-initdb.d
+      - .:/var/lib/postgresql/data
     ports:
-      - 3000:3000
-    command: npm run auth-server
-    restart: always
+      - 5432:5432/tcp
+    network_mode: host

@@ -2,6 +2,9 @@
 import axios from 'axios';
 import { ResponseTime } from '../models';
 import { Settings } from '../../config/setting';
+import axiosRetry from 'axios-retry';
+
+axiosRetry(axios, { retries: 3 });
 /**
     * Взаимодействия с таймером
     */
