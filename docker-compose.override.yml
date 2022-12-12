@@ -22,10 +22,10 @@ services:
       <<: *deploy-policy
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.cdn-erp.entrypoints=http,https"
-        - "traefik.http.routers.cdn-erp.rule=Host(`authtg.${DOMAIN}`)"
-        - "traefik.http.routers.cdn-erp.tls.certresolver=le"
-        - "traefik.http.services.cdn-erp.loadbalancer.server.port=5000"
+        - "traefik.http.routers.tgbot.entrypoints=http,https"
+        - "traefik.http.routers.tgbot.rule=Host(`authtg.${DOMAIN}`)"
+        - "traefik.http.routers.tgbot.tls.certresolver=le"
+        - "traefik.http.services.tgbot.loadbalancer.server.port=5000"
     environment:
       - AUTH_URL=https://authtg.${DOMAIN}/auth
   db:
