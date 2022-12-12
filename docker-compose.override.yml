@@ -27,7 +27,7 @@ services:
         - "traefik.http.routers.tgbot.tls.certresolver=le"
         - "traefik.http.services.tgbot.loadbalancer.server.port=5000"
     environment:
-      - AUTH_URL=https://authtg.${DOMAIN}/auth
+      - AUTH_URL=https://authtg.${DOMAIN}
   db:
     networks:
       private:
